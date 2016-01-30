@@ -11,6 +11,36 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+if(preg_match('~MSIE|Internet Explorer~i', $_SERVER['HTTP_USER_AGENT']) || (strpos($_SERVER['HTTP_USER_AGENT'], 'Trident') !== false)){
+  // Sorry, IE is not allowed here...
+  Route::any('{path?}', function(){return view("unsupported_browser");});
+}else{
+
+  //Always open route
+  Route::get('/','UIController@index');
+
+  if(Config::get('applicationConfig.mode') != 'close' && Config::get('applicationConfig.mode') != 'technical_difficulties'){
+    Route::get('/login','UIController@login');
+
+    switch(Config::get('applicationConfig.mode')){
+      case 'confirmation':
+        Route::get('/confirm','ConfirmationController@showConfirmationPage');
+      break;
+      case 'audition':
+
+      break;
+      case 'sorting1':
+
+      break;
+      case 'sorting2':
+
+      break;
+      case 'war':
+
+      break;
+      default:
+        Route::any('{path?}',function(){return view("config_error");});
+      break;
+    }
+  }
+}
