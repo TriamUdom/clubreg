@@ -1,29 +1,3 @@
-<!--
-<div class="menu">
-  <nav class='navbar navbar-custom navbar-fixed-top' role='navigation'>
-    <div class='container'>
-      <div class='navbar-header page-scroll'>
-        <button type='button' class='navbar-toggle' data-toggle='collapse' data-target='.navbar-main-collapse'>
-          <i class='fa fa-bars'></i>
-        </button>
-        <a class='navbar-brand' href='/'>
-          clubs <span class='light'>triamudom</span>
-        </a>
-      </div>
-      <div class='collapse navbar-collapse navbar-right navbar-main-collapse'>
-        <ul class='nav navbar-nav'>
-          <li class='hidden'><a href='/'></a></li>
-          <li><a href='/'>หน้าหลัก</a></li>
-          <li><a href='/test'>test</a></li>
-          <li><a href='/clubs'>test2</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-</div>
-
--->
-
 <div class="navbar navbar-default navbar-fixed-top">
   <div class="container">
     <div class="navbar-header">
