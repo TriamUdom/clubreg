@@ -19,7 +19,9 @@ if(preg_match('~MSIE|Internet Explorer~i', $_SERVER['HTTP_USER_AGENT']) || (strp
   //Always open route
   Route::get('/','UIController@index');
 
-  if(Config::get('applicationConfig.mode') != 'close'){
+  if(Config::get('applicationConfig.mode') != 'close' && Config::get('applicationConfig.mode') != 'technical_difficulties'){
+    Route::get('/login','UIController@login');
+
     switch(Config::get('applicationConfig.mode')){
       case 'confirmation':
         Route::get('/confirm','ConfirmationController@showConfirmationPage');
