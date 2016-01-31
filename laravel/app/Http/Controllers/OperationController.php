@@ -1,11 +1,13 @@
 <?php namespace App\Http\Controllers;
 
 use DB;
+use Input;
+use Validator;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
-class Operation extends Controller{
-  
+class OperationController extends Controller{
+
   /**
    * Login handler
    *
