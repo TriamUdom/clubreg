@@ -6,7 +6,6 @@ use Config;
 use Session;
 use Redirect;
 use Validator;
-use Illuminate\Routing\Controller;
 
 class OperationController extends Controller{
 
@@ -16,6 +15,9 @@ class OperationController extends Controller{
    * @return Redirection
    */
   public function login(){
+    Session::flush();
+    Session::regenerate();
+
     $sid = Input::get('sid');
     $nid = Input::get('nid');
 
@@ -28,7 +30,7 @@ class OperationController extends Controller{
     ));
 
     if($validator->fails()){
-      return Redirect::to('error/invalidlogin');
+      return Redirect::back()->with('error','รูปแบบข้อมูลไม่ถูกต้อง');
     }
 
     if ($this->authenticateUser($sid, $nid)) {
@@ -55,7 +57,7 @@ class OperationController extends Controller{
 
         return Redirect::to('account');
     } else {
-        return Redirect::to('error/invalidlogin');
+        return Redirect::back()->with('error','รหัสประจำตัวนักเรียนหรือรหัสประชาชนไม่ถูกต้อง');
     }
   }
 
@@ -150,5 +152,12 @@ class OperationController extends Controller{
     } else {
         return false;
     }
+  }
+
+  public function logout(){
+    Session::flush();
+    Session::regenerate();
+
+    return Redirect::to('/');
   }
 }
