@@ -28,15 +28,16 @@
       @else
             <ul class="nav navbar-nav navbar-right">
               <li><a href="/login" target="_self">เข้าสู่ระบบ</a></li>
+              <?php /*
               <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" id="helpcenter">ศูนย์ช่วยเหลือ <span class="caret"></span></a>
                 <ul class="dropdown-menu" aria-labelledby="helpcenter">
                   <li><a href="/faq">คำถามที่พบบ่อย</a></li>
-                  <li><a href="/reset_password">ลืมรหัสผ่าน</a></li>
                   <li class="divider"></li>
                   <li><a href="/contact">ติดต่อเจ้าหน้าที่</a></li>
                 </ul>
               </li>
+              */?>
             </ul>
       @endif
 
