@@ -1,7 +1,7 @@
 @extends('layout.main')
 
 @section('content')
-<form class="form-horizontal" method="POST" action="/login/go">
+<form class="form-horizontal" method="POST" action="/login.do">
   <fieldset>
    <legend>เข้าสู่ระบบ</legend>
    <br />
