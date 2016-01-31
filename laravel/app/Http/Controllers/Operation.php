@@ -5,6 +5,12 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
 class Operation extends Controller{
+  
+  /**
+   * Login handler
+   *
+   * @return Redirection
+   */
   public function login(){
     $sid = Input::get('sid');
     $nid = Input::get('nid');
@@ -28,6 +34,13 @@ class Operation extends Controller{
     }
   }
 
+  /**
+   * Authenticate user and do necessary operation associate with that
+   *
+   * @param int $sid
+   * @param int $nid
+   * @return bool
+   */
   private function authenticateUser($sid, $nid){
     if($this->userExist($nid)){
       $user = DB::table('user')->where('national_id',$nid)->first();
@@ -59,6 +72,12 @@ class Operation extends Controller{
     }
   }
 
+  /**
+   * Check if user exist
+   *
+   * @param int $nationalid
+   * @return bool
+   */
   private function userExist($nationalid){
     if(DB::table('user')->where('nationalid', $nationalid)->exists()){
       return true;
@@ -67,6 +86,14 @@ class Operation extends Controller{
     }
   }
 
+  /**
+   * Log user's login attempt
+   *
+   * @param mixed $nationalid
+   * @param mixed $ip_address
+   * @param bool $success whether or not the attempt success
+   * @return bool
+   */
   private function logAuthenticationAttempt($nationalid, $ip_address, $success){
 
       $timestamp = time();
@@ -86,6 +113,11 @@ class Operation extends Controller{
 
   }
 
+  /**
+   * Check if user already logged in
+   *
+   * @return bool
+   */
   public static function userLoggedIn(){
     $login_session = Session::get('logged_in');
     if ($login_session == "1") {
