@@ -18,14 +18,18 @@ if(preg_match('~MSIE|Internet Explorer~i', $_SERVER['HTTP_USER_AGENT']) || (strp
 
   //Always open route
   Route::get('/','UIController@index');
+  Route::get('/error/notloggedin',function(){
+    return view('notloggedin');
+  });
 
   if(Config::get('applicationConfig.mode') != 'close' && Config::get('applicationConfig.mode') != 'technical_difficulties'){
     Route::get('/login','UIController@login');
-    Route::post('/login/go','OperationController@login');
+    Route::post('/login.do','OperationController@login');
 
     switch(Config::get('applicationConfig.mode')){
       case 'confirmation':
         Route::get('/confirm','ConfirmationController@showConfirmationPage');
+        Route::post('/confirm.do','ConfirmationController@confirm');
       break;
       case 'audition':
 
