@@ -18,7 +18,6 @@ class ConfirmationController extends Controller{
       $current_club = DB::table('club')->where('club_code',$data->current_club)->pluck('club_name');
       return view('confirm')
         ->with('data',array(
-          'fullname' => Session::get('fullname'),
           'confirmation_status' => $data->confirmation_status,
           'current_club' => $current_club
         ));
