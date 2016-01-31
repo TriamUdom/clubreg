@@ -12,10 +12,10 @@
       <ul class="nav navbar-nav">
       </ul>
 
-      @if(false){
+      @if(isset($data['fullname']))
             <ul class="nav navbar-nav navbar-right">
               <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" id="usermenu">{{ $fullname }} <span class="caret"></span></a>
+                <a class="dropdown-toggle" data-toggle="dropdown" id="usermenu">{{ $data['fullname'] }} <span class="caret"></span></a>
                 <ul class="dropdown-menu" aria-labelledby="usermenu">
                   <li><a href="/account">ประวัตินักเรียน (หน้าหลัก)</a></li>
                   <li class="divider"></li>
