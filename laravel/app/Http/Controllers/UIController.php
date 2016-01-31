@@ -8,6 +8,10 @@ class UIController extends Controller{
   }
 
   public function login(){
-    return view('login');
+    if(OperationController::userLoggedIn()){
+      return Redirect::to('/');
+    }else{
+      return view('login');
+    }
   }
 }
