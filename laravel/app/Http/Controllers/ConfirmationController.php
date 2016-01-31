@@ -4,7 +4,6 @@ use DB;
 use Input;
 use Session;
 use Redirect;
-use Illuminate\Routing\Controller;
 
 class ConfirmationController extends Controller{
 
