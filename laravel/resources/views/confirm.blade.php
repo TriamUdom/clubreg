@@ -1,7 +1,7 @@
 @extends('layout.main')
 
 @section('content')
-<form class="form-horizontal" method="POST" action="/confirm/go">
+<form class="form-horizontal" method="POST" action="/confirm.do">
   <fieldset>
    <legend>ยืนยันการลงทะเบียนชมรมเดิม</legend>
    <span>ชมรมปัจจุบัน : {{ $data['current_club'] }}</span><br>
@@ -12,15 +12,22 @@
       ยังไม่ได้ยืนยันการลงทะเบียน
      @endif
    </span>
-   {{ csrf_field() }}
+
    <br />
    <br />
 
+   <input type="hidden" value="{{ $data['confirmation_status'] }}" name="current_status">
+
    <div class="form-group">
      <div class="col-lg-12">
-       <button type="submit" class="btn btn-success btn-block">ยืนยัน</button>
+       @if($data['confirmation_status'] == 1)
+        <button type="submit" class="btn btn-danger btn-block">ยกเลิกการลงทะเบียน</button>
+       @else
+        <button type="submit" class="btn btn-success btn-block">ยืนยันการลงทะเบียน</button>
+       @endif
      </div>
    </div>
+   {{ csrf_field() }}
   </fieldset>
 </form>
 @stop
