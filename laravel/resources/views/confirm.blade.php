@@ -14,6 +14,7 @@
    </span>
    {{ csrf_field() }}
    <br />
+   <br />
 
    <div class="form-group">
      <div class="col-lg-12">
