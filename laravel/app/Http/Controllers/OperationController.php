@@ -2,8 +2,10 @@
 
 use DB;
 use Input;
+use Config;
+use Session;
+use Redirect;
 use Validator;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
 class OperationController extends Controller{
@@ -30,6 +32,27 @@ class OperationController extends Controller{
     }
 
     if ($this->authenticateUser($sid, $nid)) {
+      switch(Config::get('applicationConfig.mode')){
+        case 'confirmation':
+          return Redirect::to('/confirm');
+        break;
+        case 'audition':
+
+        break;
+        case 'sorting1':
+
+        break;
+        case 'sorting2':
+
+        break;
+        case 'war':
+
+        break;
+        default:
+          abort(503);
+        break;
+      }
+
         return Redirect::to('account');
     } else {
         return Redirect::to('error/invalidlogin');
@@ -50,25 +73,25 @@ class OperationController extends Controller{
         // Auth Successful
         // Laravel's Session Magic. Do Not Touch.
         Session::put('logged_in', '1');
-        Session::put('nationalid', $user->national_id);
+        Session::put('national_id', $user->national_id);
         Session::put('fullname', $user->title . $user->fname . " " . $user->lname);
 
         // Log the request
         $ip_address = $_SERVER['REMOTE_ADDR'];
-        $this->logAuthenticationAttempt($nationalid, $ip_address, "1"); // Success
+        $this->logAuthenticationAttempt($nid, $ip_address, "1"); // Success
 
         return true;
       }else{
         // Log the request
         $ip_address = $_SERVER['REMOTE_ADDR'];
-        $this->logAuthenticationAttempt($nationalid, $ip_address, "0"); // Login Failed
+        $this->logAuthenticationAttempt($nid, $ip_address, "0"); // Login Failed
 
         return false;
       }
     }else{
       // Log the request
       $ip_address = $_SERVER['REMOTE_ADDR'];
-      $this->logAuthenticationAttempt($nationalid, $ip_address, "0"); // Login Failed
+      $this->logAuthenticationAttempt($nid, $ip_address, "0"); // Login Failed
 
       return false;
     }
@@ -81,7 +104,7 @@ class OperationController extends Controller{
    * @return bool
    */
   private function userExist($nationalid){
-    if(DB::table('user')->where('nationalid', $nationalid)->exists()){
+    if(DB::table('user')->where('national_id', $nationalid)->exists()){
       return true;
     }else{
       return false;
