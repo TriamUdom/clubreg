@@ -19,7 +19,7 @@
        <span class="help-block">ไม่ต้องใส่เครื่องหมายขีด (-) คั่น</span>
      </div>
    </div>
-
+   {{ csrf_field() }}
    <br />
 
    <div class="form-group">
