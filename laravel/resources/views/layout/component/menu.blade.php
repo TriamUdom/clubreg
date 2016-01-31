@@ -12,15 +12,17 @@
       <ul class="nav navbar-nav">
       </ul>
 
-      @if(isset($data['fullname']))
+      @if(Session::get('logged_in') == 1)
             <ul class="nav navbar-nav navbar-right">
               <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" id="usermenu">{{ $data['fullname'] }} <span class="caret"></span></a>
+                <a class="dropdown-toggle" data-toggle="dropdown" id="usermenu">{{ Session::get('fullname') }} <span class="caret"></span></a>
                 <ul class="dropdown-menu" aria-labelledby="usermenu">
+                  <?php /*
                   <li><a href="/account">ประวัตินักเรียน (หน้าหลัก)</a></li>
                   <li class="divider"></li>
                   <li><a href="/contact">ติดต่อเจ้าหน้าที่</a></li>
                   <li class="divider"></li>
+                  */ ?>
                   <li><a href="/logout">ออกจากระบบ</a></li>
                 </ul>
               </li>
