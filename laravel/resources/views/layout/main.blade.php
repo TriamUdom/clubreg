@@ -8,13 +8,14 @@
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="/css/tpl.css">
+    <link rel="stylesheet" href="/css/main.css">
     @yield('css')
   </head>
   <body>
 
     @include('layout/component.menu')
 
-    <div class="container">
+    <div class="container" id="main_container">
       <div class="well">
         @yield('content')
       </div>
