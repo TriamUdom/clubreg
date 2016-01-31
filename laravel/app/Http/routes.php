@@ -25,6 +25,7 @@ if(preg_match('~MSIE|Internet Explorer~i', $_SERVER['HTTP_USER_AGENT']) || (strp
   if(Config::get('applicationConfig.mode') != 'close' && Config::get('applicationConfig.mode') != 'technical_difficulties'){
     Route::get('/login','UIController@login');
     Route::post('/login.do','OperationController@login');
+    Route::get('/logout','OperationController@logout');
 
     switch(Config::get('applicationConfig.mode')){
       case 'confirmation':
