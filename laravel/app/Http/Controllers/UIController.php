@@ -1,6 +1,7 @@
 <?php namespace App\Http\Controllers;
 
 use DB;
+use Redirect;
 
 class UIController extends Controller{
   public function index(){
