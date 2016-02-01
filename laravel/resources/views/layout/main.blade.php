@@ -17,6 +17,11 @@
 
     <div class="container" id="main_container">
       <div class="well">
+        @if(Config::get('applicationConfig.release') != 'release')
+          <div class="alert alert-danger">
+            <strong>ระบบนี้เป็นระบบทดสอบ หากลงทะเบียนในเวลานี้ จะถือว่าเป็นโมฆะ</strong>
+          </div>
+        @endif
         @yield('content')
       </div>
     </div>
