@@ -7,11 +7,32 @@ use Session;
 use Redirect;
 use Validator;
 
-class PresidentOperationController extends Controller{
+/*
+|--------------------------------------------------------------------------
+| President Controller
+|--------------------------------------------------------------------------
+|
+| This controller handle both UI and backend for president operation
+|
+|
+*/
+
+class PresidentController extends Controller{
+
+  /**
+   * Show president login page
+   *
+   * @return view
+   */
   public function showLoginPage(){
     return view('admin.presidentLogin');
   }
 
+  /**
+   * President login handler
+   *
+   * @return Redirection
+   */
   public function presidentLogin(){
     Session::flush();
     Session::regenerate();
@@ -33,6 +54,9 @@ class PresidentOperationController extends Controller{
 
   }
 
+  /**
+   * Check if president already logged in
+   */
   public static function presidentLoggedIn(){
 
   }

@@ -5,6 +5,16 @@ use Input;
 use Session;
 use Redirect;
 
+/*
+|--------------------------------------------------------------------------
+| Confirmation Controller
+|--------------------------------------------------------------------------
+|
+| This controller handle both UI and backend for confirmation mode
+|
+|
+*/
+
 class ConfirmationController extends Controller{
 
   /**

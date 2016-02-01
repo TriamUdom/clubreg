@@ -7,6 +7,16 @@ use Session;
 use Redirect;
 use Validator;
 
+/*
+|--------------------------------------------------------------------------
+| Operation Controller
+|--------------------------------------------------------------------------
+|
+| This controller handle general operation (e.g.login logout) for every mode
+|
+|
+*/
+
 class OperationController extends Controller{
 
   /**
@@ -154,6 +164,11 @@ class OperationController extends Controller{
     }
   }
 
+  /**
+   * Log the user out
+   *
+   * @return Redirection
+   */
   public function logout(){
     Session::flush();
     Session::regenerate();
