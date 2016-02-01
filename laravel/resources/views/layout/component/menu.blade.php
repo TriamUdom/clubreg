@@ -1,7 +1,7 @@
 <div class="navbar navbar-default navbar-fixed-top">
   <div class="container">
     <div class="navbar-header">
-      <a class="navbar-brand" href="/">ระบบลงทะเบียนชมรม โรงเรียนเตรียมอุดมศึกษา</a>
+      <a class="navbar-brand" href="/">ระบบเลือกชมรม โรงเรียนเตรียมอุดมศึกษา</a>
       <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
