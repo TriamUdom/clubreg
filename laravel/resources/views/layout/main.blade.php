@@ -18,7 +18,7 @@
     <div class="container" id="main_container">
       <div class="well">
         @if(Config::get('applicationConfig.release') != 'release')
-          <div class="alert alert-danger">
+          <div class="alert alert-danger" style="background: #FF0000;">
             <strong>ระบบนี้เป็นระบบทดสอบ หากลงทะเบียนในเวลานี้ จะถือว่าเป็นโมฆะ</strong>
           </div>
         @endif
