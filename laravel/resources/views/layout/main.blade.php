@@ -8,14 +8,20 @@
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="/css/tpl.css">
+    <link rel="stylesheet" href="/css/main.css">
     @yield('css')
   </head>
   <body>
 
     @include('layout/component.menu')
 
-    <div class="container">
+    <div class="container" id="main_container">
       <div class="well">
+        @if(Config::get('applicationConfig.release') != 'release')
+          <div class="alert alert-danger" style="background: #FF0000;">
+            <strong>ระบบนี้เป็นระบบทดสอบ หากลงทะเบียนในเวลานี้ จะถือว่าเป็นโมฆะ</strong>
+          </div>
+        @endif
         @yield('content')
       </div>
     </div>

@@ -1,14 +1,11 @@
 @extends('layout.main')
 
 @section('content')
-<form class="form-horizontal" method="POST" action="/login.do">
+<form class="form-horizontal" method="POST" action="/president/login.do">
   <fieldset>
-   <legend>เข้าสู่ระบบ</legend>
-   @if(Session::get('error') != null)
-    {{ Session::get('error') }}
-   @endif
+   <legend>เข้าสู่ระบบสำหรับประธานชมรม</legend>
    <div class="form-group">
-     <label for="sid" class="col-lg-2 control-label">หมายเลขประจำตัวนักเรียน</label>
+     <label for="nid" class="col-lg-2 control-label">หมายเลขประจำตัวนักเรียน</label>
      <div class="col-lg-10">
        <input type="text" class="form-control" id="sid" name="sid">
      </div>
