@@ -30,7 +30,7 @@ class OperationController extends Controller{
     ));
 
     if($validator->fails()){
-      return Redirect::back()->with('error','รูปแบบข้อมูลไม่ถูกต้อง');
+      return Redirect::back()->with('error','รูปแบบข้อมูลไม่ถูกต้องหรือมีข้อมูลเป็นค่าว่าง');
     }
 
     if ($this->authenticateUser($sid, $nid)) {
