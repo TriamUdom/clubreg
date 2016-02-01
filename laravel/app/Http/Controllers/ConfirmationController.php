@@ -22,7 +22,7 @@ class ConfirmationController extends Controller{
           'current_club' => $current_club
         ));
     }else{
-      return Redirect::to('error/notloggedin');
+      return Redirect::to('/login');
     }
   }
 
@@ -45,7 +45,7 @@ class ConfirmationController extends Controller{
           throw new Exception('No national_id');
         }
       }catch(\Exception $e){
-        return Redirect::to('error/notloggedin');
+        return Redirect::to('/login');
       }
     }else{
       try{
@@ -58,7 +58,7 @@ class ConfirmationController extends Controller{
           throw new Exception('No national_id');
         }
       }catch(\Exception $e){
-        return Redirect::to('error/notloggedin');
+        return Redirect::to('/login');
       }
     }
   }
