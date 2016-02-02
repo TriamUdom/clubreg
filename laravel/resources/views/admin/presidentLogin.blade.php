@@ -5,17 +5,16 @@
   <fieldset>
    <legend>เข้าสู่ระบบสำหรับประธานชมรม</legend>
    <div class="form-group">
-     <label for="nid" class="col-lg-2 control-label">หมายเลขประจำตัวนักเรียน</label>
+     <label for="username" class="col-lg-2 control-label">ชื่อผู้ใช้</label>
      <div class="col-lg-10">
-       <input type="text" class="form-control" id="sid" name="sid">
+       <input type="text" class="form-control" id="username" name="username">
      </div>
    </div>
 
    <div class="form-group">
-     <label for="nid" class="col-lg-2 control-label">หมายเลขบัตรประจำตัวประชาชน</label>
+     <label for="password" class="col-lg-2 control-label">รหัสผ่าน</label>
      <div class="col-lg-10">
-       <input type="text" class="form-control" id="nid" name="nid">
-       <span class="help-block">ไม่ต้องใส่เครื่องหมายขีด (-) คั่น</span>
+       <input type="text" class="form-control" id="password" name="password">
      </div>
    </div>
    {{ csrf_field() }}
