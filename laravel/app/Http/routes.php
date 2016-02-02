@@ -52,5 +52,6 @@ if(preg_match('~MSIE|Internet Explorer~i', $_SERVER['HTTP_USER_AGENT']) || (strp
 
   if(Config::get('applicationConfig.mode') != 'technical_difficulties'){
     Route::get('/president/login','PresidentController@showLoginPage');
+    Route::post('/president/login.do','PresidentController@presidentLogin');
   }
 }
