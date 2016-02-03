@@ -24,6 +24,11 @@
         @endif
         @yield('content')
       </div>
+      @if(Config::get('app.debug') == true)
+        <div class="well">
+          {{ var_dump(Session::all()) }}
+        </div>
+      @endif
     </div>
 
     <script src="/js/jquery.min.js"></script>

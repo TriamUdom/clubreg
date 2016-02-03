@@ -14,7 +14,7 @@
 
       @if(Session::get('logged_in') == 1)
             <ul class="nav navbar-nav navbar-right">
-              <li><a href="/contact" target="_self">ติอต่อเจ้าหน้าที่</a></li>
+              <li><a href="/contact" target="_self">ติดต่อเจ้าหน้าที่</a></li>
               <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" id="usermenu">{{ Session::get('fullname') }} <span class="caret"></span></a>
                 <ul class="dropdown-menu" aria-labelledby="usermenu">
