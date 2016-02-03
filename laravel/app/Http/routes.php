@@ -21,6 +21,9 @@ if(preg_match('~MSIE|Internet Explorer~i', $_SERVER['HTTP_USER_AGENT']) || (strp
   Route::get('/error/notloggedin',function(){
     return view('notloggedin');
   });
+  Route::get('/contact',function(){
+    return view('contact');
+  });
 
   if(Config::get('applicationConfig.mode') != 'close' && Config::get('applicationConfig.mode') != 'technical_difficulties'){
     Route::get('/login','UIController@login');
@@ -53,5 +56,6 @@ if(preg_match('~MSIE|Internet Explorer~i', $_SERVER['HTTP_USER_AGENT']) || (strp
   if(Config::get('applicationConfig.mode') != 'technical_difficulties'){
     Route::get('/president/login','PresidentController@showLoginPage');
     Route::post('/president/login.do','PresidentController@presidentLogin');
+    Route::get('/president','PresidentController@showPresidentPage');
   }
 }
