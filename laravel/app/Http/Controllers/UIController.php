@@ -1,6 +1,7 @@
 <?php namespace App\Http\Controllers;
 
 use DB;
+use Session;
 use Redirect;
 
 /*
@@ -21,7 +22,11 @@ class UIController extends Controller{
    * @return view
    */
   public function index(){
-    return view('index');
+    if(Session::get('president_logged_in') == 1){
+      return Redirect::to('/president');
+    }else{
+      return view('index');
+    }
   }
 
   /**
