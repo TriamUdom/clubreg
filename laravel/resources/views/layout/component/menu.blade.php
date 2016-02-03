@@ -30,7 +30,7 @@
            </ul>
       @else
             <ul class="nav navbar-nav navbar-right">
-              <li><a href="/contact" target="_self">ติอต่อเจ้าหน้าที่</a></li>
+              <li><a href="/contact" target="_self">ติดต่อเจ้าหน้าที่</a></li>
               <li><a href="/login" target="_self">เข้าสู่ระบบ</a></li>
               <?php /*
               <li class="dropdown">
