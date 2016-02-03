@@ -24,7 +24,7 @@
         @endif
         @yield('content')
       </div>
-      @if(Config::get('applicationConfig.release') != 'release')
+      @if(Config::get('app.debug') == true)
         <div class="well">
           {{ var_dump(Session::all()) }}
         </div>
