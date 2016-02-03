@@ -24,6 +24,11 @@
         @endif
         @yield('content')
       </div>
+      @if(Config::get('applicationConfig.release') != 'release')
+        <div class="well">
+          {{ var_dump(Session::all()) }}
+        </div>
+      @endif
     </div>
 
     <script src="/js/jquery.min.js"></script>
