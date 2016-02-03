@@ -19,6 +19,8 @@ use Validator;
 
 class PresidentController extends Controller{
 
+  public $club_code = null;
+
   /**
    * Show president login page
    *
@@ -90,6 +92,7 @@ class PresidentController extends Controller{
         //Session::put('username', $user->national_id);
         $club = DB::table('club')->where('club_code', $data->club_code)->pluck('club_name');
         Session::put('fullname', $club);
+        $this->club_code = $data->club_code;
 
         // Log the request
         $ip_address = $_SERVER['REMOTE_ADDR'];
@@ -165,5 +168,10 @@ class PresidentController extends Controller{
     }else{
       return false;
     }
+  }
+
+  public function showConfirmedPage(){
+    $data = DB::table('user')->where('confirmation_status',1)->get();
+    return view('admin.presidentConfirmed',$data);
   }
 }
