@@ -41,16 +41,29 @@ class PresidentController extends Controller{
     $password = Input::get('password');
 
     $validator = Validator::make(array(
-      'sid' => $sid,
-      'nid' => $nid
+      'username' => $username,
+      'password' => $password
     ),array(
-      'sid' => 'required|numeric',
-      'nid' => 'required|numeric'
+      'username' => 'required',
+      'password' => 'required'
     ));
 
     if($validator->fails()){
       return Redirect::back()->with('error','รูปแบบข้อมูลไม่ถูกต้องหรือมีข้อมูลเป็นค่าว่าง');
     }
+
+    if($this->authenticatePresident()){
+
+    }
+  }
+
+  private function authenticatePresident($username, $password){
+    if($this->presidentExist()){
+
+    }
+  }
+
+  public function presidentExist(){
 
   }
 
