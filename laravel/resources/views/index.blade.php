@@ -32,9 +32,23 @@
 @endif
 <br><br>
 @if(Session::get('logged_in') == 1)
-<a href="/confirm">
-  <button class="btn btn-success btn-block">ดำเนินการต่อ</button>
-</a>
+  @if(Config::get('applicationConfig.mode') == 'confirmation')
+  <a href="/confirm">
+    <button class="btn btn-success btn-block">ดำเนินการต่อ</button>
+  </a>
+  @elseif(Config::get('applicationConfig.mode') == 'audition')
+  <a href="/audition">
+    <button class="btn btn-success btn-block">ดำเนินการต่อ</button>
+  </a>
+  @elseif(Config::get('applicationConfig.mode') == 'sorting1')
+
+  @elseif(Config::get('applicationConfig.mode') == 'sorting2')
+
+  @elseif(Config::get('applicationConfig.mode') == 'war')
+
+  @elseif(Config::get('applicationConfig.mode') == 'close')
+
+  @endif
 @else
 <a href="/login">
   <button class="btn btn-success btn-block">ดำเนินการต่อ</button>
