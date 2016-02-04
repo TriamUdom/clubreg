@@ -36,7 +36,7 @@ if(preg_match('~MSIE|Internet Explorer~i', $_SERVER['HTTP_USER_AGENT']) || (strp
         Route::post('/confirm.do','ConfirmationController@confirm');
       break;
       case 'audition':
-
+        Route::get('/audition','AuditionController@showAuditionPage');
       break;
       case 'sorting1':
 
