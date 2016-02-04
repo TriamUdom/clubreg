@@ -19,8 +19,6 @@ use Validator;
 
 class PresidentController extends Controller{
 
-  public $club_code = null;
-
   /**
    * Show president login page
    *
@@ -171,7 +169,8 @@ class PresidentController extends Controller{
   }
 
   public function showConfirmedPage(){
-    $data = DB::table('user')->where('confirmation_status',1)->get();
-    return view('admin.presidentConfirmed',$data);
+    $club_code = DB::table('club')->where('club_name', Session::get('fullname'))->pluck('club_code');
+    $data = DB::table('user')->where('confirmation_status', 1)->where('current_club', $club_code)->orderBy('room', 'asc')->orderBy('number', 'asc')->get();
+    return view('admin.presidentConfirmed')->with('data',$data);
   }
 }
