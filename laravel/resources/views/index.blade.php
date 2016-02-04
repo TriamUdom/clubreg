@@ -31,13 +31,6 @@
 
 @endif
 <br><br>
-@if(Session::get('logged_in') == 1)
-<a href="/confirm">
-  <button class="btn btn-success btn-block">ดำเนินการต่อ</button>
-</a>
-@else
-<a href="/login">
-  <button class="btn btn-success btn-block">ดำเนินการต่อ</button>
-</a>
+<button class="btn btn-danger btn-block">หมดเวลาลงทะเบียนแล้ว</button>
 @endif
 @stop
