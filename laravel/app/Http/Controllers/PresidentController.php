@@ -90,7 +90,7 @@ class PresidentController extends Controller{
         //Session::put('username', $user->national_id);
         $club = DB::table('club')->where('club_code', $data->club_code)->pluck('club_name');
         Session::put('fullname', $club);
-        $this->club_code = $data->club_code;
+        Session::put('club_code',$data->club_code);
 
         // Log the request
         $ip_address = $_SERVER['REMOTE_ADDR'];
@@ -168,9 +168,28 @@ class PresidentController extends Controller{
     }
   }
 
+  /**
+   * Show member of the club who confirm their will to still be in the club
+   *
+   * @return view with data upon president logged in
+   * @return Redirection upon president not logged in
+   */
   public function showConfirmedPage(){
-    $club_code = DB::table('club')->where('club_name', Session::get('fullname'))->pluck('club_code');
-    $data = DB::table('user')->where('confirmation_status', 1)->where('current_club', $club_code)->orderBy('room', 'asc')->orderBy('number', 'asc')->get();
-    return view('admin.presidentConfirmed')->with('data',$data);
+    if(self::presidentLoggedIn()){
+      $club_code = DB::table('club')->where('club_name', Session::get('fullname'))->pluck('club_code');
+      $data = DB::table('user')->where('confirmation_status', 1)->where('current_club', $club_code)->orderBy('room', 'asc')->orderBy('number', 'asc')->get();
+      return view('admin.presidentConfirmed')->with('data',$data);
+    }else{
+      return Redirect::to('/president/login');
+    }
+  }
+
+  public function showAuditionPage(){
+    if(self::presidentLoggedIn()){
+      $data = DB::table('audition')->where('club_code', Session::get('club_code'))->get();
+      return view('admin.presidentAudition')->with('data',$data);
+    }else{
+      return Redirect::to('/president/login');
+    }
   }
 }
