@@ -185,7 +185,12 @@ class PresidentController extends Controller{
 
   public function showAuditionPage(){
     if(self::presidentLoggedIn()){
-      $data = DB::table('audition')->where('club_code', Session::get('club_code'))->get();
+      $data = DB::table('audition')
+        ->join('user','audition.national_id','=','user.national_id')
+        ->where('audition.club_code',Session::get('club_code'))
+        ->select('audition.club_code','user.title','user.fname','user.lname','user.room')
+        ->orderBy('room','asc')
+        ->get();
       return view('admin.presidentAudition')->with('data',$data);
     }else{
       return Redirect::to('/president/login');
