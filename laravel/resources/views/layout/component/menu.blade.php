@@ -21,7 +21,7 @@
               @if(Session::get('president_logged_in') == 1)
 
               @else
-              <li><a href="/contact" target="_self">ติอต่อเจ้าหน้าที่</a></li>
+              <li><a href="/contact" target="_self">ติดต่อเจ้าหน้าที่</a></li>
               @endif
               <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" id="usermenu">{{ Session::get('fullname') }} <span class="caret"></span></a>
@@ -41,7 +41,7 @@
               @if(Session::get('president_logged_in') == 1)
 
               @else
-              <li><a href="/contact" target="_self">ติอต่อเจ้าหน้าที่</a></li>
+              <li><a href="/contact" target="_self">ติดต่อเจ้าหน้าที่</a></li>
               @endif
               <li><a href="/login" target="_self">เข้าสู่ระบบ</a></li>
               <?php /*
