@@ -32,5 +32,5 @@
 @endif
 <br><br>
 <button class="btn btn-danger btn-block">หมดเวลาลงทะเบียนแล้ว</button>
-@endif
+
 @stop
