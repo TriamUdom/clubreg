@@ -9,21 +9,22 @@
       <th>ชื่อ</th>
       <th>นามสกุล</th>
       <th>ห้อง</th>
-      <th></th>
+      <th>คำสั่ง</th>
     </tr>
   </thead>
   <tbody>
     @for ($i = 0; $i < count($data); $i++)
       <form class="form-horizontal" method="POST" action="/president/audition.do">
         <fieldset>
+          <input type="hidden" value="">
           <tr>
             <td>{{ $i+1 }}</td>
             <td>{{ $data[$i]->title }}</td>
             <td>{{ $data[$i]->fname }}</td>
             <td>{{ $data[$i]->lname }}</td>
             <td>{{ $data[$i]->room }}</td>
-            <td><a href=""><button type="submit" class="btn btn-danger btn-block">ปฏิเสธ</button></a></td>
-            <td><a href=""><button type="submit" class="btn btn-primary btn-block">ยืนยัน</button></a></td>
+            <td><button type="submit" class="btn btn-danger btn-block">ปฏิเสธ</button></td>
+            <td><button type="submit" class="btn btn-success btn-block">ยืนยัน</button></td>
           </tr>
 
           {{ csrf_field() }}
