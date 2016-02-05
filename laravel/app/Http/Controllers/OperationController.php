@@ -49,7 +49,7 @@ class OperationController extends Controller{
           return Redirect::to('/confirm');
         break;
         case 'audition':
-
+          return Redirect::to('/audition');
         break;
         case 'sorting1':
 
@@ -65,7 +65,7 @@ class OperationController extends Controller{
         break;
       }
 
-        return Redirect::to('account');
+        return Redirect::to('/');
     } else {
         return Redirect::back()->with('error','รหัสประจำตัวนักเรียนหรือรหัสประชาชนไม่ถูกต้อง');
     }
