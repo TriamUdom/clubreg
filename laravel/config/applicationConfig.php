@@ -23,7 +23,7 @@ return [
     // I'm not really know exactly how this will work
     // But I'm hoping that we'll never have to use it
   */
-  'mode' => 'close',
+  'mode' => 'confirmation',
 
   /*
   TUSD Server Address

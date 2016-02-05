@@ -31,7 +31,7 @@
       @else
             <ul class="nav navbar-nav navbar-right">
               <li><a href="/contact" target="_self">ติดต่อเจ้าหน้าที่</a></li>
-              <?php //<li><a href="/login" target="_self">เข้าสู่ระบบ</a></li> ?>
+              <li><a href="/login" target="_self">เข้าสู่ระบบ</a></li>
               <?php /*
               <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" id="helpcenter">ศูนย์ช่วยเหลือ <span class="caret"></span></a>
