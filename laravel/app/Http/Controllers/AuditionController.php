@@ -4,6 +4,7 @@ use DB;
 use Input;
 use Session;
 use Redirect;
+use Audition;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,9 +17,16 @@ use Redirect;
 */
 
 class AuditionController extends Controller{
+
+  private $audition;
+
+  public function __construct(){
+    $this->audition = new Audition();
+  }
+
   public function showAuditionPage(){
     if(OperationController::userLoggedIn()){
-      $data = DB::table('club')->where('audition',1)->where('active',1)->get();
+      $data = $this->audition->getAuditionClub();
       return view('audition')->with('data',$data);
     }else{
       return Redirect::to('/login');
