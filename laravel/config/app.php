@@ -194,6 +194,12 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View'      => Illuminate\Support\Facades\View::class,
 
+        //<-----------OUR JOB STARTS HERE----------->
+
+        'Audition'   => App\Audition\Audition::class,
+
+        //<-----------OUR JOB ENDS HERE----------->
+
     ],
 
 ];
