@@ -18,7 +18,7 @@
             <td>{{ $data[$i]->club_name }}</td>
             <td><a href=""><button type="submit" class="btn btn-primary btn-block">เลือก</button></a></td>
           </tr>
-
+          <input type="hidden" name="club_code" value="{{ $data['club_code'] }}">
           {{ csrf_field() }}
         </fieldset>
       </form>
