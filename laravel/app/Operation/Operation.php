@@ -4,8 +4,6 @@ use DB;
 
 class Operation{
 
-  private $loginData = null;
-
   /**
    * Check if user exist
    *
@@ -33,13 +31,10 @@ class Operation{
       if($user->student_id == $sid){
         // Auth Successful
         // Laravel's Session Magic. Do Not Touch.
-        //Session::put('logged_in', '1');
-        //Session::put('national_id', $user->national_id);
+        Session::put('logged_in', '1');
+        Session::put('national_id', $user->national_id);
         Session::put('fullname', $user->title . $user->fname . " " . $user->lname);
 
-        $this->loginData = array(
-          'national_id' => $user->national_id
-        );
 
         // Log the request
         $ip_address = $_SERVER['REMOTE_ADDR'];
@@ -95,7 +90,7 @@ class Operation{
    * @return bool
    */
   public function userLoggedIn(){
-    if(!is_null($this->loginData)){
+    if(Session::get('logged_in') == 1){
       return true;
     }else{
       return false;
