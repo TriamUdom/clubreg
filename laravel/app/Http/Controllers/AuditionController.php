@@ -32,4 +32,10 @@ class AuditionController extends Controller{
       return Redirect::to('/login');
     }
   }
+
+  public function addUserToQueue(){
+    $club_code = Input::get('club_code');
+    $this->audition->addUserToQueue($club_code);
+    return Redirect::to('/audition');
+  }
 }
