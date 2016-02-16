@@ -55,10 +55,11 @@ if(preg_match('~MSIE|Internet Explorer~i', $_SERVER['HTTP_USER_AGENT']) || (strp
   }
 
   if(Config::get('applicationConfig.mode') != 'technical_difficulties'){
+    Route::get('/president','PresidentController@showPresidentPage');
     Route::get('/president/login','PresidentController@showLoginPage');
     Route::post('/president/login.do','PresidentController@presidentLogin');
-    Route::get('/president','PresidentController@showPresidentPage');
     Route::get('/president/confirmed','PresidentController@showConfirmedPage');
     Route::get('/president/audition','PresidentController@showAuditionPage');
+    Route::post('/president/audition.do','PresidentController@auditionAction');
   }
 }
