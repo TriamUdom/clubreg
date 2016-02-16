@@ -42,7 +42,7 @@ class PresidentController extends Controller{
    * @return Redirection upon not logged in
    */
   public function showPresidentPage(){
-    if(self::presidentLoggedIn()){
+    if(President::presidentLoggedIn()){
       return view('admin.president');
     }else{
       return Redirect::to('/president/login');
@@ -87,7 +87,7 @@ class PresidentController extends Controller{
    * @return Redirection upon president not logged in
    */
   public function showConfirmedPage(){
-    if(self::presidentLoggedIn()){
+    if(President::presidentLoggedIn()){
       $data = DB::table('user')
       ->where('confirmation_status', 1)
       ->where('current_club', Session::get('club_code'))
@@ -101,14 +101,17 @@ class PresidentController extends Controller{
   }
 
   public function showAuditionPage(){
-    if(self::presidentLoggedIn()){
-      $data = DB::table('audition')
-        ->join('user','audition.national_id','=','user.national_id')
-        ->where('audition.club_code',Session::get('club_code'))
-        ->select('audition.club_code','user.title','user.fname','user.lname','user.room')
-        ->orderBy('room','asc')
-        ->get();
+    if(President::presidentLoggedIn()){
+      $data = $this->president->getAuditionData();
       return view('admin.presidentAudition')->with('data',$data);
+    }else{
+      return Redirect::to('/president/login');
+    }
+  }
+
+  public function auditionAction(){
+    if(President::presidentLoggedIn()){
+      $this->president->auditionAction();
     }else{
       return Redirect::to('/president/login');
     }
