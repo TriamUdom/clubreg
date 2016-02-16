@@ -1,6 +1,11 @@
 @extends('layout.main')
 
 @section('content')
+@if(Session::get('error') != null)
+<div class="alert alert-danger" style="background: #FF0000;">
+  {{ Session::get('error') }}
+</div>
+@endif
 <table class="table table-striped table-hover ">
   <thead>
     <tr>
@@ -23,8 +28,16 @@
             <td>{{ $data[$i]->fname }}</td>
             <td>{{ $data[$i]->lname }}</td>
             <td>{{ $data[$i]->room }}</td>
-            <td><button type="submit" class="btn btn-danger btn-block">ปฏิเสธ</button></td>
-            <td><button type="submit" class="btn btn-success btn-block">ยืนยัน</button></td>
+            <td>
+              <input type="hidden" name="national_id" value="{{ $data[$i]->national_id }}">
+              <input type="hidden" name="action" value="dismiss">
+              <button type="submit" class="btn btn-danger btn-block">ปฏิเสธ</button>
+            </td>
+            <td>
+              <input type="hidden" name="national_id" value="{{ $data[$i]->national_id }}">
+              <input type="hidden" name="action" value="confirm">
+              <button type="submit" class="btn btn-success btn-block">ยืนยัน</button>
+            </td>
           </tr>
 
           {{ csrf_field() }}
