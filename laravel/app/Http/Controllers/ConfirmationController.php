@@ -4,6 +4,7 @@ use DB;
 use Input;
 use Session;
 use Redirect;
+use Confirmation;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,6 +18,12 @@ use Redirect;
 
 class ConfirmationController extends Controller{
 
+  private $confirmation;
+
+  public function __construct(){
+    $this->confirmation = new Confirmation();
+  }
+
   /**
    * Show confirmation page
    *
@@ -24,12 +31,13 @@ class ConfirmationController extends Controller{
    */
   public function showConfirmationPage(){
     if(OperationController::userLoggedIn()){
-      $data = DB::table('user')->where('national_id',Session::get('national_id'))->first();
-      $current_club = DB::table('club')->where('club_code',$data->current_club)->pluck('club_name');
+      //$data = DB::table('user')->where('national_id',Session::get('national_id'))->first();
+      //$current_club = DB::table('club')->where('club_code',$data->current_club)->pluck('club_name');
+      $data = $this->confirmation->getCurrentClub();
       return view('confirm')
         ->with('data',array(
-          'confirmation_status' => $data->confirmation_status,
-          'current_club' => $current_club
+          'confirmation_status' => $data['confirmation_status'],
+          'current_club' => $data['current_club']
         ));
     }else{
       return Redirect::to('/login');
@@ -44,6 +52,8 @@ class ConfirmationController extends Controller{
   public function confirm(){
     $current_status = Input::get('current_status');
 
+    $this->confirmation->doConfirm($current_status);
+    /*
     if($current_status == 1){
       try{
         if(DB::table('user')->where('national_id',Session::get('national_id'))->exists()){
@@ -70,6 +80,6 @@ class ConfirmationController extends Controller{
       }catch(\Exception $e){
         return Redirect::to('/login');
       }
-    }
+    }*/
   }
 }
