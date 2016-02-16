@@ -31,8 +31,6 @@ class ConfirmationController extends Controller{
    */
   public function showConfirmationPage(){
     if(OperationController::userLoggedIn()){
-      //$data = DB::table('user')->where('national_id',Session::get('national_id'))->first();
-      //$current_club = DB::table('club')->where('club_code',$data->current_club)->pluck('club_name');
       $data = $this->confirmation->getCurrentClub();
       return view('confirm')
         ->with('data',array(
