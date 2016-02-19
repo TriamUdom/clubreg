@@ -5,6 +5,7 @@ use Input;
 use Session;
 use Redirect;
 use Audition;
+use Operation;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,9 +26,10 @@ class AuditionController extends Controller{
   }
 
   public function showAuditionPage(){
-    if(OperationController::userLoggedIn()){
-      $data = $this->audition->getAuditionClub();
-      return view('audition')->with('data',$data);
+    if(Operation::userLoggedIn()){
+      $available = $this->audition->getAuditionClub();
+      $selected = $this->audition->getSelected();
+    return view('audition')->with('data',array('available' => $available, 'selected' => $selected));
     }else{
       return Redirect::to('/login');
     }
@@ -36,6 +38,12 @@ class AuditionController extends Controller{
   public function addUserToQueue(){
     $club_code = Input::get('club_code');
     $this->audition->addUserToQueue($club_code);
+    return Redirect::to('/audition');
+  }
+
+  public function removeUserFromQueue(){
+    $club_code = Input::get('club_code');
+    $this->audition->removeUserFromQueue($club_code);
     return Redirect::to('/audition');
   }
 }
