@@ -4,6 +4,7 @@ use DB;
 use Input;
 use Session;
 use Redirect;
+use Operation;
 use Confirmation;
 
 /*
@@ -30,7 +31,7 @@ class ConfirmationController extends Controller{
    * @return view on success
    */
   public function showConfirmationPage(){
-    if(OperationController::userLoggedIn()){
+    if(Operation::userLoggedIn()){
       $data = $this->confirmation->getCurrentClub();
       return view('confirm')
         ->with('data',array(
