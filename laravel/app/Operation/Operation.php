@@ -1,22 +1,9 @@
 <?php namespace App\Operation;
 
 use DB;
+use Session;
 
 class Operation{
-
-  /**
-   * Check if user exist
-   *
-   * @param int $nationalid
-   * @return bool
-   */
-  public function userExist($nationalid){
-    if(DB::table('user')->where('national_id', $nationalid)->exists()){
-      return true;
-    }else{
-      return false;
-    }
-  }
 
   /**
    * Authenticate user and do necessary operation associate with that
@@ -58,6 +45,20 @@ class Operation{
   }
 
   /**
+   * Check if user exist
+   *
+   * @param int $nationalid
+   * @return bool
+   */
+  public function userExist($nationalid){
+    if(DB::table('user')->where('national_id', $nationalid)->exists()){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
+  /**
    * Log user's login attempt
    *
    * @param mixed $nationalid
@@ -89,7 +90,7 @@ class Operation{
    *
    * @return bool
    */
-  public function userLoggedIn(){
+  public static function userLoggedIn(){
     if(Session::get('logged_in') == 1){
       return true;
     }else{
