@@ -47,4 +47,13 @@ class Audition{
     DB::table('audition')->where('club_code', $club_code)->where('national_id', Session::get('national_id'))->delete();
     return true;
   }
+
+  public function haveClub(){
+    $result = DB::table('audition')->where('national_id', Session::get('national_id'))->where('status', 1)->pluck('club_code');
+    if(isset($result)){
+      return $result;
+    }else{
+      return false;
+    }
+  }
 }
