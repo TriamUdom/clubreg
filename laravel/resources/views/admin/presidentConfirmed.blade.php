@@ -2,7 +2,7 @@
 
 @section('content')
 
-<legend>{{ Session::get('fullname') }}</legend>
+<legend>{{ Session::get('fullname') }} รายชื่อนักเรียนที่ยืนยันการลงทะเบียนชมรมเดิม</legend>
 
 <table class="table table-striped table-hover ">
   <thead>
