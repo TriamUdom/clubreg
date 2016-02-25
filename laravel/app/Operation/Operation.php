@@ -2,6 +2,7 @@
 
 use DB;
 use Session;
+use Redirect;
 
 class Operation{
 
@@ -98,4 +99,15 @@ class Operation{
     }
   }
 
+  /**
+   * Log the user out
+   *
+   * @return Redirection
+   */
+  public function logout(){
+    Session::flush();
+    Session::regenerate();
+
+    return true;
+  }
 }
