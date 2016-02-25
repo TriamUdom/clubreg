@@ -43,7 +43,8 @@ class PresidentController extends Controller{
    */
   public function showPresidentPage(){
     if(President::presidentLoggedIn()){
-      return view('admin.president');
+      $data = DB::table('club')->where('club_code', Session::get('club_code'))->first();
+      return view('admin.president')->with('data', $data);
     }else{
       return Redirect::to('/president/login');
     }
@@ -111,7 +112,34 @@ class PresidentController extends Controller{
 
   public function auditionAction(){
     if(President::presidentLoggedIn()){
-      $this->president->auditionAction();
+      $result = $this->president->auditionAction();
+      switch($result){
+        case 'confirm':
+          return Redirect::to('/president/audition')->with('success','ยืนยันการสมัครแล้ว');
+        break;
+        case 'dismiss':
+          return Redirect::to('/president/audition')->with('success','ปฏิเสธการสมัครแล้ว');
+        break;
+        default:
+          return Redirect::to('/president/audition')->with('error','เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง');
+        break;
+      }
+    }else{
+      return Redirect::to('/president/login');
+    }
+  }
+
+  public function auditionCancel(){
+    if(President::presidentLoggedIn()){
+      $result = $this->president->auditionCancel();
+      switch($result){
+        case 'cancel':
+          return Redirect::to('/president/audition')->with('success','ยกเลิกการสมัครแล้ว');
+        break;
+        default:
+          return Redirect::to('/president/audition')->with('error','เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง');
+        break;
+      }
     }else{
       return Redirect::to('/president/login');
     }
