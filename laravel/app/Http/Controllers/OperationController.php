@@ -84,9 +84,7 @@ class OperationController extends Controller{
    * @return Redirection
    */
   public function logout(){
-    Session::flush();
-    Session::regenerate();
-
+    $this->operation->logout();
     return Redirect::to('/');
   }
 }
