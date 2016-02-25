@@ -25,33 +25,33 @@
   </thead>
   <tbody>
     @for ($i = 0; $i < count($data); $i++)
-          <tr>
-            <td>{{ $i+1 }}</td>
-            <td>{{ $data[$i]->title }}</td>
-            <td>{{ $data[$i]->fname }}</td>
-            <td>{{ $data[$i]->lname }}</td>
-            <td>{{ $data[$i]->room }}</td>
-            <td>
-              <form class="form-horizontal" method="POST" action="/president/audition.do">
-                <fieldset>
-                  <input type="hidden" name="national_id" value="{{ $data[$i]->national_id }}">
-                  <input type="hidden" name="action" value="dismiss">
-                  <button type="submit" class="btn btn-danger btn-block">ปฏิเสธ</button>
-                  {{ csrf_field() }}
-                </fieldset>
-              </form>
-            </td>
-            <td>
-              <form class="form-horizontal" method="POST" action="/president/audition.do">
-                <fieldset>
-                  <input type="hidden" name="national_id" value="{{ $data[$i]->national_id }}">
-                  <input type="hidden" name="action" value="confirm">
-                  <button type="submit" class="btn btn-success btn-block">ยืนยัน</button>
-                  {{ csrf_field() }}
-                </fieldset>
-              </form>
-            </td>
-          </tr>
+      <tr>
+        <td>{{ $i+1 }}</td>
+        <td>{{ $data[$i]->title }}</td>
+        <td>{{ $data[$i]->fname }}</td>
+        <td>{{ $data[$i]->lname }}</td>
+        <td>{{ $data[$i]->room }}</td>
+        <td>
+          <form class="form-horizontal" method="POST" action="/president/audition.do">
+            <fieldset>
+              <input type="hidden" name="national_id" value="{{ $data[$i]->national_id }}">
+              <input type="hidden" name="action" value="dismiss">
+              <button type="submit" class="btn btn-danger btn-block">ปฏิเสธ</button>
+              {{ csrf_field() }}
+            </fieldset>
+          </form>
+        </td>
+        <td>
+          <form class="form-horizontal" method="POST" action="/president/audition.do">
+            <fieldset>
+              <input type="hidden" name="national_id" value="{{ $data[$i]->national_id }}">
+              <input type="hidden" name="action" value="confirm">
+              <button type="submit" class="btn btn-success btn-block">ยืนยัน</button>
+              {{ csrf_field() }}
+            </fieldset>
+          </form>
+        </td>
+      </tr>
     @endfor
   </tbody>
 </table>
@@ -69,23 +69,23 @@
   </thead>
   <tbody>
     @for ($i = 0; $i < count($data); $i++)
-          <tr>
-            <td>{{ $i+1 }}</td>
-            <td>{{ $data[$i]->title }}</td>
-            <td>{{ $data[$i]->fname }}</td>
-            <td>{{ $data[$i]->lname }}</td>
-            <td>{{ $data[$i]->room }}</td>
-            <td>
-              <form class="form-horizontal" method="POST" action="/president/audition.cancel">
-                <fieldset>
-                  <input type="hidden" name="national_id" value="{{ $data[$i]->national_id }}">
-                  <input type="hidden" name="action" value="dismiss">
-                  <button type="submit" class="btn btn-danger btn-block">ปฏิเสธ</button>
-                  {{ csrf_field() }}
-                </fieldset>
-              </form>
-            </td>
-          </tr>
+      <tr>
+        <td>{{ $i+1 }}</td>
+        <td>{{ $data[$i]->title }}</td>
+        <td>{{ $data[$i]->fname }}</td>
+        <td>{{ $data[$i]->lname }}</td>
+        <td>{{ $data[$i]->room }}</td>
+        <td>
+          <form class="form-horizontal" method="POST" action="/president/audition.cancel">
+            <fieldset>
+              <input type="hidden" name="national_id" value="{{ $data[$i]->national_id }}">
+              <input type="hidden" name="action" value="dismiss">
+              <button type="submit" class="btn btn-danger btn-block">ปฏิเสธ</button>
+              {{ csrf_field() }}
+            </fieldset>
+          </form>
+        </td>
+      </tr>
     @endfor
   </tbody>
 </table>
