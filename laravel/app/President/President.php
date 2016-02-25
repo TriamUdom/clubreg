@@ -4,6 +4,7 @@ use DB;
 use Crypt;
 use Input;
 use Session;
+use Redirect;
 
 class President{
 
@@ -137,25 +138,30 @@ class President{
             ->where('national_id', $national_id)
             ->where('club_code', Session::get('club_code'))
             ->update(array('status' => 1));
+
           //Prevent user from attend to other club
           DB::table('audition')
             ->where('national_id', $national_id)
             ->whereNotIn('club_code', array(Session::get('club_code')))
             ->where('status', 0)
             ->update(array('status' => -2));
-          return Redirect::to('/president/audition')->with('success','ยืนยันการสมัครแล้ว');
+          return 'confirm';
         break;
         case 'dismiss':
           DB::table('audition')
             ->where('national_id', $national_id)
             ->where('club_code', Session::get('club_code'))
             ->update(array('status' => -1));
-          return Redirect::to('/president/audition')->with('success','ปฏิเสธการสมัครแล้ว');
+          return 'dismiss';
         break;
         default:
-          return Redirect::to('/president/audition')->with('error','เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง');
+          return false;
         break;
       }
     }
+  }
+
+  public function auditionCancel(){
+    
   }
 }
