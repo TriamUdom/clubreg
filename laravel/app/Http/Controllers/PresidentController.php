@@ -104,7 +104,8 @@ class PresidentController extends Controller{
   public function showAuditionPage(){
     if(President::presidentLoggedIn()){
       $data = $this->president->getAuditionData();
-      return view('admin.presidentAudition')->with('data',$data);
+      $data2 = $this->president->getAuditionPassed();
+      return view('admin.presidentAudition')->with('data', $data)->with('data2', $data2);
     }else{
       return Redirect::to('/president/login');
     }
