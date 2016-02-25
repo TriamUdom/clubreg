@@ -62,5 +62,6 @@ if(preg_match('~MSIE|Internet Explorer~i', $_SERVER['HTTP_USER_AGENT']) || (strp
     Route::get('/president/confirmed','PresidentController@showConfirmedPage');
     Route::get('/president/audition','PresidentController@showAuditionPage');
     Route::post('/president/audition.do','PresidentController@auditionAction');
+    Route::post('/president/audition.cancel','PresidentController@auditionCancel');
   }
 }
