@@ -27,9 +27,15 @@ class AuditionController extends Controller{
 
   public function showAuditionPage(){
     if(Operation::userLoggedIn()){
-      $available = $this->audition->getAuditionClub();
-      $selected = $this->audition->getSelected();
-    return view('audition')->with('data',array('available' => $available, 'selected' => $selected));
+      $club_code = $this->audition->haveClub();
+      if($club_code){
+        $club_name = DB::table('club')->where('club_code', $club_code)->pluck('club_name');
+        return view('audition')->with('club_name', $club_name);
+      }else{
+        $available = $this->audition->getAuditionClub();
+        $selected = $this->audition->getSelected();
+        return view('audition')->with('data',array('available' => $available, 'selected' => $selected));
+      }
     }else{
       return Redirect::to('/login');
     }
