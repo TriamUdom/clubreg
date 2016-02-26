@@ -137,11 +137,7 @@ class President{
     $national_id_encrypted  = Input::get('national_id');
     $action                 = Input::get('action');
 
-    try{
-      $national_id = Crypt::decrypt($national_id_encrypted);
-    }catch(DecryptException $e){
-      die('DecryptException');
-    }
+    $national_id = Crypt::decrypt($national_id_encrypted);
 
     if(DB::table('audition')->where('national_id', $national_id)->where('status', 1)->exists()){
       return Redirect::to('/president/audition')->with('error','ผู้ใช้นี้มีชมรมแล้ว');
@@ -180,11 +176,7 @@ class President{
     $national_id_encrypted  = Input::get('national_id');
     $action                 = Input::get('action');
 
-    try{
-      $national_id = Crypt::decrypt($national_id_encrypted);
-    }catch(DecryptException $e){
-      die('DecryptException');
-    }
+    $national_id = Crypt::decrypt($national_id_encrypted);
 
     switch($action){
       case 'cancel':
