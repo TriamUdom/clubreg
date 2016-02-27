@@ -4,6 +4,12 @@ use DB;
 use Session;
 
 class Audition{
+
+  /**
+   *
+   *
+   *
+   */
   public function getAuditionClub(){
     $selected = DB::table('audition')->where('national_id', Session::get('national_id'))->where('status', 0)->get();
     for($i=0;$i<count($selected);$i++){
@@ -17,6 +23,12 @@ class Audition{
     return $data;
   }
 
+  /**
+   * Get selected club
+   *
+   * @return array data if user have selected club
+   * @return false if user don't have selected club
+   */
   public function getSelected(){
     $Rawclub_code = DB::table('audition')->where('national_id', Session::get('national_id'))->get();
     if(!empty($Rawclub_code)){
@@ -26,12 +38,16 @@ class Audition{
         $data[] = array('club_name' => $club_name, 'club_code' => $club_code);
       }
       return $data;
-    }
-    else{
+    }else{
       return false;
     }
   }
 
+  /**
+   * Add user to audition waiting queue
+   *
+   * @return true
+   */
   public function addUserToQueue($club_code){
     DB::table('audition')->insert(array(
       'national_id' => Session::get('national_id'),
@@ -43,11 +59,22 @@ class Audition{
     return true;
   }
 
+  /**
+   * Remove user from audition waiting queue
+   *
+   * @return true
+   */
   public function removeUserFromQueue($club_code){
     DB::table('audition')->where('club_code', $club_code)->where('national_id', Session::get('national_id'))->delete();
     return true;
   }
 
+  /**
+   * Check if any club had accepted user
+   *
+   * @return club_code if any club had accepted user
+   * @return false if no club had accepted user
+   */
   public function haveClub(){
     $result = DB::table('audition')->where('national_id', Session::get('national_id'))->where('status', 1)->pluck('club_code');
     if(isset($result)){
