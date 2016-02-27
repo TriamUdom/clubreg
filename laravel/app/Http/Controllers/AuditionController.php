@@ -19,8 +19,18 @@ use Operation;
 
 class AuditionController extends Controller{
 
+  /**
+   * Audition class instance
+   *
+   * @var \App\Audition
+   */
   private $audition;
 
+  /**
+   * Construct new audition instance
+   *
+   * @return void
+   */
   public function __construct(){
     $this->audition = new Audition();
   }

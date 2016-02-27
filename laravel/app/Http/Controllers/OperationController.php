@@ -20,8 +20,18 @@ use Validator;
 
 class OperationController extends Controller{
 
+  /**
+   * Operation class instance
+   *
+   * @var \App\Confirmation
+   */
   private $operation;
 
+  /**
+   * Construct new operation instance
+   *
+   * @return void
+   */
   public function __construct(){
     $this->operation = new Operation;
   }

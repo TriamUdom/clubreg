@@ -19,8 +19,18 @@ use Confirmation;
 
 class ConfirmationController extends Controller{
 
+  /**
+   * Confirmation class instance
+   *
+   * @var \App\Confirmation
+   */
   private $confirmation;
 
+  /**
+   * Construct new confirmation instance
+   *
+   * @return void
+   */
   public function __construct(){
     $this->confirmation = new Confirmation();
   }

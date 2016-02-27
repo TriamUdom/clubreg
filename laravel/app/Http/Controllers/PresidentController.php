@@ -20,8 +20,18 @@ use Validator;
 
 class PresidentController extends Controller{
 
+  /**
+   * President class instance
+   *
+   * @var \App\President
+   */
   private $president;
 
+  /**
+   * Construct new president class
+   *
+   * @return void
+   */
   public function __construct(){
     $this->president = new President;
   }
