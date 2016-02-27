@@ -103,6 +103,11 @@ class President{
     }
   }
 
+  /**
+   * Get data of pending auditioner
+   *
+   * @return object data
+   */
   public function getAuditionData(){
     $data = DB::table('audition')
       ->join('user','audition.national_id','=','user.national_id')
@@ -118,6 +123,11 @@ class President{
     return $data;
   }
 
+  /**
+   * Get data of passed auditioner
+   *
+   * @return object data
+   */
   public function getAuditionPassed(){
     $data = DB::table('audition')
       ->join('user','audition.national_id','=','user.national_id')
@@ -133,6 +143,12 @@ class President{
     return $data;
   }
 
+  /**
+   * Do audition action
+   *
+   * @return string on success
+   * @return false on failure
+   */
   public function auditionAction(){
     $national_id_encrypted  = Input::get('national_id');
     $action                 = Input::get('action');
@@ -172,6 +188,12 @@ class President{
     }
   }
 
+  /**
+   * Cancel audition
+   *
+   * @return string on success
+   * @return false on failure
+   */
   public function auditionCancel(){
     $national_id_encrypted  = Input::get('national_id');
     $action                 = Input::get('action');
