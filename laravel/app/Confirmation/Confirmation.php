@@ -19,7 +19,7 @@ class Confirmation{
   /**
    * Confirm current club
    *
-   *
+   * @return string Redirection action
    */
   public function doConfirm($current_status){
     if($current_status == 1){
