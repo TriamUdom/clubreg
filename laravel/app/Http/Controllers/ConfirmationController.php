@@ -51,6 +51,14 @@ class ConfirmationController extends Controller{
   public function confirm(){
     $current_status = Input::get('current_status');
 
-    $this->confirmation->doConfirm($current_status);
+    $case = $this->confirmation->doConfirm($current_status);
+    switch($case){
+      case 'back':
+        return Redirect::back();
+      break;
+      case 'notloggedin':
+        return Redirect::to('/login');
+      break;
+    }
   }
 }

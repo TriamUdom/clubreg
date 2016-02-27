@@ -19,7 +19,7 @@ class Confirmation{
   /**
    * Confirm current club
    *
-   * 
+   *
    */
   public function doConfirm($current_status){
     if($current_status == 1){
@@ -28,12 +28,12 @@ class Confirmation{
           DB::table('user')->where('national_id',Session::get('national_id'))->update(array(
             'confirmation_status' => 0
           ));
-          return Redirect::back();
+          return 'back';
         }else{
           throw new UserDataException('No national_id');
         }
       }catch(\Exception $e){
-        return Redirect::to('/login');
+        return 'notloggedin';
       }
     }else{
       try{
@@ -41,12 +41,12 @@ class Confirmation{
           DB::table('user')->where('national_id',Session::get('national_id'))->update(array(
             'confirmation_status' => 1
           ));
-          return Redirect::back();
+          return 'back';
         }else{
           throw new UserDataException('No national_id');
         }
       }catch(\Exception $e){
-        return Redirect::to('/login');
+        return 'notloggedin';
       }
     }
   }
