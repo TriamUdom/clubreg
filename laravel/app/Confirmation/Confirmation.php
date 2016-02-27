@@ -4,12 +4,23 @@ use DB;
 use Redirect;
 
 class Confirmation{
+
+  /**
+   * Get user's current club
+   *
+   * @return array data
+   */
   public function getCurrentClub(){
     $data = DB::table('user')->where('national_id',Session::get('national_id'))->first();
     $current_club = DB::table('club')->where('club_code',$data->current_club)->pluck('club_name');
     return array('confirmation_status' => $data->confirmation_status, 'current_club' => $current_club);
   }
 
+  /**
+   * Confirm current club
+   *
+   * 
+   */
   public function doConfirm($current_status){
     if($current_status == 1){
       try{
