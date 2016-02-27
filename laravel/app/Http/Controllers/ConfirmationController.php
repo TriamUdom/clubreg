@@ -52,33 +52,5 @@ class ConfirmationController extends Controller{
     $current_status = Input::get('current_status');
 
     $this->confirmation->doConfirm($current_status);
-    /*
-    if($current_status == 1){
-      try{
-        if(DB::table('user')->where('national_id',Session::get('national_id'))->exists()){
-          DB::table('user')->where('national_id',Session::get('national_id'))->update(array(
-            'confirmation_status' => 0
-          ));
-          return Redirect::back();
-        }else{
-          throw new Exception('No national_id');
-        }
-      }catch(\Exception $e){
-        return Redirect::to('/login');
-      }
-    }else{
-      try{
-        if(DB::table('user')->where('national_id',Session::get('national_id'))->exists()){
-          DB::table('user')->where('national_id',Session::get('national_id'))->update(array(
-            'confirmation_status' => 1
-          ));
-          return Redirect::back();
-        }else{
-          throw new Exception('No national_id');
-        }
-      }catch(\Exception $e){
-        return Redirect::to('/login');
-      }
-    }*/
   }
 }
