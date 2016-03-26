@@ -30,6 +30,8 @@ if(preg_match('~MSIE|Internet Explorer~i', $_SERVER['HTTP_USER_AGENT']) || (strp
     Route::post('/login.do','OperationController@login');
     Route::get('/logout','OperationController@logout');
 
+    //Route::get('/debug/movedata','DebugOperation@moveData');
+
     switch(Config::get('applicationConfig.mode')){
       case 'confirmation':
         Route::get('/confirm','ConfirmationController@showConfirmationPage');
