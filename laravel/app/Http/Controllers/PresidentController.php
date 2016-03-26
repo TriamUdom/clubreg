@@ -111,6 +111,12 @@ class PresidentController extends Controller{
     }
   }
 
+  /**
+   * Show audition selection page
+   *
+   * @return view if loggedin
+   * @return Redirection if not loggedin
+   */
   public function showAuditionPage(){
     if(President::presidentLoggedIn()){
       $data = $this->president->getAuditionData();
@@ -121,6 +127,11 @@ class PresidentController extends Controller{
     }
   }
 
+  /**
+   * Call 
+   *
+   *
+   */
   public function auditionAction(){
     if(President::presidentLoggedIn()){
       $result = $this->president->auditionAction();

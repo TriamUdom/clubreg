@@ -35,6 +35,11 @@ class AuditionController extends Controller{
     $this->audition = new Audition();
   }
 
+  /**
+   * Show audition page
+   *
+   * @return view
+   */
   public function showAuditionPage(){
     if(Operation::userLoggedIn()){
       $club_code = $this->audition->haveClub();
@@ -51,12 +56,22 @@ class AuditionController extends Controller{
     }
   }
 
+  /**
+   * Call audition model to add user to audition queue
+   *
+   * @return Redirection
+   */
   public function addUserToQueue(){
     $club_code = Input::get('club_code');
     $this->audition->addUserToQueue($club_code);
     return Redirect::to('/audition');
   }
 
+  /**
+   * Call audition model to remove user from audition queue
+   *
+   * @return Redirection
+   */
   public function removeUserFromQueue(){
     $club_code = Input::get('club_code');
     $this->audition->removeUserFromQueue($club_code);
