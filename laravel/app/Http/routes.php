@@ -29,6 +29,7 @@ if(preg_match('~MSIE|Internet Explorer~i', $_SERVER['HTTP_USER_AGENT']) || (strp
     Route::get('/login','UIController@login');
     Route::post('/login.do','OperationController@login');
     Route::get('/logout','OperationController@logout');
+    Route::get('/confirmed','OperationController@confirmed');
 
     //Route::get('/debug/movedata','DebugOperation@moveData');
 
