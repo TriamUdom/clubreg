@@ -42,12 +42,6 @@ if(preg_match('~MSIE|Internet Explorer~i', $_SERVER['HTTP_USER_AGENT']) || (strp
         Route::post('/audition.do','AuditionController@addUserToQueue');
         Route::post('/audition.delete','AuditionController@removeUserFromQueue');
       break;
-      case 'sorting1':
-
-      break;
-      case 'sorting2':
-
-      break;
       case 'war':
 
       break;
