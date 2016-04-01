@@ -6,9 +6,9 @@ use Session;
 class Audition{
 
   /**
+   * Get all club that have audition which the user haven't selected
    *
-   *
-   *
+   * @return array club that have audition which the user haven't selected
    */
   public function getAuditionClub(){
     $selected = DB::table('audition')->where('national_id', Session::get('national_id'))->where('status', 0)->get();
@@ -24,7 +24,7 @@ class Audition{
   }
 
   /**
-   * Get selected club
+   * Get user's selected club
    *
    * @return array data if user have selected club
    * @return false if user don't have selected club
