@@ -14,7 +14,8 @@ use Validator;
 |--------------------------------------------------------------------------
 |
 | This controller handle general operation (e.g.login logout) for every mode
-|
+| This controller also handle page render that doesn't fall into Audition,
+| Confirmation or Registration controller
 |
 */
 
@@ -68,12 +69,6 @@ class OperationController extends Controller{
         case 'audition':
           return Redirect::to('/audition');
         break;
-        case 'sorting1':
-
-        break;
-        case 'sorting2':
-
-        break;
         case 'war':
 
         break;
@@ -96,5 +91,14 @@ class OperationController extends Controller{
   public function logout(){
     $this->operation->logout();
     return Redirect::to('/');
+  }
+
+  /**
+   *  Render page for any user that already have club
+   *
+   * @return view
+   */
+  public function confirmed(){
+    
   }
 }
