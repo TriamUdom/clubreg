@@ -42,10 +42,7 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor 
 
   @endif
 @else
-<a href="/login">
-  <button class="btn btn-success btn-block">ดำเนินการต่อ</button>
-</a>
-  @if(Config::get('applicationConfig.mode') != 'close' || Config::get('applicationConfig.mode') != 'technical_difficulties')
+  @if(Config::get('applicationConfig.mode') != 'close' && Config::get('applicationConfig.mode') != 'technical_difficulties')
     <a href="/login">
       <button class="btn btn-success btn-block">ดำเนินการต่อ</button>
     </a>
