@@ -31,8 +31,6 @@ if(isset($_SERVER['HTTP_USER_AGENT']) && (preg_match('~MSIE|Internet Explorer~i'
     Route::get('/logout','OperationController@logout');
     Route::get('/confirmed','OperationController@confirmed');
 
-    //Route::get('/debug/movedata','DebugOperation@moveData');
-
     switch(Config::get('applicationConfig.mode')){
       case 'confirmation':
         Route::get('/confirm','ConfirmationController@showConfirmationPage');
@@ -60,5 +58,12 @@ if(isset($_SERVER['HTTP_USER_AGENT']) && (preg_match('~MSIE|Internet Explorer~i'
     Route::get('/president/audition','PresidentController@showAuditionPage');
     Route::post('/president/audition.do','PresidentController@auditionAction');
     Route::post('/president/audition.cancel','PresidentController@auditionCancel');
+  }
+
+  if(Config::get('applicationConfig.administration')){
+    Route::get('/debug/movedata','DebugOperation@moveData');
+    Route::get('/admin','AdminController@showAdminPage');
+    Route::get('/admin/login','AdminController@showLoginPage');
+    Route::post('/admin/login.do','AdminController@presidentLogin');
   }
 }
