@@ -26,7 +26,14 @@ return [
   year: application operation year
   value: study year in buddhist era
   */
-  'operation_year' => '2559', 
+  'operation_year' => '2559',
+
+  /*
+  administration: enable admin operation
+  value: true, false
+  */
+  'administration' => true,
+
   /*
   TUSD Server Address
   */
