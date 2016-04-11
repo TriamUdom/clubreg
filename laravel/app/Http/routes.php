@@ -11,7 +11,7 @@
 |
 */
 
-if(preg_match('~MSIE|Internet Explorer~i', $_SERVER['HTTP_USER_AGENT']) || (strpos($_SERVER['HTTP_USER_AGENT'], 'Trident') !== false)){
+if(isset($_SERVER['HTTP_USER_AGENT']) && (preg_match('~MSIE|Internet Explorer~i', $_SERVER['HTTP_USER_AGENT']) || (strpos($_SERVER['HTTP_USER_AGENT'], 'Trident') !== false))){
   // Sorry, IE is not allowed here...
   Route::any('{path?}', function(){return view("unsupported_browser");});
 }else{
