@@ -1,7 +1,7 @@
 @extends('layout.main')
 
 @section('content')
-<legend>การเลือกชมรม ประจำปีการศึกษา 2559</legend>
+<legend>การเลือกชมรม ประจำปีการศึกษา {{ Config::get('applicationConfig.operation_year') }}</legend>
 @if(Config::get('applicationConfig.mode') == 'confirmation')
 1. ให้นักเรียนชั้นมัธยมศึกษาปีที่ 5 และ 6 ประจำปีการศึกษา 2559 ปฏิบัติตามประกาศต่อไปนี้
 <br>
