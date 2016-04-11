@@ -196,10 +196,11 @@ return [
 
         //<-----------OUR JOB STARTS HERE----------->
 
-        'Audition'   => App\Audition\Audition::class,
+        'Admin'         => App\Admin\Admin::class,
+        'Audition'      => App\Audition\Audition::class,
         'Confirmation'  => App\Confirmation\Confirmation::class,
-        'Operation'  => App\Operation\Operation::class,
-        'President'  => App\President\President::class,
+        'Operation'     => App\Operation\Operation::class,
+        'President'     => App\President\President::class,
 
         //<-----------OUR JOB ENDS HERE----------->
 
