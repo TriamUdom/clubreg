@@ -51,7 +51,7 @@
 
   @endif
 @else
-  @if(Config::get('applicationConfig.mode') != 'close' || Config::get('applicationConfig.mode') != 'technical_difficulties')
+  @if(Config::get('applicationConfig.mode') != 'close' && Config::get('applicationConfig.mode') != 'technical_difficulties')
     <a href="/login">
       <button class="btn btn-success btn-block">ดำเนินการต่อ</button>
     </a>
