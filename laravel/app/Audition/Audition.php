@@ -53,7 +53,8 @@ class Audition{
       'national_id' => Session::get('national_id'),
       'club_code' => $club_code,
       'status' => 0,
-      'timestamp' => time()
+      'timestamp' => time(),
+      'year' => Config::get('applicationConfig.operation_year')
     ));
 
     return true;
