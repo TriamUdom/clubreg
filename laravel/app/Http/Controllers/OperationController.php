@@ -94,11 +94,13 @@ class OperationController extends Controller{
   }
 
   /**
-   *  Render page for any user that already have club
+   * Render page for any user that already have club
    *
    * @return view
    */
   public function confirmed(){
-    
+    DB::table('confirmation')->where('national_id', Session::get('national_id'))->first();
+    DB::table('audition')->where('national_id', Session::get('national_id'))->where('status', 1)->first();
+    DB::table('registration')->where('national_id', Session::get('national_id'))->first();
   }
 }
