@@ -1,6 +1,7 @@
 <?php namespace App\Confirmation;
 
 use DB;
+use Session;
 use Redirect;
 
 class Confirmation{
