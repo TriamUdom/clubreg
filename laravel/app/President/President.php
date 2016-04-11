@@ -173,7 +173,7 @@ class President{
               ->whereNotIn('club_code', array(Session::get('club_code')))
               ->where('status', 0)
               ->update(array('status' => -2));
-            });
+          });
           return 'confirm';
         break;
         case 'dismiss':
@@ -211,13 +211,13 @@ class President{
             ->where('club_code', Session::get('club_code'))
             ->update(array('status' => 0));
 
-          //Prevent user from attend to other club
+          //Allow user to attend to other club
           DB::table('audition')
             ->where('national_id', $national_id)
             ->whereNotIn('club_code', array(Session::get('club_code')))
             ->where('status', -2)
             ->update(array('status' => 0));
-          });
+        });
         return 'cancel';
       break;
       default:
