@@ -2,9 +2,9 @@
   <div class="container">
     <div class="navbar-header">
       @if(Session::get('president_logged_in') == 1)
-        <a class="navbar-brand" href="/president">ระบบจัดการชมรม ประจำปีการศึกษา 2559</a>
+        <a class="navbar-brand" href="/president">ระบบจัดการชมรม ประจำปีการศึกษา {{ Config::get('applicationConfig.operation_year') }}</a>
       @else
-        <a class="navbar-brand" href="/">การเลือกชมรม ประจำปีการศึกษา 2559</a>
+        <a class="navbar-brand" href="/">ระบบเลือกชมรม ประจำปีการศึกษา {{ Config::get('applicationConfig.operation_year') }}</a>
       @endif
       <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
         <span class="icon-bar"></span>
