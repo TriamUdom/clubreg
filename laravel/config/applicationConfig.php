@@ -20,8 +20,13 @@ return [
     // I'm not really know exactly how this will work
     // But I'm hoping that we'll never have to use it
   */
-  'mode' => 'confirmation',
+  'mode' => 'audition',
 
+  /*
+  year: application operation year
+  value: study year in buddhist era
+  */
+  'operation_year' => '2559', 
   /*
   TUSD Server Address
   */
