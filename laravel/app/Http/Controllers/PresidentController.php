@@ -42,7 +42,7 @@ class PresidentController extends Controller{
    * @return view
    */
   public function showLoginPage(){
-    return view('admin.presidentLogin');
+    return view('president.presidentLogin');
   }
 
   /**
@@ -54,7 +54,7 @@ class PresidentController extends Controller{
   public function showPresidentPage(){
     if(President::presidentLoggedIn()){
       $data = DB::table('club')->where('club_code', Session::get('club_code'))->first();
-      return view('admin.president')->with('data', $data);
+      return view('president.president')->with('data', $data);
     }else{
       return Redirect::to('/president/login');
     }
@@ -105,7 +105,7 @@ class PresidentController extends Controller{
       ->orderBy('room', 'asc')
       ->orderBy('number', 'asc')
       ->get();
-      return view('admin.presidentConfirmed')->with('data',$data);
+      return view('president.presidentConfirmed')->with('data',$data);
     }else{
       return Redirect::to('/president/login');
     }
@@ -121,14 +121,14 @@ class PresidentController extends Controller{
     if(President::presidentLoggedIn()){
       $data = $this->president->getAuditionData();
       $data2 = $this->president->getAuditionPassed();
-      return view('admin.presidentAudition')->with('data', $data)->with('data2', $data2);
+      return view('president.presidentAudition')->with('data', $data)->with('data2', $data2);
     }else{
       return Redirect::to('/president/login');
     }
   }
 
   /**
-   * Call 
+   * Call
    *
    *
    */
