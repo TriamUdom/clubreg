@@ -160,20 +160,24 @@ class President{
     }else{
       switch($action){
         case 'confirm':
-          DB::transaction(function(){
-            //Get user into our club
-            DB::table('audition')
-              ->where('national_id', $national_id)
-              ->where('club_code', Session::get('club_code'))
-              ->update(array('status' => 1));
+          DB::beginTransaction();
+            try{
+              //Get user into our club
+              DB::table('audition')
+                ->where('national_id', $national_id)
+                ->where('club_code', Session::get('club_code'))
+                ->update(array('status' => 1));
 
-            //Prevent user from attend to other club
-            DB::table('audition')
-              ->where('national_id', $national_id)
-              ->whereNotIn('club_code', array(Session::get('club_code')))
-              ->where('status', 0)
-              ->update(array('status' => -2));
-          });
+              //Prevent user from attend to other club
+              DB::table('audition')
+                ->where('national_id', $national_id)
+                ->whereNotIn('club_code', array(Session::get('club_code')))
+                ->where('status', 0)
+                ->update(array('status' => -2));
+            }catch(Exception $e){
+              DB::rollBack();
+            }
+          DB::commit();
           return 'confirm';
         break;
         case 'dismiss':
@@ -204,20 +208,24 @@ class President{
 
     switch($action){
       case 'cancel':
-        DB::transaction(function(){
-          //Get user out of our club
-          DB::table('audition')
-            ->where('national_id', $national_id)
-            ->where('club_code', Session::get('club_code'))
-            ->update(array('status' => 0));
+        DB::beginTransaction();
+          try{
+            //Get user out of our club
+            DB::table('audition')
+              ->where('national_id', $national_id)
+              ->where('club_code', Session::get('club_code'))
+              ->update(array('status' => 0));
 
-          //Allow user to attend to other club
-          DB::table('audition')
-            ->where('national_id', $national_id)
-            ->whereNotIn('club_code', array(Session::get('club_code')))
-            ->where('status', -2)
-            ->update(array('status' => 0));
-        });
+            //Allow user to attend to other club
+            DB::table('audition')
+              ->where('national_id', $national_id)
+              ->whereNotIn('club_code', array(Session::get('club_code')))
+              ->where('status', -2)
+              ->update(array('status' => 0));
+          }catch(Exception $e){
+            DB::rollBack();
+          }
+        DB::commit();
         return 'cancel';
       break;
       default:
