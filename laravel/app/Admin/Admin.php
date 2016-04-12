@@ -1,6 +1,7 @@
 <?php namespace App\Admin;
 
 use DB;
+use Session;
 
 class Admin{
 
@@ -83,4 +84,11 @@ class Admin{
     }
   }
 
+  public static function adminLoggedIn(){
+    if(Session::get('admin_logged_in') == 1){
+      return true;
+    }else{
+      return false;
+    }
+  }
 }
