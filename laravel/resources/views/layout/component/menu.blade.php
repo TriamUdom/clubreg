@@ -3,6 +3,8 @@
     <div class="navbar-header">
       @if(Session::get('president_logged_in') == 1)
         <a class="navbar-brand" href="/president">ระบบจัดการชมรม ประจำปีการศึกษา {{ Config::get('applicationConfig.operation_year') }}</a>
+      @elseif(Session::get('admin_logged_in') == 1)
+        <a class="navbar-brand" href="/admin">ระบบจัดการชมรม (Admin) ประจำปีการศึกษา {{ Config::get('applicationConfig.operation_year') }}</a>
       @else
         <a class="navbar-brand" href="/">ระบบเลือกชมรม ประจำปีการศึกษา {{ Config::get('applicationConfig.operation_year') }}</a>
       @endif
@@ -16,7 +18,7 @@
       <ul class="nav navbar-nav">
       </ul>
 
-      @if(Session::get('logged_in') == 1 || Session::get('president_logged_in') == 1)
+      @if(Session::get('logged_in') == 1 || Session::get('president_logged_in') == 1 || Session::get('admin_logged_in') == 1)
             <ul class="nav navbar-nav navbar-right">
               @if(Session::get('president_logged_in') == 1)
 
