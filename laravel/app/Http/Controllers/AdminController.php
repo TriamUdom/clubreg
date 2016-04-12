@@ -89,7 +89,11 @@ class AdminController extends Controller{
 
   public function doDBMigrate(){
     if(Admin::adminLoggedIn()){
-      $this->admin->doDBMigrate();
+      if($this->admin->doDBMigrate()){
+        return Redirect::to('/admin/dbmigrate')->with('success', 'Migration success');
+      }else{
+        return Redirect::to('/admin/dbmigrate')->with('error', 'Migration fail');
+      }
     }else{
       return Redirect::to('/admin/login');
     }
