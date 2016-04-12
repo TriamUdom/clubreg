@@ -1,6 +1,7 @@
 <?php namespace App\Operation;
 
 use DB;
+use Config;
 use Session;
 use Redirect;
 
@@ -109,5 +110,46 @@ class Operation{
     Session::regenerate();
 
     return true;
+  }
+
+  /**
+   * Check if user have club
+   *
+   * @param string $config set desired return value (club, bool)
+   * @return string club_code if $config = club
+   * @return bool if $config = bool
+   */
+  public function haveClub($config = true){
+    $confirmation = DB::table('confirmation')
+                      ->where('national_id', Session::get('national_id'))
+                      ->where('year', Config::get('applicationConfig.operation_year'))
+                      ->first();
+    $audition     = DB::table('audition')
+                      ->where('national_id', Session::get('national_id'))
+                      ->where('status', 1)
+                      ->where('year', Config::get('applicationConfig.operation_year'))
+                      ->first();
+    $registration = DB::table('registration')
+                      ->where('national_id', Session::get('national_id'))
+                      ->where('year', Config::get('applicationConfig.operation_year'))
+                      ->first();
+
+    if($config === true){
+      if(isset($confirmation) || isset($audition) || isset($registration)){
+        return true;
+      }else{
+        return false;
+      }
+    }else if($config == 'club'){
+      if(isset($confirmation)){
+        return $confirmation->club_code;
+      }else if(isset($audition)){
+        return $audition->club_code;
+      }else if(isset($registration)){
+        return $registration->club_code;
+      }else{
+        return "No data";
+      }
+    }
   }
 }
