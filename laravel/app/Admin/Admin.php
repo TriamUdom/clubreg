@@ -14,14 +14,11 @@ class Admin{
   public function authenticateAdmin($username, $password){
     if($this->adminExist($username)){
       $data = DB::table('admin')->where('username',$username)->first();
-      if($data->password == $password){
+      if(sha1($data->salt . $password) == $data->password){
         // Auth Successful
         // Laravel's Session Magic. Do Not Touch.
-        //Session::put('username', $user->national_id);
         Session::put('admin_logged_in', '1');
-        $club = DB::table('club')->where('club_code', $data->club_code)->pluck('club_name');
-        Session::put('fullname', $club);
-        Session::put('club_code',$data->club_code);
+        Session::put('fullname', $username);
 
 
         // Log the request
