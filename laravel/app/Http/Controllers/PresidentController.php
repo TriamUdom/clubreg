@@ -121,7 +121,9 @@ class PresidentController extends Controller{
     if(President::presidentLoggedIn()){
       $data = $this->president->getAuditionData();
       $data2 = $this->president->getAuditionPassed();
-      return view('president.presidentAudition')->with('data', $data)->with('data2', $data2);
+      return view('president.presidentAudition')
+        ->with('data', $data)
+        ->with('data2', $data2);
     }else{
       return Redirect::to('/president/login');
     }
