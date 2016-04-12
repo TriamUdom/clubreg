@@ -1,6 +1,10 @@
 <?php namespace App\Http\Controllers;
 
+use Input;
 use Admin;
+use Session;
+use Validator;
+use Redirect;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,15 +35,15 @@ class AdminController extends Controller{
   }
 
   public function showAdminPage(){
-    return view('admin.adminLogin');
-  }
-
-  public function showLoginPage(){
-    if(Admin::presidentLoggedIn()){
-      //Admin page here
+    if(Admin::adminLoggedIn()){
+      return view('admin.admin');
     }else{
       return Redirect::to('/admin/login');
     }
+  }
+
+  public function showLoginPage(){
+    return view('admin.adminLogin');
   }
 
   public function adminLogin(){
@@ -66,5 +70,9 @@ class AdminController extends Controller{
     }else{
       return Redirect::back()->with('error','ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
     }
+  }
+
+  public function dbMigrate(){
+    return view('admin.dbmigrate');
   }
 }
