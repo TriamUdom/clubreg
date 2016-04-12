@@ -94,13 +94,20 @@ class OperationController extends Controller{
   }
 
   /**
-   * Render page for any user that already have club
+   * Render page for user that already have club by someway
    *
    * @return view
    */
-  public function confirmed(){
-    DB::table('confirmation')->where('national_id', Session::get('national_id'))->first();
-    DB::table('audition')->where('national_id', Session::get('national_id'))->where('status', 1)->first();
-    DB::table('registration')->where('national_id', Session::get('national_id'))->first();
+  public function confirmedClub(){
+    if(Operation::userLoggedIn()){
+      if($this->operation->haveClub(true)){
+        $club = DB::table('club')->where('club_code', $this->operation->haveClub('club'))->pluck('club_name');
+        return view('confirm')->with('club', $club)->with('year', Config::get('applicationConfig.operation_year'));
+      }else{
+        return Redirect::to('/');
+      }
+    }else{
+      return Redirect::to('/login');
+    }
   }
 }

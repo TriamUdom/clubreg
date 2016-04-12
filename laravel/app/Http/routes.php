@@ -29,7 +29,7 @@ if(isset($_SERVER['HTTP_USER_AGENT']) && (preg_match('~MSIE|Internet Explorer~i'
     Route::get('/login','UIController@login');
     Route::post('/login.do','OperationController@login');
     Route::get('/logout','OperationController@logout');
-    Route::get('/confirmed','OperationController@confirmed');
+    Route::get('/confirmed','OperationController@confirmedClub');
 
     switch(Config::get('applicationConfig.mode')){
       case 'confirmation':
