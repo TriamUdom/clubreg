@@ -1,7 +1,9 @@
 <?php namespace App\Http\Controllers;
 
+use DB;
 use Input;
 use Admin;
+use Config;
 use Session;
 use Validator;
 use Redirect;
@@ -73,6 +75,23 @@ class AdminController extends Controller{
   }
 
   public function dbMigrate(){
-    return view('admin.dbmigrate');
+    if(Admin::adminLoggedIn()){
+      return view('admin.dbmigrate')->with('data',
+        array(
+          'current_year' => DB::table('teacher_year')->max('year'),
+          'operation_year' => Config::get('applicationConfig.operation_year')
+        )
+      );
+    }else{
+      return Redirect::to('/admin/login');
+    }
+  }
+
+  public function doDBMigrate(){
+    if(Admin::adminLoggedIn()){
+      $this->admin->doDBMigrate();
+    }else{
+      return Redirect::to('/admin/login');
+    }
   }
 }
