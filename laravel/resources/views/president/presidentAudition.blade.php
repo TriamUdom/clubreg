@@ -1,16 +1,8 @@
 @extends('layout.main')
 
 @section('content')
-@if(Session::get('error') != null)
-<div class="alert alert-danger" style="background: #FF0000;">
-  {{ Session::get('error') }}
-</div>
-@endif
-@if(Session::get('success') != null)
-<div class="alert alert-success" style="background: #3ada4f;">
-  {{ Session::get('success') }}
-</div>
-@endif
+@include('layout.component.errorwbg')
+@include('layout.component.successwbg')
 <legend>{{ Session::get('fullname') }} รายชื่อนักเรียนที่สมัครออดิชัน</legend>
 <table class="table table-striped table-hover ">
   <thead>

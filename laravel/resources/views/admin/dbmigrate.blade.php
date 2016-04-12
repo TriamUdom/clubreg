@@ -1,16 +1,8 @@
 @extends('layout.main')
 
 @section('content')
-@if(Session::get('error') != null)
-<div class="alert alert-danger" style="background: #FF0000;">
-  {{ Session::get('error') }}
-</div>
-@endif
-@if(Session::get('success') != null)
-<div class="alert alert-success" style="background: #3ada4f;">
-  {{ Session::get('success') }}
-</div>
-@endif
+@include('layout.component.errorwbg')
+@include('layout.component.successwbg')
 <legend>Database Migration</legend>
 <h5>ปีในฐานข้อมูล : {{ $data['current_year'] }}</h5>
 <h5>ปีในไฟล์ตั้งค่า : {{ $data['operation_year'] }}</h5>

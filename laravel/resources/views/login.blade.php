@@ -4,9 +4,7 @@
 <form class="form-horizontal" method="POST" action="/login.do">
   <fieldset>
    <legend>เข้าสู่ระบบ</legend>
-   @if(Session::get('error') != null)
-    {{ Session::get('error') }}
-   @endif
+   @include('layout.component.errornobg')
    <div class="form-group">
      <label for="sid" class="col-lg-2 control-label">หมายเลขประจำตัวนักเรียน</label>
      <div class="col-lg-10">

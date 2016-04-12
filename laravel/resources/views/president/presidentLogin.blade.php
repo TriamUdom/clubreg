@@ -4,9 +4,7 @@
 <form class="form-horizontal" method="POST" action="/president/login.do">
   <fieldset>
    <legend>เข้าสู่ระบบสำหรับประธานชมรม</legend>
-   @if(Session::get('error') != null)
-    {{ Session::get('error') }}
-   @endif
+   @include('layout.component.errornobg')
    <div class="form-group">
      <label for="username" class="col-lg-2 control-label">ชื่อผู้ใช้</label>
      <div class="col-lg-10">
