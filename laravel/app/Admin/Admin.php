@@ -1,6 +1,7 @@
 <?php namespace App\Admin;
 
 use DB;
+use Config;
 use Session;
 
 class Admin{
@@ -84,11 +85,31 @@ class Admin{
     }
   }
 
+  /**
+   * Check if admin already logged in
+   *
+   * @return bool
+   */
   public static function adminLoggedIn(){
     if(Session::get('admin_logged_in') == 1){
       return true;
     }else{
       return false;
     }
+  }
+
+  public function doDBMigrate(){
+    DB::table('teacher_year')->where('year', Config::get('applicationConfig.operation_year'))->delete();
+    $group = DB::table('subject_group')->get();
+    for($i=0;$i<count($group);$i++){
+      for($j=1;$j<=$group[$i]->teacher_available;$j++){
+        DB::table('teacher_year')->insert(array(
+          'subject_code' => $group[$i]->subject_code,
+          'number' => $j,
+          'year' => Config::get('applicationConfig.operation_year')
+        ));
+      }
+    }
+    return true;
   }
 }
