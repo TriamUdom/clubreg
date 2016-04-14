@@ -3,6 +3,7 @@
 use DB;
 use Redirect;
 use Operation;
+use Registration;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,11 +39,17 @@ class RegistrationController extends Controller{
         //Already confirm club
         return Redirect::to('/confirmed');
       }else{
-        return view('registration');
+        $available = $this->registration->getRegistrationClub();
+        return view('registration')->with('data', array(
+          'available' => $available
+        ));
       }
     }else{
       Redirect::to('/login');
     }
   }
 
+  public function addUserToList(){
+    
+  }
 }
