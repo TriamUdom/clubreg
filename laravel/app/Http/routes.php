@@ -43,6 +43,8 @@ if(isset($_SERVER['HTTP_USER_AGENT']) && (preg_match('~MSIE|Internet Explorer~i'
       break;
       case 'war':
         Route::get('/registration','RegistrationController@showRegistrationPage');
+        Route::post('/registration.do','RegistrationController@addUserToList');
+        Route::post('/registration.delete','RegistrationController@removeUserFromList');
       break;
       default:
         Route::any('{path?}',function(){return view("config_error");});
