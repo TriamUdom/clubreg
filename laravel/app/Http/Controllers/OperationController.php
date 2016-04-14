@@ -102,7 +102,7 @@ class OperationController extends Controller{
     if(Operation::userLoggedIn()){
       if(Operation::haveClub(true)){
         $club = DB::table('club')->where('club_code', Operation::haveClub('club'))->pluck('club_name');
-        return view('confirm')->with('club', $club)->with('year', Config::get('applicationConfig.operation_year'));
+        return view('confirmed')->with('club', $club)->with('year', Config::get('applicationConfig.operation_year'));
       }else{
         return Redirect::to('/');
       }
