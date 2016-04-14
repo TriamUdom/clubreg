@@ -34,27 +34,11 @@ class RegistrationController extends Controller{
 
   public function showRegistrationPage(){
     if(Operation::userLoggedIn()){
-      if(DB::table('confirmation')->where('national_id', Session::get('national_id'))->first()){
+      if(Operation::haveClub(true)){
         //Already confirm club
         return Redirect::to('/confirmed');
       }else{
-        //Not yet have club
-        $club_code = $this->audition->haveClub();
-        if($club_code){
-          //Some club had accepted the user
-          $club_name = DB::table('club')->where('club_code', $club_code)->pluck('club_name');
-          return view('audition')->with('club_name', $club_name);
-        }else{
-          //No club have accepted the user
-          $available = $this->audition->getAuditionClub();
-          $selected = $this->audition->getSelected();
-          return view('audition')->with('data',
-            array(
-              'available' => $available,
-              'selected' => $selected
-            )
-          );
-        }
+        return view('registration');
       }
     }else{
       Redirect::to('/login');
