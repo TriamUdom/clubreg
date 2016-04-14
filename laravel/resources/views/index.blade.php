@@ -37,7 +37,9 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor 
     <button class="btn btn-success btn-block">ดำเนินการต่อ</button>
   </a>
   @elseif(Config::get('applicationConfig.mode') == 'war')
-
+  <a href="/registration">
+    <button class="btn btn-success btn-block">ดำเนินการต่อ</button>
+  </a>
   @elseif(Config::get('applicationConfig.mode') == 'close')
 
   @endif
