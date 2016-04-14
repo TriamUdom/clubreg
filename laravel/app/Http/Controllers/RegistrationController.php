@@ -50,6 +50,26 @@ class RegistrationController extends Controller{
   }
 
   public function addUserToList(){
-    
+    if(Operation::userLoggedIn()){
+      if(!Operation::haveClub(true)){
+
+      }else{
+        abort(403);
+      }
+    }else{
+      return Redirect::to('/login');
+    }
+  }
+
+  public function removeUserFromList(){
+    if(Operation::userLoggedIn()){
+      if(!Operation::haveClub(true)){
+
+      }else{
+        abort(403);
+      }
+    }else{
+      return Redirect::to('/login');
+    }
   }
 }
