@@ -70,19 +70,4 @@ class Audition{
     DB::table('audition')->where('club_code', $club_code)->where('national_id', Session::get('national_id'))->delete();
     return true;
   }
-
-  /**
-   * Check if any club had accepted user
-   *
-   * @return club_code if any club had accepted user
-   * @return false if no club had accepted user
-   */
-  public function haveClub(){
-    $result = DB::table('audition')->where('national_id', Session::get('national_id'))->where('status', 1)->pluck('club_code');
-    if(isset($result)){
-      return $result;
-    }else{
-      return false;
-    }
-  }
 }
