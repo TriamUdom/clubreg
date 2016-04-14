@@ -42,7 +42,7 @@ if(isset($_SERVER['HTTP_USER_AGENT']) && (preg_match('~MSIE|Internet Explorer~i'
         Route::post('/audition.delete','AuditionController@removeUserFromQueue');
       break;
       case 'war':
-
+        Route::get('/registration','RegistrationController@showRegistrationPage');
       break;
       default:
         Route::any('{path?}',function(){return view("config_error");});
