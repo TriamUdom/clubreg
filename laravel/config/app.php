@@ -201,6 +201,7 @@ return [
         'Confirmation'  => App\Confirmation\Confirmation::class,
         'Operation'     => App\Operation\Operation::class,
         'President'     => App\President\President::class,
+        'Registration'  => App\Registration\Registration::class,
 
         //<-----------OUR JOB ENDS HERE----------->
 
