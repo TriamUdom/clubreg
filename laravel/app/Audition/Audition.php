@@ -1,6 +1,7 @@
 <?php namespace App\Audition;
 
 use DB;
+use Config;
 use Session;
 
 class Audition{
