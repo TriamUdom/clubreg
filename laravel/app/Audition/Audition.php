@@ -17,9 +17,16 @@ class Audition{
       $selected_code[] = $selected[$i]->club_code;
     }
     if(isset($selected_code)){
-      $data = DB::table('club')->where('audition',1)->where('active',1)->whereNotIn('club_code', $selected_code)->get();
+      $data = DB::table('club')
+                ->where('audition',1)
+                ->where('active',1)
+                ->whereNotIn('club_code', $selected_code)
+                ->get();
     }else{
-      $data = DB::table('club')->where('audition',1)->where('active',1)->get();
+      $data = DB::table('club')
+                ->where('audition',1)
+                ->where('active',1)
+                ->get();
     }
     return $data;
   }
@@ -67,7 +74,10 @@ class Audition{
    * @return true
    */
   public function removeUserFromQueue($club_code){
-    DB::table('audition')->where('club_code', $club_code)->where('national_id', Session::get('national_id'))->delete();
+    DB::table('audition')
+      ->where('club_code', $club_code)
+      ->where('national_id', Session::get('national_id'))
+      ->delete();
     return true;
   }
 }
