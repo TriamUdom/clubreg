@@ -65,9 +65,13 @@ class AuditionController extends Controller{
    * @return Redirection
    */
   public function addUserToQueue(){
-    $club_code = Input::get('club_code');
-    $this->audition->addUserToQueue($club_code);
-    return Redirect::to('/audition');
+    if(!Operation::haveClub(true)){
+      $club_code = Input::get('club_code');
+      $this->audition->addUserToQueue($club_code);
+      return Redirect::to('/audition');
+    }else{
+      abort(403);
+    }
   }
 
   /**
@@ -76,8 +80,12 @@ class AuditionController extends Controller{
    * @return Redirection
    */
   public function removeUserFromQueue(){
-    $club_code = Input::get('club_code');
-    $this->audition->removeUserFromQueue($club_code);
-    return Redirect::to('/audition');
+    if(!Operation::haveClub(true)){
+      $club_code = Input::get('club_code');
+      $this->audition->removeUserFromQueue($club_code);
+      return Redirect::to('/audition');
+    }else{
+      abort(403);
+    }
   }
 }
