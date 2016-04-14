@@ -117,9 +117,9 @@ class Operation{
    *
    * @param string $config set desired return value (club, bool)
    * @return string club_code if $config = club
-   * @return bool if $config = bool
+   * @return bool if $config = true
    */
-  public function haveClub($config = true){
+  public static function haveClub($config = true){
     $confirmation = DB::table('confirmation')
                       ->where('national_id', Session::get('national_id'))
                       ->where('year', Config::get('applicationConfig.operation_year'))
