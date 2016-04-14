@@ -42,7 +42,7 @@ class AuditionController extends Controller{
    */
   public function showAuditionPage(){
     if(Operation::userLoggedIn()){
-      if($confirmed_club = DB::table('confirmation')->where('national_id', Session::get('national_id'))->first()){
+      if(DB::table('confirmation')->where('national_id', Session::get('national_id'))->first()){
         //Already confirm club
         return Redirect::to('/confirmed');
       }else{
