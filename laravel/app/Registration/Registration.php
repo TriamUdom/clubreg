@@ -1,7 +1,9 @@
 <?php namespace App\Registration;
 
 use DB;
+use Config;
 use Session;
+use Operation;
 
 class Registration{
 
@@ -43,4 +45,63 @@ class Registration{
     }
   }
 
+  public function addUserToList($club_code){
+    if(Operation::isClubActive($club_code)){
+      if(!Operation::isClubAudition($club_code)){
+        $totalInClub = DB::table('registration')
+                          ->where('club_code', $club_code)
+                          ->count();
+        $teacherUsage = DB::table('teacher_year')
+                          ->where('club_code', $club_code)
+                          ->count();
+        if($totalInClub < (($teacherUsage*30)+5)){
+          //Still room for more student
+          DB::table('registration')->insert(array(
+            'national_id' => Session::get('national_id'),
+            'club_code'   => $club_code,
+            'timestamp'   => time(),
+            'year'        => Config::get('applicationConfig.operation_year')
+          ));
+          
+          return true;
+        }else{
+          //All teacher had been used up
+          //Let's see if we can get some more
+          if($this->assignTeacherToClub($club_code)){
+            $this->addUserToList($club_code);
+          }else{
+            return 'ชมรมนี้มีนักเรียนเต็มแล้ว';
+          }
+        }
+      }else{
+        return 'ชมรมนี้เปิดรับนักเรียนสำหรับการสมัครแบบคัดเลือกเท่านั้น';
+      }
+    }else{
+      return 'ชมรมที่เลือกไม่ได้เปิดรับสมัครนักเรียนในปีการศึกษานี้';
+    }
+  }
+
+  private function assignTeacherToClub($club_code){
+    $subject_code = DB::table('club')
+                      ->where('club_code', $club_code)
+                      ->pluck('subject_code');
+    $min_number   = DB::table('teacher_year')
+                      ->where('club_code', null)
+                      ->where('subject_code', $subject_code)
+                      ->where('number', '>=', 1)
+                      ->min('number');
+    if(is_null($min_number)){
+      //All teacher had been assigned
+      return false;
+    }else{
+      //There's still some teacher(s) available
+      DB::table('teacher_year')
+        ->where('number', $min_number)
+        ->where('subject_code', $subject_code)
+        ->update(array(
+          'club_code' => $club_code
+        ));
+      return true;
+    }
+  }
 }
