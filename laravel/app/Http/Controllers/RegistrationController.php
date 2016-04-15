@@ -1,6 +1,7 @@
 <?php namespace App\Http\Controllers;
 
 use DB;
+use Input;
 use Redirect;
 use Operation;
 use Registration;
@@ -52,9 +53,15 @@ class RegistrationController extends Controller{
   public function addUserToList(){
     if(Operation::userLoggedIn()){
       if(!Operation::haveClub(true)){
-
+        $club_code = Input::get("club_code");
+        $add = $this->registration->addUserToList($club_code);
+        if($add === true){
+          return Redirect::to('/confirmed');
+        }else{
+          return Redirect::to('/registration')->with('error', $add);
+        }
       }else{
-        abort(403);
+        return Redirect::to('/confirmed')->with('error', 'นักเรียนเลือกชมรมแล้ว ไม่สามารถเปลี่ยนแปลงได้');
       }
     }else{
       return Redirect::to('/login');
@@ -63,10 +70,16 @@ class RegistrationController extends Controller{
 
   public function removeUserFromList(){
     if(Operation::userLoggedIn()){
-      if(!Operation::haveClub(true)){
+      if(Operation::haveClub(true)){
+        $club_code = Input::get("club_code");
+        $remove = $this->registration->removeUserFromList($club_code);
+        if($remove === true){
+          return Redirect::to('/registration');
+        }else{
 
+        }
       }else{
-        abort(403);
+        return Redirect::to('/confirmed')->with('error', 'นักเรียนเลือกชมรมแล้ว ไม่สามารถเปลี่ยนแปลงได้');
       }
     }else{
       return Redirect::to('/login');
