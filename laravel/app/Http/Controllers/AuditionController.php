@@ -65,16 +65,20 @@ class AuditionController extends Controller{
    * @return Redirection
    */
   public function addUserToQueue(){
-    if(!Operation::haveClub(true)){
-      $club_code = Input::get('club_code');
-      $add = $this->audition->addUserToQueue($club_code);
-      if($add === true){
-        return Redirect::to('/audition');
+    if(Operation::userLoggedIn()){
+      if(!Operation::haveClub(true)){
+        $club_code = Input::get('club_code');
+        $add = $this->audition->addUserToQueue($club_code);
+        if($add === true){
+          return Redirect::to('/audition');
+        }else{
+          return Redirect::to('/audition')->with('error', $add);
+        }
       }else{
-        return Redirect::to('/audition')->with('error', $add);
+        return Redirect::to('/confirmed')->with('error', 'นักเรียนเลือกชมรมแล้ว ไม่สามารถเพิ่มข้อมูลได้');
       }
     }else{
-      return Redirect::to('/confirmed')->with('error', 'นักเรียนเลือกชมรมแล้ว ไม่สามารถเปลี่ยนแปลงได้');
+      return Redirect::to('/login');
     }
   }
 
@@ -84,16 +88,20 @@ class AuditionController extends Controller{
    * @return Redirection
    */
   public function removeUserFromQueue(){
-    if(!Operation::haveClub(true)){
-      $club_code = Input::get('club_code');
-      $remove = $this->audition->removeUserFromQueue($club_code);
-      if($remove === true){
-        return Redirect::to('/audition');
+    if(Operation::userLoggedIn()){
+      if(Operation::haveClub(true)){
+        $club_code = Input::get('club_code');
+        $remove = $this->audition->removeUserFromQueue($club_code);
+        if($remove === true){
+          return Redirect::to('/audition');
+        }else{
+          return Redirect::to('/audition')->with('error', $remove);
+        }
       }else{
-        return Redirect::to('/audition')->with('error', $remove);
+        return Redirect::to('/confirmed')->with('error', 'นักเรียนยังไม่ได้เลือกชมรม ไม่สามารถลบข้อมูลได้');
       }
     }else{
-      return Redirect::to('/confirmed')->with('error', 'นักเรียนเลือกชมรมแล้ว ไม่สามารถเปลี่ยนแปลงได้');
+      return Redirect::to('/login');
     }
   }
 }
