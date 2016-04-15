@@ -1,6 +1,9 @@
 @extends('layout.main')
 
 @section('content')
+
+@include('layout.component.errorwbg')
+
 <legend>ชมรมที่เปิดรับ</legend>
 <table class="table table-striped table-hover">
   <thead>
