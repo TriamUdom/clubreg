@@ -2,6 +2,8 @@
 
 @section('content')
 
+@include('layout.component.errorwbg')
+
 @if(!empty($data['selected']))
 <legend>ชมรมที่เลือก</legend>
 <table class="table table-striped table-hover ">
