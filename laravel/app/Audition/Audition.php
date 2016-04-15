@@ -3,6 +3,7 @@
 use DB;
 use Config;
 use Session;
+use Operation;
 
 class Audition{
 
@@ -54,30 +55,48 @@ class Audition{
   /**
    * Add user to audition waiting queue
    *
-   * @return true
+   * @return true upon success
+   * @return string error message upon failure
    */
   public function addUserToQueue($club_code){
-    DB::table('audition')->insert(array(
-      'national_id' => Session::get('national_id'),
-      'club_code' => $club_code,
-      'status' => 0,
-      'timestamp' => time(),
-      'year' => Config::get('applicationConfig.operation_year')
-    ));
+    if(Operation::isClubActive($club_code)){
+      if(Operation::isClubAudition($club_code)){
+        DB::table('audition')->insert(array(
+          'national_id' => Session::get('national_id'),
+          'club_code' => $club_code,
+          'status' => 0,
+          'timestamp' => time(),
+          'year' => Config::get('applicationConfig.operation_year')
+        ));
 
-    return true;
+        return true;
+      }else{
+        return 'ชมรมนี้เปิดรับนักเรียนสำหรับการสมัครแบบธรรมดาเท่านั้น';
+      }
+    }else{
+      return 'ชมรมที่เลือกไม่ได้เปิดรับสมัครนักเรียนในปีนี้';
+    }
   }
 
   /**
    * Remove user from audition waiting queue
    *
-   * @return true
+   * @return true upon success
+   * @return string error message upon failure
    */
   public function removeUserFromQueue($club_code){
-    DB::table('audition')
-      ->where('club_code', $club_code)
-      ->where('national_id', Session::get('national_id'))
-      ->delete();
-    return true;
+    if(Operation::isClubActive($club_code)){
+      if(Operation::isClubAudition($club_code)){
+        DB::table('audition')
+          ->where('club_code', $club_code)
+          ->where('national_id', Session::get('national_id'))
+          ->delete();
+        return true;
+      }else{
+        return 'ชมรมนี้เปิดรับนักเรียนสำหรับการสมัครแบบธรรมดาเท่านั้น';
+      }
+    }else{
+      return 'ชมรมที่เลือกไม่ได้เปิดรับสมัครนักเรียนในปีนี้';
+    }
   }
 }
