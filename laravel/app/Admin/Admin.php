@@ -100,6 +100,8 @@ class Admin{
 
   public function doDBMigrate(){
     DB::table('teacher_year')->where('year', Config::get('applicationConfig.operation_year'))->delete();
+
+    //Add dynamic teacher
     $group = DB::table('subject_group')->get();
     for($i=0;$i<count($group);$i++){
       for($j=1;$j<=$group[$i]->teacher_available;$j++){
@@ -107,6 +109,19 @@ class Admin{
           'subject_code' => $group[$i]->subject_code,
           'number' => $j,
           'year' => Config::get('applicationConfig.operation_year')
+        ));
+      }
+    }
+
+    //Add static teacher
+    $static = DB::table('club')->where('active', 1)->get();
+    for($q=0;$q<count($static);$q++){
+      for($k=1;$k<=$static[$q]->fix_teacher;$k++){
+        DB::table('teacher_year')->insert(array(
+          'subject_code' => $static[$q]->subject_code,
+          'number' => "-".$k,
+          'year' => Config::get('applicationConfig.operation_year'),
+          'club_code' => $static[$q]->club_code
         ));
       }
     }
