@@ -67,10 +67,14 @@ class AuditionController extends Controller{
   public function addUserToQueue(){
     if(!Operation::haveClub(true)){
       $club_code = Input::get('club_code');
-      $this->audition->addUserToQueue($club_code);
-      return Redirect::to('/audition');
+      $add = $this->audition->addUserToQueue($club_code);
+      if($add === true){
+        return Redirect::to('/audition');
+      }else{
+        return Redirect::to('/audition')->with('error', $add);
+      }
     }else{
-      abort(403);
+      return Redirect::to('/confirmed')->with('error', 'นักเรียนเลือกชมรมแล้ว ไม่สามารถเปลี่ยนแปลงได้');
     }
   }
 
@@ -82,10 +86,14 @@ class AuditionController extends Controller{
   public function removeUserFromQueue(){
     if(!Operation::haveClub(true)){
       $club_code = Input::get('club_code');
-      $this->audition->removeUserFromQueue($club_code);
-      return Redirect::to('/audition');
+      $remove = $this->audition->removeUserFromQueue($club_code);
+      if($remove === true){
+        return Redirect::to('/audition');
+      }else{
+        return Redirect::to('/audition')->with('error', $remove);
+      }
     }else{
-      abort(403);
+      return Redirect::to('/confirmed')->with('error', 'นักเรียนเลือกชมรมแล้ว ไม่สามารถเปลี่ยนแปลงได้');
     }
   }
 }
