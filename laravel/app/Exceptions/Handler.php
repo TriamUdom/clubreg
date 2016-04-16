@@ -50,6 +50,10 @@ class Handler extends ExceptionHandler
           return redirect()->back();
         }
 
+        if($e instanceof \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException){
+          abort(405);
+        }
+
         return parent::render($request, $e);
     }
 }
