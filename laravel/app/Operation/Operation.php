@@ -25,23 +25,30 @@ class Operation{
         Session::put('fullname', $user->title . $user->fname . " " . $user->lname);
 
 
-        // Log the request
-        $ip_address = $_SERVER['REMOTE_ADDR'];
-        $this->logAuthenticationAttempt($nid, $ip_address, "1"); // Success
+        if(Config::get('applicationConfig.environment') != 'testing'){
+          // Log the request
+          $ip_address = $_SERVER['REMOTE_ADDR'];
+          $useragent = $_SERVER['HTTP_USER_AGENT'];
+          $this->logAuthenticationAttempt($nid, $ip_address, "1", $useragent); // Success
+        }
 
         return true;
       }else{
-        // Log the request
-        $ip_address = $_SERVER['REMOTE_ADDR'];
-        $this->logAuthenticationAttempt($nid, $ip_address, "0"); // Login Failed
-
+        if(Config::get('applicationConfig.environment') != 'testing'){
+          // Log the request
+          $ip_address = $_SERVER['REMOTE_ADDR'];
+          $useragent = $_SERVER['HTTP_USER_AGENT'];
+          $this->logAuthenticationAttempt($nid, $ip_address, "0", $useragent); // Login Failed
+        }
         return false;
       }
     }else{
-      // Log the request
-      $ip_address = $_SERVER['REMOTE_ADDR'];
-      $this->logAuthenticationAttempt($nid, $ip_address, "0"); // Login Failed
-
+      if(Config::get('applicationConfig.environment') != 'testing'){
+        // Log the request
+        $ip_address = $_SERVER['REMOTE_ADDR'];
+        $useragent = $_SERVER['HTTP_USER_AGENT'];
+        $this->logAuthenticationAttempt($nid, $ip_address, "0", $useragent); // Login Failed
+      }
       return false;
     }
   }
@@ -66,17 +73,17 @@ class Operation{
    * @param mixed $nationalid
    * @param mixed $ip_address
    * @param bool $success whether or not the attempt success
+   * @param string $useragent useragent
    * @return bool
    */
-  private function logAuthenticationAttempt($nationalid, $ip_address, $success){
-
-      $timestamp = time();
-
+  private function logAuthenticationAttempt($username, $ip_address, $success, $useragent){
       $id = DB::table('login_log')->insertGetId(array(
-          'unix_timestamp' => $timestamp,
-          'user_nationalid' => $nationalid,
+          'unix_timestamp' => time(),
+          'username' => $username,
+          'type' => 'student',
           'ip_address' => $ip_address,
-          'success' => $success
+          'success' => $success,
+          'useragent' => $useragent
       ));
 
       if ($id != 0) {
