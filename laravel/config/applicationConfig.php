@@ -35,6 +35,12 @@ return [
   'administration' => true,
 
   /*
+  environment: determain what mode the application is on
+  value: local (default), testing
+  */
+  'environment' => env('APP_ENV'),
+
+  /*
   TUSD Server Address
   */
   'tusd_address' => '',
