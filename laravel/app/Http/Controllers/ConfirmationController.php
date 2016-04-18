@@ -38,16 +38,20 @@ class ConfirmationController extends Controller{
   /**
    * Show confirmation page
    *
-   * @return view on success
+   * @return view
    */
   public function showConfirmationPage(){
     if(Operation::userLoggedIn()){
-      $data = $this->confirmation->getCurrentClub();
-      return view('confirm')
-        ->with('data',array(
-          'confirmation_status' => $data['confirmation_status'],
-          'current_club' => $data['current_club']
-        ));
+      if(!Operation::haveClub()){
+        $data = $this->confirmation->getCurrentClub();
+        return view('confirmation')
+          ->with('data',array(
+            'confirmation_status' => $data['confirmation_status'],
+            'current_club' => $data['current_club']
+          ));
+      }else{
+        return Redirect::to('/confirmed')->with('error', 'นักเรียนเลือกชมรมแล้ว ไม่สามารถเพิ่มข้อมูลได้');
+      }
     }else{
       return Redirect::to('/login');
     }
@@ -59,16 +63,22 @@ class ConfirmationController extends Controller{
    * @return Redirection
    */
   public function confirm(){
-    $current_status = Input::get('current_status');
+    if(Operation::userLoggedIn()){
+      if(!Operation::haveClub()){
+        $current_status = Input::get('current_status');
 
-    $case = $this->confirmation->doConfirm($current_status);
-    switch($case){
-      case 'back':
-        return Redirect::back();
-      break;
-      case 'notloggedin':
-        return Redirect::to('/login');
-      break;
+        $case = $this->confirmation->doConfirm($current_status);
+        switch($case){
+          case 'back':
+            return Redirect::back();
+          break;
+          case 'notloggedin':
+            return Redirect::to('/login');
+          break;
+        }
+      }
+    }else{
+      return Redirect::to('/login');
     }
   }
 }
