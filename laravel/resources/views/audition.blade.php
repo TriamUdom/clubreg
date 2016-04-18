@@ -21,7 +21,7 @@
           <tr>
             <td>{{ $i+1 }}</td>
             <td>{{ $data['selected'][$i]['club_name'] }}</td>
-            <td><a href=""><button type="submit" class="btn btn-danger btn-block">ยกเลิก</button></a></td>
+            <td><a href=""><button type="submit" class="btn btn-danger btn-block" name="{{ $data['available'][$i]->club_code }}">ยกเลิก</button></a></td>
           </tr>
           <input type="hidden" name="club_code" value="{{ $data['selected'][$i]['club_code'] }}">
           {{ csrf_field() }}
@@ -48,7 +48,7 @@
           <tr>
             <td>{{ $i+1 }}</td>
             <td>{{ $data['available'][$i]->club_name }}</td>
-            <td><a href=""><button type="submit" class="btn btn-primary btn-block">เลือก</button></a></td>
+            <td><button type="submit" class="btn btn-primary btn-block" name="{{ $data['available'][$i]->club_code }}">เลือก</button></td>
           </tr>
           <input type="hidden" name="club_code" value="{{ $data['available'][$i]->club_code }}">
           {{ csrf_field() }}
