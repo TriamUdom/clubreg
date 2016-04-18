@@ -160,22 +160,6 @@ class Operation{
     }
   }
 
-  public static function isClubActive($club_code){
-    if(DB::table('club')->where('club_code', $club_code)->pluck('active') == 1){
-      return true;
-    }else{
-      return false;
-    }
-  }
-
-  public static function isClubAudition($club_code){
-    if(DB::table('club')->where('club_code', $club_code)->pluck('audition') == 1){
-      return true;
-    }else{
-      return false;
-    }
-  }
-
   /**
    * Check if user have pending audition
    *
@@ -202,6 +186,22 @@ class Operation{
       }else{
         return true;
       }
+    }
+  }
+
+  public static function isClubActive($club_code){
+    if(DB::table('club')->where('club_code', $club_code)->pluck('active') == 1){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
+  public static function isClubAudition($club_code){
+    if(DB::table('club')->where('club_code', $club_code)->pluck('audition') == 1){
+      return true;
+    }else{
+      return false;
     }
   }
 }
