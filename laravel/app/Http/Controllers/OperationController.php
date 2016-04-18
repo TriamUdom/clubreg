@@ -70,7 +70,7 @@ class OperationController extends Controller{
           return Redirect::to('/audition');
         break;
         case 'war':
-
+          return Redirect::to('/registration');
         break;
         default:
           abort(503);
