@@ -6,7 +6,7 @@ return [
   release: release notation & software state
   values: alpha, beta, release
   */
-  'release' => 'beta',
+  'release' => 'alpha',
 
   /*
   mode: application operating mode
