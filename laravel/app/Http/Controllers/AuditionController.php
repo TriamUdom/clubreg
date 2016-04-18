@@ -89,7 +89,7 @@ class AuditionController extends Controller{
    */
   public function removeUserFromQueue(){
     if(Operation::userLoggedIn()){
-      if(Operation::haveClub(true)){
+      if(Operation::havePendingAudition()){
         $club_code = Input::get('club_code');
         $remove = $this->audition->removeUserFromQueue($club_code);
         if($remove === true){
