@@ -2,6 +2,7 @@
 
 use DB;
 use Input;
+use Config;
 use Session;
 use Redirect;
 use Audition;
@@ -101,6 +102,30 @@ class AuditionController extends Controller{
         }
       }else{
         return Redirect::to('/confirmed')->with('error', 'นักเรียนยังไม่ได้เลือกชมรม ไม่สามารถลบข้อมูลได้');
+      }
+    }else{
+      return Redirect::to('/login');
+    }
+  }
+
+  public function confirmUser(){
+    if(Operation::userLoggedIn()){
+      $club_code = Input::get('club_code');
+      $insert = DB::table('audition')
+                  ->where('national_id', Session::get('national_id'))
+                  ->where('club_code', $club_code)
+                  ->where('status', 1)
+                  ->where('year', Config::get('applicationConfig.operation_year'))
+                  ->first();
+      if(!is_null($insert)){
+        $confirm = $this->audition->confirmAudition($club_code);
+        if($confirm === true){
+          return Redirect::to('/audition');
+        }else{
+          return Redirect::to('/audition')->with('error', $confirm);
+        }
+      }else{
+        abort(400);
       }
     }else{
       return Redirect::to('/login');
