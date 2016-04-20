@@ -133,7 +133,7 @@ class Operation{
                       ->first();
     $audition     = DB::table('audition')
                       ->where('national_id', Session::get('national_id'))
-                      ->where('status', 1)
+                      ->where('status', 2)
                       ->where('year', Config::get('applicationConfig.operation_year'))
                       ->first();
     $registration = DB::table('registration')
