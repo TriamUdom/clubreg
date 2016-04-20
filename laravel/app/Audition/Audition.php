@@ -42,7 +42,22 @@ class Audition{
    * @return false if user don't have selected club
    */
   public function getSelected(){
-    $Rawclub_code = DB::table('audition')->where('national_id', Session::get('national_id'))->get();
+    $Rawclub_code = DB::table('audition')
+                      ->where('national_id', Session::get('national_id'))
+                      ->where('year', Config::get('applicationConfig.operation_year'))
+                      ->get();
+    if(!empty($Rawclub_code)){
+      for($i=0;$i<count($Rawclub_code);$i++){
+        $club_code = $Rawclub_code[$i]->club_code;
+        $club_name = DB::table('club')->where('club_code', $club_code)->pluck('club_name');
+        $data[] = array('club_name' => $club_name, 'club_code' => $club_code);
+      }
+      return $data;
+    }else{
+      return false;
+    }
+  }
+
   public function getAuditionPassed(){
     $Rawclub_code = DB::table('audition')
                       ->where('national_id', Session::get('national_id'))
