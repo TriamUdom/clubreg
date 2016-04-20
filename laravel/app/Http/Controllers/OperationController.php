@@ -64,7 +64,7 @@ class OperationController extends Controller{
     if ($this->operation->authenticateUser($sid, $nid)) {
       switch(Config::get('applicationConfig.mode')){
         case 'confirmation':
-          return Redirect::to('/confirm');
+          return Redirect::to('/confirmation');
         break;
         case 'audition':
           return Redirect::to('/audition');
