@@ -29,7 +29,7 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor 
 <br><br>
 @if(Session::get('logged_in') == 1)
   @if(Config::get('applicationConfig.mode') == 'confirmation')
-  <a href="/confirm">
+  <a href="/confirmation">
     <button class="btn btn-success btn-block">ดำเนินการต่อ</button>
   </a>
   @elseif(Config::get('applicationConfig.mode') == 'audition')
