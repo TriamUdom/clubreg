@@ -15,8 +15,10 @@ class Audition{
   public function getAuditionClub(){
     $selected = DB::table('audition')
                   ->where('national_id', Session::get('national_id'))
-                  ->where('status', 0)
+                  ->where('year', Config::get('applicationConfig.operation_year'))
+                  ->whereIn('status', [-1, 0, 1])
                   ->get();
+                  
     for($i=0;$i<count($selected);$i++){
       $selected_code[] = $selected[$i]->club_code;
     }
