@@ -28,5 +28,5 @@
     @endfor
   </tbody>
 </table>
-<b>* หมายเหตุ ห้องและเลขที่ เป็นข้อมูลประจำปีการศึกษา {{ Config::get('applicationConfig.operation_year') }}</b>
+<b>* หมายเหตุ ห้องและเลขที่ เป็นข้อมูลประจำปีการศึกษา {{ Config::get('applicationConfig.operation_year')-1 }}</b>
 @stop
