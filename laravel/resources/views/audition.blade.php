@@ -42,15 +42,15 @@
     </tr>
   </thead>
   <tbody>
-    @for ($i = 0; $i < count($data['available']); $i++)
+    @for ($j = 0; $j < count($data['available']); $j++)
       <form class="form-horizontal" method="POST" action="/audition.do">
         <fieldset>
           <tr>
-            <td>{{ $i+1 }}</td>
-            <td>{{ $data['available'][$i]->club_name }}</td>
-            <td><button type="submit" class="btn btn-primary btn-block" name="{{ $data['available'][$i]->club_code }}">เลือก</button></td>
+            <td>{{ $j+1 }}</td>
+            <td>{{ $data['available'][$j]->club_name }}</td>
+            <td><button type="submit" class="btn btn-primary btn-block" name="{{ $data['available'][$j]->club_code }}">เลือก</button></td>
           </tr>
-          <input type="hidden" name="club_code" value="{{ $data['available'][$i]->club_code }}">
+          <input type="hidden" name="club_code" value="{{ $data['available'][$j]->club_code }}">
           {{ csrf_field() }}
         </fieldset>
       </form>
