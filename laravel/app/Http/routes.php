@@ -41,6 +41,7 @@ if(isset($_SERVER['HTTP_USER_AGENT']) && (preg_match('~MSIE|Internet Explorer~i'
         Route::get('/audition','AuditionController@showAuditionPage');
         Route::post('/audition.do','AuditionController@addUserToQueue');
         Route::post('/audition.delete','AuditionController@removeUserFromQueue');
+        Route::post('/audition.confirm','AuditionController@confirmUser');
       break;
       case 'war':
         Route::get('/registration','RegistrationController@showRegistrationPage');
