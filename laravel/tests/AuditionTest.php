@@ -7,7 +7,7 @@ class AuditionTest extends MainTest{
     if(Config::get('applicationConfig.mode') == 'audition'){
       $this->login();
       if(!Operation::haveClub()){
-        if(!Operation::havePendingAudition()){
+        if(!Audition::havePendingAudition()){
           $this->visit('/audition')
                ->press('ก30927')
                ->seePageIs('/audition')
@@ -28,7 +28,7 @@ class AuditionTest extends MainTest{
   public function testAddAudition(){
     if(Config::get('applicationConfig.mode') == 'audition'){
       $this->login();
-      if(!Operation::havePendingAudition() && !Operation::haveClub()){
+      if(!Audition::havePendingAudition() && !Operation::haveClub()){
         $this->call('POST', '/audition.do', array(
           'club_code' => 'ก30927'
         ))
@@ -44,7 +44,7 @@ class AuditionTest extends MainTest{
   public function testRemoveAudition(){
     if(Config::get('applicationConfig.mode') == 'audition'){
       $this->login();
-      if(Operation::havePendingAudition() && !Operation::haveClub()){
+      if(Audition::havePendingAudition() && !Operation::haveClub()){
         $this->call('POST', '/audition.delete', array(
           'club_code' => 'ก30927'
         ));

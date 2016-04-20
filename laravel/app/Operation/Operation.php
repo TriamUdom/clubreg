@@ -160,35 +160,6 @@ class Operation{
     }
   }
 
-  /**
-   * Check if user have pending audition
-   *
-   * @param string $club_code specify club_code for searching
-   * @return bool
-   */
-  public static function havePendingAudition($club_code = null){
-    if(is_null($club_code)){
-      $data = DB::table('audition')
-                ->where('national_id', Session::get('national_id'))
-                ->first();
-      if(is_null($data)){
-        return false;
-      }else{
-        return true;
-      }
-    }else{
-      $data = DB::table('audition')
-                ->where('national_id', Session::get('national_id'))
-                ->where('club_code', $club_code)
-                ->first();
-      if(is_null($data)){
-        return false;
-      }else{
-        return true;
-      }
-    }
-  }
-
   public static function isClubActive($club_code){
     if(DB::table('club')->where('club_code', $club_code)->pluck('active') == 1){
       return true;
