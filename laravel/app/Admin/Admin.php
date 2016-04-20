@@ -135,4 +135,21 @@ class Admin{
     }
     return true;
   }
+
+  public function moveConfirmationData(){
+    $data = DB::table('confirmation')
+              ->where('year', Config::get('applicationConfig.operation_year'))
+              ->get();
+
+    for($i=0; $i < count($data); $i++){
+      DB::table('user_year')
+        ->where('national_id', $data[$i]->national_id)
+        ->where('year', Config::get('applicationConfig.operation_year'))
+        ->update(array(
+          'club_code' => $data[$i]->club_code
+        ));
+    }
+
+    return true;
+  }
 }
