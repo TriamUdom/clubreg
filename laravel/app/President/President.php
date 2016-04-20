@@ -185,26 +185,13 @@ class President{
     }else{
       switch($action){
         case 'confirm':
-          DB::beginTransaction();
-            try{
-              //Get user into our club
-              DB::table('audition')
-                ->where('national_id', $national_id)
-                ->where('club_code', Session::get('club_code'))
-                ->where('year', Config::get('applicationConfig.operation_year'))
-                ->update(array('status' => 1));
+          //Get user into our club
+          DB::table('audition')
+            ->where('national_id', $national_id)
+            ->where('club_code', Session::get('club_code'))
+            ->where('year', Config::get('applicationConfig.operation_year'))
+            ->update(array('status' => 1));
 
-              //Prevent user from attend to other club
-              DB::table('audition')
-                ->where('national_id', $national_id)
-                ->whereNotIn('club_code', array(Session::get('club_code')))
-                ->where('year', Config::get('applicationConfig.operation_year'))
-                ->where('status', 0)
-                ->update(array('status' => -2));
-            }catch(Exception $e){
-              DB::rollBack();
-            }
-          DB::commit();
           return 'confirm';
         break;
         case 'dismiss':
