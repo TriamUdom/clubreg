@@ -76,7 +76,7 @@ class RegistrationController extends Controller{
         if($remove === true){
           return Redirect::to('/registration');
         }else{
-
+          return Redirect::to('/registration')->with('error', $remove);
         }
       }else{
         return Redirect::to('/confirmed')->with('error', 'นักเรียนเลือกชมรมแล้ว ไม่สามารถเปลี่ยนแปลงได้');
