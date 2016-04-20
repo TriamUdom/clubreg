@@ -33,9 +33,9 @@ if(isset($_SERVER['HTTP_USER_AGENT']) && (preg_match('~MSIE|Internet Explorer~i'
 
     switch(Config::get('applicationConfig.mode')){
       case 'confirmation':
-        Route::get('/confirm','ConfirmationController@showConfirmationPage');
-        Route::post('/confirm.do','ConfirmationController@confirm');
-        Route::post('/confirm.delete','ConfirmationController@delete');
+        Route::get('/confirmation','ConfirmationController@showConfirmationPage');
+        Route::post('/confirmation.do','ConfirmationController@confirm');
+        Route::post('/confirmation.delete','ConfirmationController@delete');
       break;
       case 'audition':
         Route::get('/audition','AuditionController@showAuditionPage');
