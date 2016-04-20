@@ -12,6 +12,7 @@
       <th>ชื่อ</th>
       <th>นามสกุล</th>
       <th>ห้อง</th>
+      <th>เลขที่</th>
     </tr>
   </thead>
   <tbody>
@@ -22,9 +23,10 @@
         <td>{{ $data[$i]->fname }}</td>
         <td>{{ $data[$i]->lname }}</td>
         <td>{{ $data[$i]->room }}</td>
+        <td>{{ $data[$i]->number }}</td>
       </tr>
     @endfor
   </tbody>
 </table>
-
+<b>* หมายเหตุ ห้องและเลขที่ เป็นข้อมูลประจำปีการศึกษา {{ Config::get('applicationConfig.operation_year') }}</b>
 @stop
