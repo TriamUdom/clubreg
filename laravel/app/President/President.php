@@ -180,7 +180,7 @@ class President{
 
     $national_id = Crypt::decrypt($national_id_encrypted);
 
-    if(DB::table('audition')->where('national_id', $national_id)->where('status', 1)->exists()){
+    if(DB::table('audition')->where('national_id', $national_id)->where('status', 2)->exists()){
       return Redirect::to('/president/audition')->with('error','ผู้ใช้นี้มีชมรมแล้ว');
     }else{
       switch($action){
