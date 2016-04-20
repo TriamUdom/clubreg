@@ -143,12 +143,24 @@ class President{
    */
   public function getAuditionPassed(){
     $data = DB::table('audition')
-      ->join('user','audition.national_id','=','user.national_id')
-      ->where('audition.club_code',Session::get('club_code'))
-      ->where('status',1)
-      ->select('audition.club_code','user.title','user.fname','user.lname','user.room','user.national_id')
-      ->orderBy('room','asc')
-      ->get();
+              ->join('user_year', function($join){
+                $join->on('audition.national_id', '=', 'user_year.national_id')
+                     ->on('audition.year', '=', 'user_year.year');
+              })
+              ->join('user', 'audition.national_id', '=', 'user.national_id')
+              ->where('audition.year', Config::get('applicationConfig.operation_year'))
+              ->where('audition.club_code', Session::get('club_code'))
+              ->where('audition.status', 1)
+              ->orderBy('user_year.room', 'asc')
+              ->orderBy('user_year.number', 'asc')
+              ->get();
+
+    for($i=0;$i<count($data);$i++){
+      $data[$i]->national_id = Crypt::encrypt($data[$i]->national_id);
+    }
+
+    return $data;
+  }
     for($i=0;$i<count($data);$i++){
       $data[$i]->national_id = Crypt::encrypt($data[$i]->national_id);
     }
