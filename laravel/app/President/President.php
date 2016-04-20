@@ -3,6 +3,7 @@
 use DB;
 use Crypt;
 use Input;
+use Config;
 use Session;
 use Redirect;
 
@@ -172,12 +173,14 @@ class President{
               DB::table('audition')
                 ->where('national_id', $national_id)
                 ->where('club_code', Session::get('club_code'))
+                ->where('year', Config::get('applicationConfig.operation_year'))
                 ->update(array('status' => 1));
 
               //Prevent user from attend to other club
               DB::table('audition')
                 ->where('national_id', $national_id)
                 ->whereNotIn('club_code', array(Session::get('club_code')))
+                ->where('year', Config::get('applicationConfig.operation_year'))
                 ->where('status', 0)
                 ->update(array('status' => -2));
             }catch(Exception $e){
@@ -190,6 +193,7 @@ class President{
           DB::table('audition')
             ->where('national_id', $national_id)
             ->where('club_code', Session::get('club_code'))
+            ->where('year', Config::get('applicationConfig.operation_year'))
             ->update(array('status' => -1));
           return 'dismiss';
         break;
@@ -220,12 +224,14 @@ class President{
             DB::table('audition')
               ->where('national_id', $national_id)
               ->where('club_code', Session::get('club_code'))
+              ->where('year', Config::get('applicationConfig.operation_year'))
               ->update(array('status' => 0));
 
             //Allow user to attend to other club
             DB::table('audition')
               ->where('national_id', $national_id)
               ->whereNotIn('club_code', array(Session::get('club_code')))
+              ->where('year', Config::get('applicationConfig.operation_year'))
               ->where('status', -2)
               ->update(array('status' => 0));
           }catch(Exception $e){
