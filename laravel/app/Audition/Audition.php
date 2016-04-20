@@ -13,7 +13,10 @@ class Audition{
    * @return array club that have audition which the user haven't selected
    */
   public function getAuditionClub(){
-    $selected = DB::table('audition')->where('national_id', Session::get('national_id'))->where('status', 0)->get();
+    $selected = DB::table('audition')
+                  ->where('national_id', Session::get('national_id'))
+                  ->where('status', 0)
+                  ->get();
     for($i=0;$i<count($selected);$i++){
       $selected_code[] = $selected[$i]->club_code;
     }
