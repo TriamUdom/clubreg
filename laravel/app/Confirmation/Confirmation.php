@@ -95,4 +95,26 @@ class Confirmation{
       abort(400);
     }
   }
+
+  public function delete($current_status, $club_code){
+    if($current_status == 1){
+      $club_code_in_db = DB::table('user_year')
+                           ->where('national_id', Session::get('national_id'))
+                           ->where('year', Config::get('applicationConfig.operation_year')-1)
+                           ->pluck('club_code');
+      if($club_code == $club_code_in_db){
+        DB::table('confirmation')
+          ->where('national_id', Session::get('national_id'))
+          ->where('club_code', $club_code)
+          ->where('year', Config::get('applicationConfig.operation_year'))
+          ->delete();
+
+        return true;
+      }else{
+        abort(400);
+      }
+    }else{
+      abort(400);
+    }
+  }
 }
