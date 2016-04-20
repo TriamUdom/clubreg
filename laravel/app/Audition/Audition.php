@@ -43,6 +43,12 @@ class Audition{
    */
   public function getSelected(){
     $Rawclub_code = DB::table('audition')->where('national_id', Session::get('national_id'))->get();
+  public function getAuditionPassed(){
+    $Rawclub_code = DB::table('audition')
+                      ->where('national_id', Session::get('national_id'))
+                      ->where('year', Config::get('applicationConfig.operation_year'))
+                      ->where('status', 1)
+                      ->get();
     if(!empty($Rawclub_code)){
       for($i=0;$i<count($Rawclub_code);$i++){
         $club_code = $Rawclub_code[$i]->club_code;
