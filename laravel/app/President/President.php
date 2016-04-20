@@ -195,6 +195,7 @@ class President{
             ->where('club_code', Session::get('club_code'))
             ->where('year', Config::get('applicationConfig.operation_year'))
             ->update(array('status' => -1));
+
           return 'dismiss';
         break;
         default:
@@ -218,26 +219,13 @@ class President{
 
     switch($action){
       case 'cancel':
-        DB::beginTransaction();
-          try{
-            //Get user out of our club
-            DB::table('audition')
-              ->where('national_id', $national_id)
-              ->where('club_code', Session::get('club_code'))
-              ->where('year', Config::get('applicationConfig.operation_year'))
-              ->update(array('status' => 0));
+        //Get user out of our club
+        DB::table('audition')
+          ->where('national_id', $national_id)
+          ->where('club_code', Session::get('club_code'))
+          ->where('year', Config::get('applicationConfig.operation_year'))
+          ->update(array('status' => 0));
 
-            //Allow user to attend to other club
-            DB::table('audition')
-              ->where('national_id', $national_id)
-              ->whereNotIn('club_code', array(Session::get('club_code')))
-              ->where('year', Config::get('applicationConfig.operation_year'))
-              ->where('status', -2)
-              ->update(array('status' => 0));
-          }catch(Exception $e){
-            DB::rollBack();
-          }
-        DB::commit();
         return 'cancel';
       break;
       default:
