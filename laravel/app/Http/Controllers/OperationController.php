@@ -73,7 +73,7 @@ class OperationController extends Controller{
           return Redirect::to('/registration');
         break;
         default:
-          abort(503);
+          abort(500);
         break;
       }
 
