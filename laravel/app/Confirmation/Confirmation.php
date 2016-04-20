@@ -67,4 +67,32 @@ class Confirmation{
       }
     }
   }
+
+  public function confirm($current_status, $club_code){
+    if($current_status == 0){
+      if(Operation::isClubActive($club_code)){
+        $club_code_in_db = DB::table('user_year')
+                             ->where('national_id', Session::get('national_id'))
+                             ->where('year', Config::get('applicationConfig.operation_year')-1)
+                             ->pluck('club_code');
+        if($club_code == $club_code_in_db){
+          DB::table('confirmation')
+            ->insert(array(
+              'national_id' => Session::get('national_id'),
+              'club_code' => $club_code,
+              'timestamp' => time(),
+              'year' => Config::get('applicationConfig.operation_year')
+            ));
+
+          return true;
+        }else{
+          abort(400);
+        }
+      }else{
+        return 'ชมรมที่เลือกไม่ได้เปิดรับสมัครนักเรียนในปีการศึกษานี้';
+      }
+    }else{
+      abort(400);
+    }
+  }
 }
