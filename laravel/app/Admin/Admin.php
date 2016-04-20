@@ -105,7 +105,9 @@ class Admin{
   }
 
   public function doDBMigrate(){
-    DB::table('teacher_year')->where('year', Config::get('applicationConfig.operation_year'))->delete();
+    DB::table('teacher_year')
+      ->where('year', Config::get('applicationConfig.operation_year'))
+      ->delete();
 
     //Add dynamic teacher
     $group = DB::table('subject_group')->get();
