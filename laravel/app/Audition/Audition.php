@@ -18,7 +18,7 @@ class Audition{
                   ->where('year', Config::get('applicationConfig.operation_year'))
                   ->whereIn('status', [-1, 0, 1])
                   ->get();
-                  
+
     for($i=0;$i<count($selected);$i++){
       $selected_code[] = $selected[$i]->club_code;
     }
@@ -47,6 +47,7 @@ class Audition{
     $Rawclub_code = DB::table('audition')
                       ->where('national_id', Session::get('national_id'))
                       ->where('year', Config::get('applicationConfig.operation_year'))
+                      ->where('status', '!=', 1)
                       ->get();
     if(!empty($Rawclub_code)){
       for($i=0;$i<count($Rawclub_code);$i++){
