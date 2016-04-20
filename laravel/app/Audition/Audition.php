@@ -93,6 +93,7 @@ class Audition{
         DB::table('audition')
           ->where('club_code', $club_code)
           ->where('national_id', Session::get('national_id'))
+          ->where('year', Config::get('applicationConfig.operation_year'))
           ->delete();
         return true;
       }else{
@@ -113,6 +114,7 @@ class Audition{
     if(is_null($club_code)){
       $data = DB::table('audition')
                 ->where('national_id', Session::get('national_id'))
+                ->where('year', Config::get('applicationConfig.operation_year'))
                 ->first();
       if(is_null($data)){
         return false;
@@ -123,6 +125,7 @@ class Audition{
       $data = DB::table('audition')
                 ->where('national_id', Session::get('national_id'))
                 ->where('club_code', $club_code)
+                ->where('year', Config::get('applicationConfig.operation_year'))
                 ->first();
       if(is_null($data)){
         return false;
