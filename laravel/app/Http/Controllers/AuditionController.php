@@ -49,9 +49,11 @@ class AuditionController extends Controller{
         //No club have accepted the user
         $available = $this->audition->getAuditionClub();
         $selected = $this->audition->getSelected();
+        $pass = $this->audition->getAuditionPassed();
         return view('audition')->with('data',array(
           'available' => $available,
-          'selected' => $selected
+          'selected' => $selected,
+          'pass' => $pass
         ));
       }
     }else{
