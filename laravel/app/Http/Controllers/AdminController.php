@@ -98,4 +98,24 @@ class AdminController extends Controller{
       return Redirect::to('/admin/login');
     }
   }
+
+  public function showMoveconfirmationdata(){
+    if(Admin::adminLoggedIn()){
+      return view('admin.adminMoveconfirmationdata');
+    }else{
+      return Redirect::to('/admin/login');
+    }
+  }
+
+  public function moveConfirmationData(){
+    if(Admin::adminLoggedIn()){
+      if($this->admin->moveConfirmationData()){
+        return Redirect::to('/admin/moveconfirmationdata')->with('success', 'Move success');
+      }else{
+        return Redirect::to('/admin/moveconfirmationdata')->with('error', 'Move fail');
+      }
+    }else{
+      return Redirect::to('/admin/login');
+    }
+  }
 }
