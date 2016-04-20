@@ -160,22 +160,22 @@ class Audition{
   }
 
   public function confirmAudition($club_code){
-      if(Operation::isClubActive($club_code)){
-        if(Operation::isClubAudition($club_code)){
-          DB::table('audition')
-            ->where('national_id', Session::get('national_id'))
-            ->where('club_code', $club_code)
-            ->where('year', Config::get('applicationConfig.operation_year'))
-            ->update(array(
-              'status' => 2
-            ));
-
-          return true;
-        }else{
-          return 'ชมรมนี้เปิดรับนักเรียนสำหรับการสมัครแบบธรรมดาเท่านั้น';
-        }
+    if(Operation::isClubActive($club_code)){
+      if(Operation::isClubAudition($club_code)){
+        DB::table('audition')
+          ->where('national_id', Session::get('national_id'))
+          ->where('club_code', $club_code)
+          ->where('year', Config::get('applicationConfig.operation_year'))
+          ->update(array(
+            'status' => 2
+          ));
+          
+        return true;
       }else{
-        return 'ชมรมที่เลือกไม่ได้เปิดรับสมัครนักเรียนในปีการศึกษานี้';
+        return 'ชมรมนี้เปิดรับนักเรียนสำหรับการสมัครแบบธรรมดาเท่านั้น';
       }
+    }else{
+      return 'ชมรมที่เลือกไม่ได้เปิดรับสมัครนักเรียนในปีการศึกษานี้';
+    }
   }
 }
