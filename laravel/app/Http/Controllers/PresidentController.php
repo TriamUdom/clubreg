@@ -99,12 +99,19 @@ class PresidentController extends Controller{
    */
   public function showConfirmedPage(){
     if(President::presidentLoggedIn()){
-      $data = DB::table('user')
-      ->where('confirmation_status', 1)
-      ->where('current_club', Session::get('club_code'))
-      ->orderBy('room', 'asc')
-      ->orderBy('number', 'asc')
-      ->get();
+      $data = DB::table('confirmation')
+                ->join('user_year', function($join){
+                  $join->on('confirmation.national_id', '=', 'user_year.national_id')
+                       ->on('confirmation.year', '-1 =', 'user_year.year')
+                       ->on('confirmation.club_code', '=', 'user_year.club_code');
+                })
+                ->join('user', 'confirmation.national_id', '=', 'user.national_id')
+                ->where('user_year.year', Config::get('applicationConfig.operation_year')-1)
+                ->where('user_year.club_code', Session::get('club_code'))
+                ->orderBy('user_year.room', 'asc')
+                ->orderBy('user_year.number', 'asc')
+                ->get();
+
       return view('president.presidentConfirmed')->with('data',$data);
     }else{
       return Redirect::to('/president/login');
