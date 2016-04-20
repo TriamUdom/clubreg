@@ -175,4 +175,24 @@ class PresidentController extends Controller{
       return Redirect::to('/president/login');
     }
   }
+
+  public function showRegisteredPage(){
+    if(President::presidentLoggedIn()){
+      $data = DB::table('registration')
+                ->join('user_year', function($join){
+                  $join->on('registration.national_id', '=', 'user_year.national_id')
+                       ->on('registration.year', '=', 'user_year.year')
+                       ->on('registration.club_code', '=', 'user_year.club_code');
+                })
+                ->join('user', 'registration.national_id', '=', 'user.national_id')
+                ->where('user_year.year', Config::get('applicationConfig.operation_year'))
+                ->where('user_year.club_code', Session::get('club_code'))
+                ->orderBy('user_year.room', 'asc')
+                ->orderBy('user_year.number', 'asc')
+                ->get();
+      return view('president.presidentRegistered')->with('data', $data);
+    }else{
+      return Redirect::to('/president/login');
+    }
+  }
 }
