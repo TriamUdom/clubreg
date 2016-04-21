@@ -88,15 +88,19 @@ class Audition{
   public function addUserToQueue($club_code){
     if(Operation::isClubActive($club_code)){
       if(Operation::isClubAudition($club_code)){
-        DB::table('audition')->insert(array(
-          'national_id' => Session::get('national_id'),
-          'club_code' => $club_code,
-          'status' => 0,
-          'timestamp' => time(),
-          'year' => Config::get('applicationConfig.operation_year')
-        ));
+        if(DB::table('audition')->where('club_code', $club_code)->where('national_id', Session::get('national_id'))->where('year', Config::get('applicationConfig.operation_year'))->count() == 0){
+          DB::table('audition')->insert(array(
+            'national_id' => Session::get('national_id'),
+            'club_code' => $club_code,
+            'status' => 0,
+            'timestamp' => time(),
+            'year' => Config::get('applicationConfig.operation_year')
+          ));
 
-        return true;
+          return true;
+        }else{
+          return 'นักเรียนได้ลงทะเบียนชมรมนี้แล้ว ไม่สามารถลงทะเบียนซ้ำได้';
+        }
       }else{
         return 'ชมรมนี้เปิดรับนักเรียนสำหรับการสมัครแบบธรรมดาเท่านั้น';
       }
@@ -169,7 +173,7 @@ class Audition{
           ->update(array(
             'status' => 2
           ));
-          
+
         return true;
       }else{
         return 'ชมรมนี้เปิดรับนักเรียนสำหรับการสมัครแบบธรรมดาเท่านั้น';
