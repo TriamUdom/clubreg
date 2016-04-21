@@ -56,14 +56,18 @@ class Registration{
                           ->count();
         if($totalInClub < (($teacherUsage*30)+5)){
           //Still room for more student
-          DB::table('registration')->insert(array(
-            'national_id' => Session::get('national_id'),
-            'club_code'   => $club_code,
-            'timestamp'   => time(),
-            'year'        => Config::get('applicationConfig.operation_year')
-          ));
-          
-          return true;
+          if(DB::table('audition')->where('club_code', $club_code)->where('national_id', Session::get('national_id'))->where('year', Config::get('applicationConfig.operation_year'))->count() == 0){
+            DB::table('registration')->insert(array(
+              'national_id' => Session::get('national_id'),
+              'club_code'   => $club_code,
+              'timestamp'   => time(),
+              'year'        => Config::get('applicationConfig.operation_year')
+            ));
+
+            return true;
+          }else{
+            return 'นักเรียนมีประวัติการลงทะเบียนชมรมนี้แล้ว';
+          }
         }else{
           //All teacher had been used up
           //Let's see if we can get some more
@@ -101,6 +105,7 @@ class Registration{
         ->update(array(
           'club_code' => $club_code
         ));
+      
       return true;
     }
   }
