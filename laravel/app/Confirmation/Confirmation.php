@@ -8,8 +8,6 @@ use Operation;
 
 class Confirmation{
 
-  // @TODO : Rewrite this class according to the table
-
   /**
    * Get user's current club
    *
