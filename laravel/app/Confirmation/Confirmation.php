@@ -31,41 +31,6 @@ class Confirmation{
     );
   }
 
-  /**
-   * Confirm current club
-   *
-   * @return string Redirection action
-   */
-  public function doConfirm($current_status){
-    if($current_status == 1){
-      try{
-        if(DB::table('user')->where('national_id',Session::get('national_id'))->exists()){
-          DB::table('user')->where('national_id',Session::get('national_id'))->update(array(
-            'confirmation_status' => 0
-          ));
-          return 'back';
-        }else{
-          throw new UserDataException('No national_id');
-        }
-      }catch(\Exception $e){
-        return 'notloggedin';
-      }
-    }else{
-      try{
-        if(DB::table('user')->where('national_id',Session::get('national_id'))->exists()){
-          DB::table('user')->where('national_id',Session::get('national_id'))->update(array(
-            'confirmation_status' => 1
-          ));
-          return 'back';
-        }else{
-          throw new UserDataException('No national_id');
-        }
-      }catch(\Exception $e){
-        return 'notloggedin';
-      }
-    }
-  }
-
   public function confirm($current_status, $club_code){
     if($current_status == 0){
       if(Operation::isClubActive($club_code)){
