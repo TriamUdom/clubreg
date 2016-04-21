@@ -212,7 +212,11 @@ class President{
             ->where('year', Config::get('applicationConfig.operation_year'))
             ->update(array('status' => 1));
 
-          return 'confirm';
+          if(DB::table('audition')->where('national_id', $national_id)->where('club_code', Session::get('club_code'))->where('year', Config::get('applicationConfig.operation_year'))->count() == 1){
+            return 'confirm';
+          }else{
+            return 'error';
+          }
         break;
         case 'dismiss':
           DB::table('audition')
@@ -221,7 +225,11 @@ class President{
             ->where('year', Config::get('applicationConfig.operation_year'))
             ->update(array('status' => -1));
 
-          return 'dismiss';
+          if(DB::table('audition')->where('national_id', $national_id)->where('club_code', Session::get('club_code'))->where('year', Config::get('applicationConfig.operation_year'))->count() == 1){
+            return 'dismiss';
+          }else{
+            return 'error';
+          }
         break;
         default:
           return false;
