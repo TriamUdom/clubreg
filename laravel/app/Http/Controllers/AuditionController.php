@@ -108,6 +108,11 @@ class AuditionController extends Controller{
     }
   }
 
+  /**
+   * Call audition model to confirm user
+   *
+   * @return Redirection
+   */
   public function confirmUser(){
     if(Operation::userLoggedIn()){
       $club_code = Input::get('club_code');

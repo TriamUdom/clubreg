@@ -84,6 +84,11 @@ class ConfirmationController extends Controller{
     }
   }
 
+  /**
+   * Delete handler
+   *
+   * @return Redirection
+   */
   public function delete(){
     if(Operation::userLoggedIn()){
       if(Operation::haveClub()){

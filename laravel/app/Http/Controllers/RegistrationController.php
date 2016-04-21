@@ -34,6 +34,11 @@ class RegistrationController extends Controller{
     $this->registration = new Registration();
   }
 
+  /**
+   * Render registration page
+   *
+   * @return view
+   */
   public function showRegistrationPage(){
     if(Operation::userLoggedIn()){
       if(Operation::haveClub(true)){
@@ -50,6 +55,11 @@ class RegistrationController extends Controller{
     }
   }
 
+  /**
+   * Call registration model to add user to list
+   *
+   * @return view
+   */
   public function addUserToList(){
     if(Operation::userLoggedIn()){
       if(!Operation::haveClub(true)){
@@ -68,6 +78,11 @@ class RegistrationController extends Controller{
     }
   }
 
+  /**
+   * Call registration model to remove user from list
+   *
+   * @return view
+   */
   public function removeUserFromList(){
     if(Operation::userLoggedIn()){
       if(Operation::haveClub(true)){

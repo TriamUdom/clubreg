@@ -140,9 +140,9 @@ class PresidentController extends Controller{
   }
 
   /**
-   * Call
+   * Call president model to do audition action
    *
-   *
+   * @return Redirection
    */
   public function auditionAction(){
     if(President::presidentLoggedIn()){
@@ -163,6 +163,11 @@ class PresidentController extends Controller{
     }
   }
 
+  /**
+   * Call president model to cancel the passed audition
+   *
+   * @return Redirection
+   */
   public function auditionCancel(){
     if(President::presidentLoggedIn()){
       $result = $this->president->auditionCancel();
@@ -179,6 +184,11 @@ class PresidentController extends Controller{
     }
   }
 
+  /**
+   * Render registered list page
+   *
+   * @return view
+   */
   public function showRegisteredPage(){
     if(President::presidentLoggedIn()){
       $data = DB::table('registration')

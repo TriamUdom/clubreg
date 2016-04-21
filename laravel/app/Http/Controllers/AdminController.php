@@ -36,6 +36,11 @@ class AdminController extends Controller{
     $this->admin = new Admin();
   }
 
+  /**
+   * Render admin page
+   *
+   * @return view
+   */
   public function showAdminPage(){
     if(Admin::adminLoggedIn()){
       return view('admin.admin');
@@ -44,10 +49,20 @@ class AdminController extends Controller{
     }
   }
 
+  /**
+   * Render admin's login page
+   *
+   * @return view
+   */
   public function showLoginPage(){
     return view('admin.adminLogin');
   }
 
+  /**
+   * Handle admin's login form POST
+   *
+   * @return Redirection
+   */
   public function adminLogin(){
     Session::flush();
     Session::regenerate();
@@ -74,6 +89,11 @@ class AdminController extends Controller{
     }
   }
 
+  /**
+   * Render DB migration page
+   *
+   * @return view
+   */
   public function dbMigrate(){
     if(Admin::adminLoggedIn()){
       return view('admin.dbmigrate')->with('data',
@@ -87,6 +107,11 @@ class AdminController extends Controller{
     }
   }
 
+  /**
+   * Handle migration form POST
+   *
+   * @return Redirection
+   */
   public function doDBMigrate(){
     if(Admin::adminLoggedIn()){
       if($this->admin->doDBMigrate()){
@@ -99,6 +124,11 @@ class AdminController extends Controller{
     }
   }
 
+  /**
+   * Render moveConfirmationData view
+   *
+   * @return view
+   */
   public function showMoveconfirmationdata(){
     if(Admin::adminLoggedIn()){
       return view('admin.adminMoveconfirmationdata');
@@ -107,6 +137,11 @@ class AdminController extends Controller{
     }
   }
 
+  /**
+   * Handle moveConfirmationData form POST
+   *
+   * @return Redirection
+   */
   public function moveConfirmationData(){
     if(Admin::adminLoggedIn()){
       if($this->admin->moveConfirmationData()){

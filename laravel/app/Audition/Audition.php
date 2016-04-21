@@ -163,6 +163,13 @@ class Audition{
     }
   }
 
+  /**
+   * Confirm the club that user pass
+   *
+   * @param string $club_code
+   * @return true upon success
+   * @return string error message upon failure
+   */
   public function confirmAudition($club_code){
     if(Operation::isClubActive($club_code)){
       if(Operation::isClubAudition($club_code)){

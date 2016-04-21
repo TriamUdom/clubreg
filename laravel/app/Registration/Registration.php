@@ -45,6 +45,13 @@ class Registration{
     }
   }
 
+  /**
+   * Add user to list
+   *
+   * @param string $club_code
+   * @return true upon success
+   * @return error message upon failure
+   */
   public function addUserToList($club_code){
     if(Operation::isClubActive($club_code)){
       if(!Operation::isClubAudition($club_code)){
@@ -85,6 +92,12 @@ class Registration{
     }
   }
 
+  /**
+   * Assign teacher to a specify club (if available)
+   *
+   * @param string $club_code
+   * @return bool
+   */
   private function assignTeacherToClub($club_code){
     $subject_code = DB::table('club')
                       ->where('club_code', $club_code)
@@ -105,7 +118,7 @@ class Registration{
         ->update(array(
           'club_code' => $club_code
         ));
-      
+
       return true;
     }
   }

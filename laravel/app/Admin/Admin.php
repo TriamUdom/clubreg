@@ -104,6 +104,9 @@ class Admin{
     }
   }
 
+  /**
+   * Create database for each year opeartion
+   */
   public function doDBMigrate(){
     DB::table('teacher_year')
       ->where('year', Config::get('applicationConfig.operation_year'))
@@ -136,6 +139,11 @@ class Admin{
     return true;
   }
 
+  /**
+   * Copy the club_code from confirmation table to user_year table
+   *
+   * @return true
+   */
   public function moveConfirmationData(){
     $data = DB::table('confirmation')
               ->where('year', Config::get('applicationConfig.operation_year'))

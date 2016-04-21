@@ -160,6 +160,12 @@ class Operation{
     }
   }
 
+  /**
+   * Check if a specify club is active
+   *
+   * @param string $club_code
+   * @return bool
+   */
   public static function isClubActive($club_code){
     if(DB::table('club')->where('club_code', $club_code)->pluck('active') == 1){
       return true;
@@ -168,6 +174,12 @@ class Operation{
     }
   }
 
+  /**
+   * Check if a specify club require audition
+   *
+   * @param string $club_code
+   * @return bool
+   */
   public static function isClubAudition($club_code){
     if(DB::table('club')->where('club_code', $club_code)->pluck('audition') == 1){
       return true;
