@@ -4,6 +4,10 @@
     <title>งานกิจกรรมพัฒนาผู้เรียน</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:url" content="https://reg.clubs.triamudom.ac.th/" />
+    <meta property="og:title" content="ระบบลงทะเบียนชมรม โรงเรียนเตรียมอุดมศึกษา" />
+    <meta property="og:description" content="ระบบลงทะเบียนชมรม โรงเรียนเตรียมอุดมศึกษา ประจำปีการศึกษา ๒๕๕๙" />
+    <meta property="og:image" content="http://i.imgur.com/retNp1v.jpg" />)
     <link rel="stylesheet" href="/css/thaisarabunnew.css" type="text/css">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
