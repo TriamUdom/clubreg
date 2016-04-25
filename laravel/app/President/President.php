@@ -125,6 +125,7 @@ class President{
               ->where('audition.year', Config::get('applicationConfig.operation_year'))
               ->where('audition.club_code', Session::get('club_code'))
               ->where('audition.status', 0)
+              ->orderBy('user_year.class', 'asc')
               ->orderBy('user_year.room', 'asc')
               ->orderBy('user_year.number', 'asc')
               ->get();
@@ -151,6 +152,7 @@ class President{
               ->where('audition.year', Config::get('applicationConfig.operation_year'))
               ->where('audition.club_code', Session::get('club_code'))
               ->where('audition.status', 1)
+              ->orderBy('user_year.class', 'asc')
               ->orderBy('user_year.room', 'asc')
               ->orderBy('user_year.number', 'asc')
               ->get();
