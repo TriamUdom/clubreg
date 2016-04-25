@@ -108,6 +108,7 @@ class PresidentController extends Controller{
                 ->join('user', 'confirmation.national_id', '=', 'user.national_id')
                 ->where('user_year.year', Config::get('applicationConfig.operation_year')-1)
                 ->where('user_year.club_code', Session::get('club_code'))
+                ->orderBy('user_year.class', 'asc')
                 ->orderBy('user_year.room', 'asc')
                 ->orderBy('user_year.number', 'asc')
                 ->get();
@@ -200,6 +201,7 @@ class PresidentController extends Controller{
                 ->join('user', 'registration.national_id', '=', 'user.national_id')
                 ->where('user_year.year', Config::get('applicationConfig.operation_year'))
                 ->where('user_year.club_code', Session::get('club_code'))
+                ->orderBy('user_year.class', 'asc')
                 ->orderBy('user_year.room', 'asc')
                 ->orderBy('user_year.number', 'asc')
                 ->get();
