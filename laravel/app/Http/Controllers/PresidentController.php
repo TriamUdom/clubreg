@@ -130,11 +130,13 @@ class PresidentController extends Controller{
       $pending = $this->president->getAuditionData();
       $pass = $this->president->getAuditionPassed();
       $fail = $this->president->getAuditionFailed();
+      $confirmed = $this->president->getAuditionConfirmed();
 
       return view('president.presidentAudition')
         ->with('pending', $pending)
         ->with('pass', $pass)
-        ->with('fail', $fail);
+        ->with('fail', $fail)
+        ->with('confirmed', $confirmed);
     }else{
       return Redirect::to('/president/login');
     }
