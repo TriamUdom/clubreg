@@ -212,4 +212,18 @@ class PresidentController extends Controller{
       return Redirect::to('/president/login');
     }
   }
+
+  /**
+   * Render all member list page
+   *
+   * @return view
+   */
+  public function showAllPage(){
+    if(President::presidentLoggedIn()){
+      $data = $this->president->getAllStudentList();
+      return view('president.presidentAll')->with('data', $data);
+    }else{
+      return Redirect::to('/president/login');
+    }
+  }
 }
