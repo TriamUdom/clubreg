@@ -6,6 +6,7 @@ use Input;
 use Config;
 use Session;
 use Redirect;
+use Operation;
 
 class President{
 
@@ -291,5 +292,97 @@ class President{
       break;
     }
 
+  }
+
+  public function getAllStudentList(){
+    $data1 = DB::table('confirmation')
+              ->join('user_year', function($join){
+                $join->on('confirmation.national_id', '=', 'user_year.national_id')
+                     ->on('confirmation.year', '=', 'user_year.year')
+                     ->on('confirmation.club_code', '=', 'user_year.club_code');
+              })
+              ->join('user', 'confirmation.national_id', '=', 'user.national_id')
+              ->where('user_year.year', Config::get('applicationConfig.operation_year'))
+              ->where('user_year.club_code', Session::get('club_code'))
+              ->orderBy('user_year.class', 'asc')
+              ->orderBy('user_year.room', 'asc')
+              ->orderBy('user_year.number', 'asc')
+              ->get();
+
+    if(Operation::isClubAudition(Session::get('club_code'))){
+      $data2 = DB::table('audition')
+                ->join('user_year', function($join){
+                  $join->on('audition.national_id', '=', 'user_year.national_id')
+                       ->on('audition.year', '=', 'user_year.year');
+                })
+                ->join('user', 'audition.national_id', '=', 'user.national_id')
+                ->where('audition.year', Config::get('applicationConfig.operation_year'))
+                ->where('audition.club_code', Session::get('club_code'))
+                ->where('audition.status', 2)
+                ->orderBy('user_year.class', 'asc')
+                ->orderBy('user_year.room', 'asc')
+                ->orderBy('user_year.number', 'asc')
+                ->get();
+    }else{
+      $data2 = DB::table('registration')
+                ->join('user_year', function($join){
+                  $join->on('registration.national_id', '=', 'user_year.national_id')
+                       ->on('registration.year', '=', 'user_year.year')
+                       ->on('registration.club_code', '=', 'user_year.club_code');
+                })
+                ->join('user', 'registration.national_id', '=', 'user.national_id')
+                ->where('user_year.year', Config::get('applicationConfig.operation_year'))
+                ->where('user_year.club_code', Session::get('club_code'))
+                ->orderBy('user_year.class', 'asc')
+                ->orderBy('user_year.room', 'asc')
+                ->orderBy('user_year.number', 'asc')
+                ->get();
+    }
+
+    DB::beginTransaction();
+      try{
+        $data = array_merge($data1, $data2); //Merge the two array
+        $table_name = 'a'.mb_substr(Session::get('club_code'), 1); // Remove ก from club code to prevent problem
+        DB::statement('
+          CREATE TEMPORARY TABLE IF NOT EXISTS '. $table_name .' LIKE `club_name_list_template`
+        '); //Create the table for sorting
+        if(DB::table($table_name)->count() == 0){
+          for($i=0; $i<count($data); $i++){
+            DB::table($table_name)->insert(array(
+              'student_id' => $data[$i]->student_id,
+              'national_id' => $data[$i]->national_id,
+              'title' => $data[$i]->title,
+              'fname' => $data[$i]->fname,
+              'lname' => $data[$i]->lname,
+              'class' => $data[$i]->class,
+              'room' => $data[$i]->room,
+              'number' => $data[$i]->number,
+              'club_code' => $data[$i]->club_code,
+              'year' => $data[$i]->year
+            ));
+          }
+        }else{
+          throw new DataException("Table Not Empty");
+        }
+      }catch(DataException $e){
+        DB::rollBack();
+        echo 'Caught DataException: ',  $e->getMessage(), "\n";
+      }catch(Exception $e){
+        DB::rollBack();
+        echo 'Caught exception: ',  $e->getMessage(), "\n";
+      }
+    DB::commit();
+
+    $return = DB::table($table_name)
+                ->where('year', Config::get('applicationConfig.operation_year'))
+                ->where('club_code', Session::get('club_code'))
+                ->orderBy('class', 'asc')
+                ->orderBy('room', 'asc')
+                ->orderBy('number', 'asc')
+                ->get();
+
+    DB::statement('DROP TEMPORARY TABLE IF EXISTS '. $table_name); //Drop the temporary table
+
+    return $return;
   }
 }
