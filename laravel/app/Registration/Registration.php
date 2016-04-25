@@ -55,11 +55,18 @@ class Registration{
   public function addUserToList($club_code){
     if(Operation::isClubActive($club_code)){
       if(!Operation::isClubAudition($club_code)){
-        $totalInClub = DB::table('registration')
+        $totalInClub = 0;
+        $totalInClub += DB::table('confirmation')
                           ->where('club_code', $club_code)
+                          ->where('year', Config::get('applicationConfig.operation_year'))
+                          ->count();
+        $totalInClub += DB::table('registration')
+                          ->where('club_code', $club_code)
+                          ->where('year', Config::get('applicationConfig.operation_year'))
                           ->count();
         $teacherUsage = DB::table('teacher_year')
                           ->where('club_code', $club_code)
+                          ->where('year', Config::get('applicationConfig.operation_year'))
                           ->count();
         if($totalInClub < (($teacherUsage*30)+5)){
           //Still room for more student
