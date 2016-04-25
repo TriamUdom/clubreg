@@ -76,5 +76,12 @@ if(isset($_SERVER['HTTP_USER_AGENT']) && (preg_match('~MSIE|Internet Explorer~i'
     Route::post('/admin/dbmigrate.do','AdminController@doDBMigrate');
     Route::get('/admin/moveconfirmationdata','AdminController@showMoveconfirmationdata');
     Route::post('/admin/moveconfirmationdata.do','AdminController@moveConfirmationData');
+    Route::get('/admin/checklist','AdminController@showCheckListPage');
+    Route::get('/admin/checklist/beforeconfirmation','AdminController@showBeforeConfirmationPage');
+    Route::get('/admin/checklist/afterconfirmation','AdminController@showAfterConfirmationPage');
+    Route::get('/admin/checklist/beforeaudition','AdminController@showBeforeAuditionPage');
+    Route::get('/admin/checklist/afteraudition','AdminController@showAfterAuditionPage');
+    Route::get('/admin/checklist/beforeregistration','AdminController@showBefoReregistrationPage');
+    Route::get('/admin/checklist/afterregistration','AdminController@showAfterRegistrationPage');
   }
 }
