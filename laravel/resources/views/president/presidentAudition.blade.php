@@ -115,4 +115,31 @@
     @endfor
   </tbody>
 </table>
+<legend>{{ Session::get('fullname') }} รายชื่อนักเรียนที่ยืนยันการออดิชัน</legend>
+<table class="table table-striped table-hover ">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>คำนำ</th>
+      <th>ชื่อ</th>
+      <th>นามสกุล</th>
+      <th>ชั้น</th>
+      <th>ห้อง</th>
+      <th>เลขที่</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for ($i = 0; $i < count($confirmed); $i++)
+      <tr>
+        <td>{{ $i+1 }}</td>
+        <td>{{ $confirmed[$i]->title }}</td>
+        <td>{{ $confirmed[$i]->fname }}</td>
+        <td>{{ $confirmed[$i]->lname }}</td>
+        <td>{{ $confirmed[$i]->class }}</td>
+        <td>{{ $confirmed[$i]->room }}</td>
+        <td>{{ $confirmed[$i]->number }}</td>
+      </tr>
+    @endfor
+  </tbody>
+</table>
 @stop
