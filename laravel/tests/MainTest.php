@@ -54,6 +54,7 @@ class MainTest extends TestCase{
       }
     }*/
 
+    /*
     public function testOperation(){
       if(Config::get('applicationConfig.mode') == 'confirmation'){
         if(Operation::userLoggedIn()){
@@ -74,7 +75,7 @@ class MainTest extends TestCase{
       }else if(Config::get('applicationConfig.mode') == 'war'){
 
       }
-    }
+    }*/
 
     public function login(){
       $this->visit('/login')
