@@ -7,4 +7,5 @@
 @else
 <a class="btn btn-primary btn-lg btn-block" href="/president/registration" target="_self">2. นักเรียนที่สมัครชมรม</a>
 @endif
+<a class="btn btn-primary btn-lg btn-block" href="/president/all" target="_self">3. นักเรียนทั้งหมด</a>
 @stop
