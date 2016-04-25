@@ -153,4 +153,95 @@ class AdminController extends Controller{
       return Redirect::to('/admin/login');
     }
   }
+
+  /**
+   * Render checklist view
+   *
+   * @return view
+   */
+  public function showCheckListPage(){
+    if(Admin::adminLoggedIn()){
+      return view('admin.adminCheckList');
+    }else{
+      return Redirect::to('/admin/login');
+    }
+  }
+
+  /**
+   * Render checklist view
+   *
+   * @return view
+   */
+  public function showBeforeConfirmationPage(){
+    if(Admin::adminLoggedIn()){
+      return view('admin.adminBC');
+    }else{
+      return Redirect::to('/admin/login');
+    }
+  }
+
+  /**
+   * Render checklist view
+   *
+   * @return view
+   */
+  public function showAfterConfirmationPage(){
+    if(Admin::adminLoggedIn()){
+      return view('admin.adminAC');
+    }else{
+      return Redirect::to('/admin/login');
+    }
+  }
+
+  /**
+   * Render checklist view
+   *
+   * @return view
+   */
+  public function showBeforeAuditionPage(){
+    if(Admin::adminLoggedIn()){
+      return view('admin.adminBA');
+    }else{
+      return Redirect::to('/admin/login');
+    }
+  }
+
+  /**
+   * Render checklist view
+   *
+   * @return view
+   */
+  public function showAfterAuditionPage(){
+    if(Admin::adminLoggedIn()){
+      return view('admin.adminAA');
+    }else{
+      return Redirect::to('/admin/login');
+    }
+  }
+
+  /**
+   * Render checklist view
+   *
+   * @return view
+   */
+  public function showBefoReregistrationPage(){
+    if(Admin::adminLoggedIn()){
+      return view('admin.adminBR');
+    }else{
+      return Redirect::to('/admin/login');
+    }
+  }
+
+  /**
+   * Render checklist view
+   *
+   * @return view
+   */
+  public function showAfterRegistrationPage(){
+    if(Admin::adminLoggedIn()){
+      return view('admin.adminAR');
+    }else{
+      return Redirect::to('/admin/login');
+    }
+  }
 }
