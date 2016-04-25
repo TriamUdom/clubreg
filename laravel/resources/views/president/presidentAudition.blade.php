@@ -11,7 +11,9 @@
       <th>คำนำ</th>
       <th>ชื่อ</th>
       <th>นามสกุล</th>
+      <th>ชั้น</th>
       <th>ห้อง</th>
+      <th>เลขที่</th>
       <th>คำสั่ง</th>
     </tr>
   </thead>
@@ -22,7 +24,9 @@
         <td>{{ $pending[$i]->title }}</td>
         <td>{{ $pending[$i]->fname }}</td>
         <td>{{ $pending[$i]->lname }}</td>
+        <td>{{ $pending[$i]->class }}</td>
         <td>{{ $pending[$i]->room }}</td>
+        <td>{{ $pending[$i]->number }}</td>
         <td>
           <form class="form-horizontal" method="POST" action="/president/audition.do">
             <fieldset>
@@ -55,7 +59,9 @@
       <th>คำนำ</th>
       <th>ชื่อ</th>
       <th>นามสกุล</th>
+      <th>ชั้น</th>
       <th>ห้อง</th>
+      <th>เลขที่</th>
       <th>คำสั่ง</th>
     </tr>
   </thead>
@@ -66,7 +72,9 @@
         <td>{{ $pass[$i]->title }}</td>
         <td>{{ $pass[$i]->fname }}</td>
         <td>{{ $pass[$i]->lname }}</td>
+        <td>{{ $pass[$i]->class }}</td>
         <td>{{ $pass[$i]->room }}</td>
+        <td>{{ $pass[$i]->number }}</td>
         <td>
           <form class="form-horizontal" method="POST" action="/president/audition.cancel">
             <fieldset>
@@ -89,7 +97,9 @@
       <th>คำนำ</th>
       <th>ชื่อ</th>
       <th>นามสกุล</th>
+      <th>ชั้น</th>
       <th>ห้อง</th>
+      <th>เลขที่</th>
       <th>คำสั่ง</th>
     </tr>
   </thead>
@@ -100,7 +110,9 @@
         <td>{{ $fail[$i]->title }}</td>
         <td>{{ $fail[$i]->fname }}</td>
         <td>{{ $fail[$i]->lname }}</td>
+        <td>{{ $fail[$i]->class }}</td>
         <td>{{ $fail[$i]->room }}</td>
+        <td>{{ $fail[$i]->number }}</td>
         <td>
           <form class="form-horizontal" method="POST" action="/president/audition.cancel">
             <fieldset>
