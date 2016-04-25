@@ -11,6 +11,7 @@
       <th>คำนำ</th>
       <th>ชื่อ</th>
       <th>นามสกุล</th>
+      <th>ชั้น</th>
       <th>ห้อง</th>
       <th>เลขที่</th>
     </tr>
@@ -22,6 +23,7 @@
         <td>{{ $data[$i]->title }}</td>
         <td>{{ $data[$i]->fname }}</td>
         <td>{{ $data[$i]->lname }}</td>
+        <td>{{ $data[$i]->class }}</td>
         <td>{{ $data[$i]->room }}</td>
         <td>{{ $data[$i]->number }}</td>
       </tr>
