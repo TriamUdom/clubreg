@@ -106,6 +106,7 @@ class Registration{
                       ->where('club_code', null)
                       ->where('subject_code', $subject_code)
                       ->where('number', '>=', 1)
+                      ->where('year', Config::get('applicationConfig.operation_year'))
                       ->min('number');
     if(is_null($min_number)){
       //All teacher had been assigned
@@ -115,6 +116,7 @@ class Registration{
       DB::table('teacher_year')
         ->where('number', $min_number)
         ->where('subject_code', $subject_code)
+        ->where('year', Config::get('applicationConfig.operation_year'))
         ->update(array(
           'club_code' => $club_code
         ));
