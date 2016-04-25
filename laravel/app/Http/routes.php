@@ -63,6 +63,7 @@ if(isset($_SERVER['HTTP_USER_AGENT']) && (preg_match('~MSIE|Internet Explorer~i'
     Route::post('/president/audition.do','PresidentController@auditionAction');
     Route::post('/president/audition.cancel','PresidentController@auditionCancel');
     Route::get('/president/registration', 'PresidentController@showRegisteredPage');
+    Route::get('/president/all', 'PresidentController@showAllPage');
   }
 
   if(Config::get('applicationConfig.administration')){
