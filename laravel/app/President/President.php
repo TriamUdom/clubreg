@@ -179,6 +179,29 @@ class President{
               ->where('audition.year', Config::get('applicationConfig.operation_year'))
               ->where('audition.club_code', Session::get('club_code'))
               ->where('audition.status', -1)
+              ->orderBy('user_year.class', 'asc')
+              ->orderBy('user_year.room', 'asc')
+              ->orderBy('user_year.number', 'asc')
+              ->get();
+
+    for($i=0;$i<count($data);$i++){
+      $data[$i]->national_id = Crypt::encrypt($data[$i]->national_id);
+    }
+
+    return $data;
+  }
+
+  public function getAuditionConfirmed(){
+    $data = DB::table('audition')
+              ->join('user_year', function($join){
+                $join->on('audition.national_id', '=', 'user_year.national_id')
+                     ->on('audition.year', '=', 'user_year.year');
+              })
+              ->join('user', 'audition.national_id', '=', 'user.national_id')
+              ->where('audition.year', Config::get('applicationConfig.operation_year'))
+              ->where('audition.club_code', Session::get('club_code'))
+              ->where('audition.status', 2)
+              ->orderBy('user_year.class', 'asc')
               ->orderBy('user_year.room', 'asc')
               ->orderBy('user_year.number', 'asc')
               ->get();
