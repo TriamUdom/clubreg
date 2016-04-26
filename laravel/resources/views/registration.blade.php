@@ -15,7 +15,7 @@
   </thead>
   <tbody>
     @for ($i = 0; $i < count($data['available']); $i++)
-      <form class="form-horizontal" method="POST" action="/registration.do">
+      <form class="form-horizontal" onsubmit="return confirm('เมื่อยืนยันการลงทะเบียนชมรม{{ $data['pass'][$i]['club_name'] }}แล้ว \n นักเรียนจะไม่สามารถเปลี่ยนแปลงชมรมได้อีก');" method="POST" action="/registration.do">
         <fieldset>
           <tr>
             <td>{{ $i+1 }}</td>
