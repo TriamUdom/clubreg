@@ -7,6 +7,8 @@ use Config;
 use Session;
 use Redirect;
 use Operation;
+use PhpOffice\PhpWord\TemplateProcessor;
+use App\Exceptions\DataException;
 
 class President{
 
@@ -384,5 +386,89 @@ class President{
     DB::statement('DROP TEMPORARY TABLE IF EXISTS '. $table_name); //Drop the temporary table
 
     return $return;
+  }
+
+  public function createFM3301($presidentName, $adviserName){
+    $studentData = $this->getAllStudentList();
+    $clubData = DB::table('club')->where('club_code', Session::get('club_code'))->first();
+    $adviserCount = DB::table('teacher_year')
+                      ->where('club_code', Session::get('club_code'))
+                      ->where('year', Config::get('applicationConfig.operation_year'))
+                      ->count();
+    $criterionCount = $adviserCount*30;
+
+    $fileName = '[FM 33-01] '.substr(Session::get('club_code'), -2).'_'.Session::get('fullname');
+    $rootPath = dirname(__DIR__, 2);
+    if(file_exists($rootPath.'\resources\FMOutput\\'.$fileName.'.docx')){
+      unlink($rootPath.'\resources\FMOutput\\'.$fileName.'.docx');
+    }
+
+    $templateProcessor = new TemplateProcessor($rootPath.'\resources\FMtemplate\FM3301.docx');
+
+    $templateProcessor->setValue('clubName',            htmlspecialchars($clubData->club_name));
+    $templateProcessor->setValue('clubCode',            htmlspecialchars($clubData->club_code));
+    $templateProcessor->setValue('adviserCount',        htmlspecialchars($adviserCount));
+    $templateProcessor->setValue('criterionCount',      htmlspecialchars($criterionCount));
+
+    $class4StudentCount = 0;
+    $class5StudentCount = 0;
+    $class6StudentCount = 0;
+    $studentCount = count($studentData);
+
+    for($i=0;$i<$studentCount;$i++){
+      switch($studentData[$i]->class){
+        case 4:
+          $class4StudentCount += 1;
+        break;
+        case 5:
+          $class5StudentCount += 1;
+        break;
+        case 6:
+          $class6StudentCount += 1;
+        break;
+        default:
+          throw new DataException("Class ".$studentData[$i]->class." does not exists.");
+        break;
+      }
+    }
+
+    $lessThanCriterion = 0;
+    $moreThanCriterion = 0;
+
+    if($studentCount > $adviserCount*30){
+      $moreThanCriterion = $studentCount - $adviserCount*30;
+    }else if($studentCount < $adviserCount*30){
+      $lessThanCriterion = $adviserCount*30 - $studentCount;
+    }
+
+    //$presidentName = 'นายทดสอบ สอบทด';
+
+    $templateProcessor->setValue('totalStudentCount',     htmlspecialchars($studentCount));
+    $templateProcessor->setValue('class4StudentCount',    htmlspecialchars($class4StudentCount));
+    $templateProcessor->setValue('class5StudentCount',    htmlspecialchars($class5StudentCount));
+    $templateProcessor->setValue('class6StudentCount',    htmlspecialchars($class6StudentCount));
+    $templateProcessor->setValue('lessThanCriterion',     htmlspecialchars($lessThanCriterion));
+    $templateProcessor->setValue('moreThanCriterion',     htmlspecialchars($moreThanCriterion));
+
+    $templateProcessor->cloneRow('count', $studentCount);
+
+    for($j=0;$j<$studentCount;$j++){
+      $k = $j+1;
+      $templateProcessor->setValue('count#'.$k, $k);
+
+      $templateProcessor->setValue('tfname#'.$k,          htmlspecialchars($studentData[$j]->title.' '.$studentData[$j]->fname));
+      $templateProcessor->setValue('lname#'.$k,           htmlspecialchars($studentData[$j]->lname));
+
+      $templateProcessor->setValue('class#'.$k,           htmlspecialchars('ม.'.$studentData[$j]->class));
+      $templateProcessor->setValue('room#'.$k,            htmlspecialchars($studentData[$j]->room));
+    }
+
+    $templateProcessor->setValue('operation_year',        htmlspecialchars(Config::get('applicationConfig.operation_year')));
+    $templateProcessor->setValue('presidentName',         htmlspecialchars($presidentName));
+    $templateProcessor->setValue('presidentAdviserName',  htmlspecialchars($adviserName));
+
+    $templateProcessor->saveAs($rootPath.'\resources\FMOutput\\'.$fileName.'.docx');
+    return $rootPath.'\resources\FMOutput\\'.$fileName.'.docx';
+
   }
 }
