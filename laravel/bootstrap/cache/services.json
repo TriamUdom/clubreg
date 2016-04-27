@@ -16,7 +16,6 @@
         "Illuminate\\Mail\\MailServiceProvider",
         "Illuminate\\Pagination\\PaginationServiceProvider",
         "Illuminate\\Pipeline\\PipelineServiceProvider",
-
         "Illuminate\\Queue\\QueueServiceProvider",
         "Illuminate\\Redis\\RedisServiceProvider",
         "Illuminate\\Auth\\Passwords\\PasswordResetServiceProvider",

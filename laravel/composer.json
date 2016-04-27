@@ -7,7 +7,7 @@
     "require": {
         "php": ">=5.5.9",
         "laravel/framework": "5.1.*",
-        "phpoffice/phpword": "dev-master",
+        "phpoffice/phpword": "dev-develop",
         "dompdf/dompdf": "0.7.x@beta"
     },
     "require-dev": {
