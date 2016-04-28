@@ -22,7 +22,8 @@ class President{
   public function authenticatePresident($username, $password){
     if($this->presidentExist($username)){
       $data = DB::table('president')->where('username',$username)->first();
-      if(sha1($data->salt . $password) == $data->password){
+      $pepper = Config::get('applicationConfig.pepper');
+      if(sha1($data->salt . $password . $pepper) == $data->password){
         // Auth Successful
         // Laravel's Session Magic. Do Not Touch.
         //Session::put('username', $user->national_id);

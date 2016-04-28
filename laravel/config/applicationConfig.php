@@ -41,6 +41,11 @@ return [
   'environment' => env('APP_ENV'),
 
   /*
+  pepper: additional string to further secure the hashed password
+  */
+  'pepper' => env('APP_PEPPER'),
+
+  /*
   TUSD Server Address
   */
   'tusd_address' => '',
