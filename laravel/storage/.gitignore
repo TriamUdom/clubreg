@@ -1,2 +1,10 @@
 app/*
+!app/
+
+framework/*
+!framework/sessions
+framework/sessions/*
+!framework/view
+framework/view/*
+
 log/*
