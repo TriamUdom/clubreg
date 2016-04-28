@@ -16,7 +16,8 @@ class Admin{
   public function authenticateAdmin($username, $password){
     if($this->adminExist($username)){
       $data = DB::table('admin')->where('username',$username)->first();
-      if(sha1($data->salt . $password) == $data->password){
+      $pepper = Config::get('applicationConfig.pepper');
+      if(sha1($data->salt . $password . $pepper) == $data->password){
         // Auth Successful
         // Laravel's Session Magic. Do Not Touch.
         Session::put('admin_logged_in', '1');
