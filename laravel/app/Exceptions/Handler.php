@@ -2,6 +2,8 @@
 
 namespace App\Exceptions;
 
+use Config;
+use Session;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -16,8 +18,8 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $dontReport = [
-        HttpException::class,
-        ModelNotFoundException::class,
+        //HttpException::class,
+        //ModelNotFoundException::class,
     ];
 
     /**
@@ -30,7 +32,18 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $e)
     {
-        return parent::report($e);
+      if(Config::get('applicationConfig.release') == 'release'){
+        \Log::warning($e, array(
+          'session' => Session::all(),
+          'user_agent' => $_SERVER['HTTP_USER_AGENT'],
+        ));
+      }else{
+        \Log::info($e, array(
+          'session' => Session::all(),
+          'user_agent' => $_SERVER['HTTP_USER_AGENT'],
+        ));
+      }
+      return parent::report($e);
     }
 
     /**
@@ -42,8 +55,16 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
-        if ($e instanceof ModelNotFoundException) {
-            $e = new NotFoundHttpException($e->getMessage(), $e);
+        if($e instanceof ModelNotFoundException) {
+          abort(404);
+        }
+
+        if($e instanceof \Illuminate\Session\TokenMismatchException){
+          return redirect()->back();
+        }
+
+        if($e instanceof \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException){
+          abort(405);
         }
 
         return parent::render($request, $e);

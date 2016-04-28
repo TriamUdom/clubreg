@@ -1,9 +1,10 @@
 @extends('layout.main')
 
 @section('content')
-<form class="form-horizontal" method="POST" action="/president/login.do">
+<form class="form-horizontal" method="POST" action="/admin/login.do">
   <fieldset>
-   <legend>เข้าสู่ระบบสำหรับประธานชมรม</legend>
+   <legend>เข้าสู่ระบบสำหรับเจ้าหน้าที่</legend>
+   @include('layout.component.errornobg')
    <div class="form-group">
      <label for="username" class="col-lg-2 control-label">ชื่อผู้ใช้</label>
      <div class="col-lg-10">
@@ -14,7 +15,7 @@
    <div class="form-group">
      <label for="password" class="col-lg-2 control-label">รหัสผ่าน</label>
      <div class="col-lg-10">
-       <input type="text" class="form-control" id="password" name="password">
+       <input type="password" class="form-control" id="password" name="password">
      </div>
    </div>
    {{ csrf_field() }}

@@ -1,10 +1,10 @@
-@media (max-width:440px){
+@media (max-width:381px){
   #main_container{
     margin-top:170px;
   }
 }
 
-@media (min-width:441px){
+@media (min-width:382px){
   #main_container{
     margin-top:100px;
   }

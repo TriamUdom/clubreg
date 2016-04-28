@@ -2,8 +2,11 @@
 
 use DB;
 use Input;
+use Config;
 use Session;
 use Redirect;
+use Operation;
+use Confirmation;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,19 +21,40 @@ use Redirect;
 class ConfirmationController extends Controller{
 
   /**
+   * Confirmation class instance
+   *
+   * @var \App\Confirmation
+   */
+  private $confirmation;
+
+  /**
+   * Construct new confirmation instance
+   *
+   * @return void
+   */
+  public function __construct(){
+    $this->confirmation = new Confirmation();
+  }
+
+  /**
    * Show confirmation page
    *
-   * @return view on success
+   * @return view
    */
   public function showConfirmationPage(){
-    if(OperationController::userLoggedIn()){
-      $data = DB::table('user')->where('national_id',Session::get('national_id'))->first();
-      $current_club = DB::table('club')->where('club_code',$data->current_club)->pluck('club_name');
-      return view('confirm')
-        ->with('data',array(
-          'confirmation_status' => $data->confirmation_status,
-          'current_club' => $current_club
-        ));
+    if(Operation::userLoggedIn()){
+      $club_code = DB::table('user_year')->where('year', Config::get('applicationConfig.operation_year')-1)->pluck('club_code');
+      if(Operation::isClubActive($club_code)){
+        $data = $this->confirmation->getCurrentClub();
+        return view('confirmation')
+          ->with('data',array(
+            'confirmation_status' => $data['confirmation_status'],
+            'current_club' => $data['current_club'],
+            'club_code' => $data['club_code']
+          ));
+      }else{
+        return view('confirmation')->with('not_open', 'ชมรมนี้ไม่ได้เปิดรับสมัครนักเรียนในปีการศึกษา'.Config::get('applicationConfig.mode'));
+      }
     }else{
       return Redirect::to('/login');
     }
@@ -42,34 +66,45 @@ class ConfirmationController extends Controller{
    * @return Redirection
    */
   public function confirm(){
-    $current_status = Input::get('current_status');
-
-    if($current_status == 1){
-      try{
-        if(DB::table('user')->where('national_id',Session::get('national_id'))->exists()){
-          DB::table('user')->where('national_id',Session::get('national_id'))->update(array(
-            'confirmation_status' => 0
-          ));
-          return Redirect::back();
+    if(Operation::userLoggedIn()){
+      if(!Operation::haveClub()){
+        $current_status = Input::get('current_status');
+        $club_code   = Input::get('club_code');
+        $confirm = $this->confirmation->confirm($current_status, $club_code);
+        if($confirm === true){
+          return Redirect::to('/confirmation');
         }else{
-          throw new Exception('No national_id');
+          return Redirect::to('/confirmation')->with('error', $confirm);
         }
-      }catch(\Exception $e){
-        return Redirect::to('/login');
+      }else{
+        return Redirect::to('/confirmation')->with('error', 'Error code : 0x000002');
       }
     }else{
-      try{
-        if(DB::table('user')->where('national_id',Session::get('national_id'))->exists()){
-          DB::table('user')->where('national_id',Session::get('national_id'))->update(array(
-            'confirmation_status' => 1
-          ));
-          return Redirect::back();
+      return Redirect::to('/login');
+    }
+  }
+
+  /**
+   * Delete handler
+   *
+   * @return Redirection
+   */
+  public function delete(){
+    if(Operation::userLoggedIn()){
+      if(Operation::haveClub()){
+        $current_status = Input::get('current_status');
+        $club_code   = Input::get('club_code');
+        $delete = $this->confirmation->delete($current_status, $club_code);
+        if($delete === true){
+          return Redirect::to('/confirmation');
         }else{
-          throw new Exception('No national_id');
+          return Redirect::to('/confirmation')->with('error', $delete);
         }
-      }catch(\Exception $e){
-        return Redirect::to('/login');
+      }else{
+        return Redirect::to('/confirmation')->with('error', 'Error code : 0x000001');
       }
+    }else{
+      return Redirect::to('/login');
     }
   }
 }

@@ -5,6 +5,7 @@ use Input;
 use Config;
 use Session;
 use Redirect;
+use Operation;
 use Validator;
 
 /*
@@ -13,11 +14,28 @@ use Validator;
 |--------------------------------------------------------------------------
 |
 | This controller handle general operation (e.g.login logout) for every mode
-|
+| This controller also handle page render that doesn't fall into Audition,
+| Confirmation or Registration controller
 |
 */
 
 class OperationController extends Controller{
+
+  /**
+   * Operation class instance
+   *
+   * @var \App\Confirmation
+   */
+  private $operation;
+
+  /**
+   * Construct new operation instance
+   *
+   * @return void
+   */
+  public function __construct(){
+    $this->operation = new Operation;
+  }
 
   /**
    * Login handler
@@ -43,124 +61,25 @@ class OperationController extends Controller{
       return Redirect::back()->with('error','รูปแบบข้อมูลไม่ถูกต้องหรือมีข้อมูลเป็นค่าว่าง');
     }
 
-    if ($this->authenticateUser($sid, $nid)) {
+    if ($this->operation->authenticateUser($sid, $nid)) {
       switch(Config::get('applicationConfig.mode')){
         case 'confirmation':
-          return Redirect::to('/confirm');
+          return Redirect::to('/confirmation');
         break;
         case 'audition':
-
-        break;
-        case 'sorting1':
-
-        break;
-        case 'sorting2':
-
+          return Redirect::to('/audition');
         break;
         case 'war':
-
+          return Redirect::to('/registration');
         break;
         default:
-          abort(503);
+          abort(500);
         break;
       }
 
-        return Redirect::to('account');
+        return Redirect::to('/');
     } else {
         return Redirect::back()->with('error','รหัสประจำตัวนักเรียนหรือรหัสประชาชนไม่ถูกต้อง');
-    }
-  }
-
-  /**
-   * Authenticate user and do necessary operation associate with that
-   *
-   * @param int $sid
-   * @param int $nid
-   * @return bool
-   */
-  private function authenticateUser($sid, $nid){
-    if($this->userExist($nid)){
-      $user = DB::table('user')->where('national_id',$nid)->first();
-      if($user->student_id == $sid){
-        // Auth Successful
-        // Laravel's Session Magic. Do Not Touch.
-        Session::put('logged_in', '1');
-        Session::put('national_id', $user->national_id);
-        Session::put('fullname', $user->title . $user->fname . " " . $user->lname);
-
-        // Log the request
-        $ip_address = $_SERVER['REMOTE_ADDR'];
-        $this->logAuthenticationAttempt($nid, $ip_address, "1"); // Success
-
-        return true;
-      }else{
-        // Log the request
-        $ip_address = $_SERVER['REMOTE_ADDR'];
-        $this->logAuthenticationAttempt($nid, $ip_address, "0"); // Login Failed
-
-        return false;
-      }
-    }else{
-      // Log the request
-      $ip_address = $_SERVER['REMOTE_ADDR'];
-      $this->logAuthenticationAttempt($nid, $ip_address, "0"); // Login Failed
-
-      return false;
-    }
-  }
-
-  /**
-   * Check if user exist
-   *
-   * @param int $nationalid
-   * @return bool
-   */
-  private function userExist($nationalid){
-    if(DB::table('user')->where('national_id', $nationalid)->exists()){
-      return true;
-    }else{
-      return false;
-    }
-  }
-
-  /**
-   * Log user's login attempt
-   *
-   * @param mixed $nationalid
-   * @param mixed $ip_address
-   * @param bool $success whether or not the attempt success
-   * @return bool
-   */
-  private function logAuthenticationAttempt($nationalid, $ip_address, $success){
-
-      $timestamp = time();
-
-      $id = DB::table('login_log')->insertGetId(array(
-          'unix_timestamp' => $timestamp,
-          'user_nationalid' => $nationalid,
-          'ip_address' => $ip_address,
-          'success' => $success
-      ));
-
-      if ($id != 0) {
-          return true;
-      } else {
-          return false;
-      }
-
-  }
-
-  /**
-   * Check if user already logged in
-   *
-   * @return bool
-   */
-  public static function userLoggedIn(){
-    $login_session = Session::get('logged_in');
-    if ($login_session == "1") {
-        return true;
-    } else {
-        return false;
     }
   }
 
@@ -170,9 +89,25 @@ class OperationController extends Controller{
    * @return Redirection
    */
   public function logout(){
-    Session::flush();
-    Session::regenerate();
-
+    $this->operation->logout();
     return Redirect::to('/');
+  }
+
+  /**
+   * Render page for user that already have club by someway
+   *
+   * @return view
+   */
+  public function confirmedClub(){
+    if(Operation::userLoggedIn()){
+      if(Operation::haveClub(true)){
+        $club = DB::table('club')->where('club_code', Operation::haveClub('club'))->pluck('club_name');
+        return view('confirmed')->with('club', $club)->with('year', Config::get('applicationConfig.operation_year'));
+      }else{
+        return Redirect::to('/');
+      }
+    }else{
+      return Redirect::to('/login');
+    }
   }
 }

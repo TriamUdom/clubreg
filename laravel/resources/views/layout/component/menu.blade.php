@@ -1,7 +1,13 @@
 <div class="navbar navbar-default navbar-fixed-top">
   <div class="container">
     <div class="navbar-header">
-      <a class="navbar-brand" href="/">การเลือกชมรม ประจำปีการศึกษา 2559</a>
+      @if(Session::get('president_logged_in') == 1)
+        <a class="navbar-brand" href="/president">ระบบจัดการชมรม ประจำปีการศึกษา {{ Config::get('applicationConfig.operation_year') }}</a>
+      @elseif(Session::get('admin_logged_in') == 1)
+        <a class="navbar-brand" href="/admin">ระบบจัดการชมรม (Admin) ประจำปีการศึกษา {{ Config::get('applicationConfig.operation_year') }}</a>
+      @else
+        <a class="navbar-brand" href="/">ระบบเลือกชมรม ประจำปีการศึกษา {{ Config::get('applicationConfig.operation_year') }}</a>
+      @endif
       <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -12,9 +18,13 @@
       <ul class="nav navbar-nav">
       </ul>
 
-      @if(Session::get('logged_in') == 1)
+      @if(Session::get('logged_in') == 1 || Session::get('president_logged_in') == 1 || Session::get('admin_logged_in') == 1)
             <ul class="nav navbar-nav navbar-right">
+              @if(Session::get('president_logged_in') == 1)
+
+              @else
               <li><a href="/contact" target="_self">ติดต่อเจ้าหน้าที่</a></li>
+              @endif
               <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" id="usermenu">{{ Session::get('fullname') }} <span class="caret"></span></a>
                 <ul class="dropdown-menu" aria-labelledby="usermenu">
@@ -30,7 +40,11 @@
            </ul>
       @else
             <ul class="nav navbar-nav navbar-right">
+              @if(Session::get('president_logged_in') == 1)
+
+              @else
               <li><a href="/contact" target="_self">ติดต่อเจ้าหน้าที่</a></li>
+              @endif
               <li><a href="/login" target="_self">เข้าสู่ระบบ</a></li>
               <?php /*
               <li class="dropdown">

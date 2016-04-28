@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'debug' => env('APP_DEBUG', false),
+    'debug' => env('APP_DEBUG'),
 
     /*
     |--------------------------------------------------------------------------
@@ -39,7 +39,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Asia/Bangkok',
 
     /*
     |--------------------------------------------------------------------------
@@ -78,7 +78,7 @@ return [
     |
     */
 
-    'key' => env('APP_KEY', 'SomeRandomString'),
+    'key' => env('APP_KEY'),
 
     'cipher' => 'AES-256-CBC',
 
@@ -145,6 +145,10 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        /*
+         * Rollbar Service Providers...
+         */
+        Jenssegers\Rollbar\RollbarServiceProvider::class,
     ],
 
     /*
@@ -193,6 +197,17 @@ return [
         'URL'       => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View'      => Illuminate\Support\Facades\View::class,
+
+        //<-----------OUR JOB STARTS HERE----------->
+
+        'Admin'         => App\Admin\Admin::class,
+        'Audition'      => App\Audition\Audition::class,
+        'Confirmation'  => App\Confirmation\Confirmation::class,
+        'Operation'     => App\Operation\Operation::class,
+        'President'     => App\President\President::class,
+        'Registration'  => App\Registration\Registration::class,
+
+        //<-----------OUR JOB ENDS HERE----------->
 
     ],
 
