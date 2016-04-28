@@ -8,7 +8,8 @@
         "php": ">=5.5.9",
         "laravel/framework": "5.1.*",
         "phpoffice/phpword": "dev-develop",
-        "dompdf/dompdf": "0.7.x@beta"
+        "dompdf/dompdf": "0.7.x@beta",
+        "jenssegers/rollbar": "^1.5"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

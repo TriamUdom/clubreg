@@ -145,6 +145,10 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        /*
+         * Rollbar Service Providers...
+         */
+        Jenssegers\Rollbar\RollbarServiceProvider::class,
     ],
 
     /*
