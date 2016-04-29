@@ -187,4 +187,19 @@ class Operation{
       return false;
     }
   }
+
+  /**
+   * Determine if a given national id is a member of suspectedClub
+   *
+   * @param int $national_id
+   * @param string $suspectedClubCode
+   * @return bool
+   */
+  public static function isUserInClub($national_id, $suspectedClubCode){
+    if(DB::table('user_year')->where('national_id', $national_id)->where('club_code', $suspectedClubCode)->where('year', Config::get('applicationConfig.operation_year'))->exists()){
+      return true;
+    }else{
+      return false;
+    }
+  }
 }
