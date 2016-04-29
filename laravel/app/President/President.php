@@ -114,6 +114,14 @@ class President{
     }
   }
 
+  private static function encryptNationalID(array $data){
+    for($i=0;$i<count($data);$i++){
+      $data[$i]->national_id = Crypt::encrypt($data[$i]->national_id);
+    }
+
+    return $data;
+  }
+
   /**
    * Get data of pending auditioner
    *
@@ -134,9 +142,7 @@ class President{
               ->orderBy('user_year.number', 'asc')
               ->get();
 
-    for($i=0;$i<count($data);$i++){
-      $data[$i]->national_id = Crypt::encrypt($data[$i]->national_id);
-    }
+    $data = self::encryptNationalID($data);
 
     return $data;
   }
@@ -161,9 +167,7 @@ class President{
               ->orderBy('user_year.number', 'asc')
               ->get();
 
-    for($i=0;$i<count($data);$i++){
-      $data[$i]->national_id = Crypt::encrypt($data[$i]->national_id);
-    }
+    $data = self::encryptNationalID($data);
 
     return $data;
   }
@@ -188,9 +192,7 @@ class President{
               ->orderBy('user_year.number', 'asc')
               ->get();
 
-    for($i=0;$i<count($data);$i++){
-      $data[$i]->national_id = Crypt::encrypt($data[$i]->national_id);
-    }
+    $data = self::encryptNationalID($data);
 
     return $data;
   }
@@ -210,9 +212,7 @@ class President{
               ->orderBy('user_year.number', 'asc')
               ->get();
 
-    for($i=0;$i<count($data);$i++){
-      $data[$i]->national_id = Crypt::encrypt($data[$i]->national_id);
-    }
+    $data = self::encryptNationalID($data);
 
     return $data;
   }
@@ -297,7 +297,7 @@ class President{
 
   }
 
-  public function getAllStudentList(){
+  public function getAllStudentList($encryptNationalID = false){
     $data1 = DB::table('confirmation')
               ->join('user_year', function($join){
                 $join->on('confirmation.national_id', '=', 'user_year.national_id')
