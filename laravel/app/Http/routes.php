@@ -64,11 +64,15 @@ if(isset($_SERVER['HTTP_USER_AGENT']) && (preg_match('~MSIE|Internet Explorer~i'
     Route::post('/president/audition.cancel','PresidentController@auditionCancel');
     Route::get('/president/registration', 'PresidentController@showRegisteredPage');
     Route::get('/president/all', 'PresidentController@showAllPage');
+    Route::get('/president/setup', 'PresidentController@presidentSetUp');
+    Route::post('/president/setup.do', 'PresidentController@doSetUp');
     Route::get('/president/fm3301', 'PresidentController@fillFM3301');
     Route::post('/president/fm3301.do', 'PresidentController@showFM3301');
     Route::get('/president/fm3304', 'PresidentController@fillFM3304');
     Route::post('/president/fm3304.do', 'PresidentController@showFM3304');
-    Route::get('/president/fm3305', 'PresidentController@fillFM3305');
+    Route::get('/president/fm3305', 'PresidentController@selectYearToFillFM3305');
+    Route::post('/president/fm3305.selectyear', 'PresidentController@selectYear');
+    Route::get('/president/fm3305/{year}/{semester}', 'PresidentController@fillFM3305');
     Route::post('/president/fm3305.do', 'PresidentController@showFM3305');
     Route::post('/president/fm3305/student.do', 'PresidentController@addUserToNotPass');
     Route::post('/president/fm3305/student.delete', 'PresidentController@removeUserFromNotPass');

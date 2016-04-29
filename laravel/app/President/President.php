@@ -384,12 +384,96 @@ class President{
                 ->orderBy('number', 'asc')
                 ->get();
 
-    DB::statement('DROP TEMPORARY TABLE IF EXISTS '. $table_name); //Drop the temporary table
+    DB::statement('DROP TEMPORARY TABLE IF EXISTS '. $table_name);
+
+    if($encryptNationalID){
+      $data = self::encryptNationalID($data);
+    }
 
     return $return;
   }
 
-  public function createFM3301($presidentName, $adviserName){
+  public function getPresidentName($type = 'array'){
+    $data = DB::table('club')->where('club_code', Session::get('club_code'))->first();
+    if($type == 'array'){
+      return array($data->president_title, $data->president_fname, $data->president_lname);
+    }else if($type == 'string'){
+      return $data->president_title.' '.$data->president_fname.' '.$data->president_lname;
+    }
+  }
+
+  public function getAdviserName($type = 'array'){
+    $data = DB::table('club')->where('club_code', Session::get('club_code'))->first();
+    if($type == 'array'){
+      return array($data->adviser_title, $data->adviser_fname, $data->adviser_lname);
+    }else if($type == 'string'){
+      return $data->adviser_title.' '.$data->adviser_fname.' '.$data->adviser_lname;
+    }
+  }
+
+  public function nameSetUp($president_title, $president_fname, $president_lname, $adviser_title, $adviser_fname, $adviser_lname){
+    DB::table('club')
+      ->where('club_code', Session::get('club_code'))
+      ->update(array(
+        'president_title' => $president_title,
+        'president_fname' => $president_fname,
+        'president_lname' => $president_lname,
+        'adviser_title' => $adviser_title,
+        'adviser_fname' => $adviser_fname,
+        'adviser_lname' => $adviser_lname
+      ));
+    return true;
+  }
+
+  public function getMemberPass($encryptNationalID = false){
+    $memberNotPass = $this->getMemberNotPass();
+
+    for($i=0;$i<count($memberNotPass);$i++){
+      $notPassNationalID[] = $memberNotPass[$i]->national_id;
+    }
+
+    if(isset($notPassNationalID)){
+      $memberPass = DB::table('user_year')
+                      ->join('user', 'user_year.national_id', '=', 'user.national_id')
+                      ->where('user_year.year', Config::get('applicationConfig.operation_year'))
+                      ->where('user_year.club_code', Session::get('club_code'))
+                      ->whereNotIn('user_year.national_id', $notPassNationalID)
+                      ->get();
+    }else{
+      $memberPass = DB::table('user_year')
+                      ->join('user', 'user_year.national_id', '=', 'user.national_id')
+                      ->where('user_year.year', Config::get('applicationConfig.operation_year'))
+                      ->where('user_year.club_code', Session::get('club_code'))
+                      ->get();
+    }
+
+    if($encryptNationalID){
+      $data = self::encryptNationalID($memberPass);
+    }
+
+    return $data;
+  }
+
+  public function getMemberNotPass($encryptNationalID = false){
+    $data = DB::table('not_pass_user')
+              ->join('user', 'not_pass_user.national_id', '=', 'user.national_id')
+              ->join('user_year', function($join){
+                $join->on('not_pass_user.national_id', '=', 'user_year.national_id')
+                     ->on('not_pass_user.year', '=', 'user_year.year')
+                     ->on('not_pass_user.club_code', '=', 'user_year.club_code');
+              })
+              ->where('not_pass_user.year', Config::get('applicationConfig.operation_year'))
+              ->where('not_pass_user.club_code', Session::get('club_code'))
+              ->get();
+
+    if($encryptNationalID){
+      $data = self::encryptNationalID($data);
+    }
+
+    return $data;
+  }
+
+  public function createFM3301(){
     $studentData = $this->getAllStudentList();
     $clubData = DB::table('club')->where('club_code', Session::get('club_code'))->first();
     $adviserCount = DB::table('teacher_year')
@@ -463,6 +547,9 @@ class President{
     }
 
     $templateProcessor->setValue('operation_year',        htmlspecialchars(Config::get('applicationConfig.operation_year')));
+
+    $presidentName = $this->getPresidentName('string');
+    $adviserName = $this->getAdviserName('string');
     $templateProcessor->setValue('presidentName',         htmlspecialchars($presidentName));
     $templateProcessor->setValue('adviserName',           htmlspecialchars($adviserName));
 
@@ -470,7 +557,7 @@ class President{
     return $rootPath.'\resources\FMOutput\\'.$fileName.'.docx';
   }
 
-  public function createFM3304($adviserName, $semester){
+  public function createFM3304($semester){
     $studentData = $this->getAllStudentList();
     $clubData = DB::table('club')->where('club_code', Session::get('club_code'))->first();
 
@@ -500,9 +587,53 @@ class President{
       $templateProcessor->setValue('class-room#'.$k,      htmlspecialchars($studentData[$j]->class.'/'.$studentData[$j]->room));
     }
 
+    $adviserName = $this->getAdviserName('string');
     $templateProcessor->setValue('adviserName',           htmlspecialchars($adviserName));
 
     $templateProcessor->saveAs($rootPath.'\resources\FMOutput\\'.$fileName.'.docx');
     return $rootPath.'\resources\FMOutput\\'.$fileName.'.docx';
+  }
+
+  public function addUserToNotPass($national_id_encrypted, $semester){
+    $national_id = Crypt::decrypt($national_id_encrypted);
+    if(Operation::isUserInClub($national_id, Session::get('club_code'))){
+      if(DB::table('not_pass_user')->where('national_id', $national_id)->where('year', Config::get('applicationConfig.operation_year'))->exists()){
+        return "มีข้อมูลนักเรียนคนนี้ในรายชื่อไม่ผ่านชมรมแล้ว ไม่สามารถเพิ่มข้อมูลซ้ำได้";
+      }else{
+        DB::table('not_pass_user')->insert(array(
+          'national_id' => $national_id,
+          'semester' => $semester,
+          'year' => Config::get('applicationConfig.operation_year'),
+          'club_code' => Session::get('club_code')
+        ));
+
+        return true;
+      }
+    }else{
+      return "นักเรียนคนนี้ไม่มีในรายชื่อสมาชิกชมรม";
+    }
+  }
+
+  public function removeUserFromNotPass($national_id_encrypted, $semester){
+    $national_id = Crypt::decrypt($national_id_encrypted);
+    if(Operation::isUserInClub($national_id, Session::get('club_code'))){
+      if(!DB::table('not_pass_user')->where('national_id', $national_id)->where('year', Config::get('applicationConfig.operation_year'))->exists()){
+        return "ไม่มีข้อมูลนักเรียนคนนี้ในรายชื่อไม่ผ่านชมรม ไม่สามารถลบได้";
+      }else{
+        DB::table('not_pass_user')
+          ->where('national_id', $national_id)
+          ->where('semester', $semester)
+          ->where('year', Config::get('applicationConfig.operation_year'))
+          ->delete();
+
+        return true;
+      }
+    }else{
+      return "นักเรียนคนนี้ไม่มีในรายชื่อสมาชิกชมรม";
+    }
+  }
+
+  public function createFM3305(){
+
   }
 }

@@ -7,6 +7,8 @@ use Session;
 use Redirect;
 use President;
 use Validator;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 
 /*
 |--------------------------------------------------------------------------
@@ -227,6 +229,61 @@ class PresidentController extends Controller{
     }
   }
 
+  public function presidentSetUp(){
+    if(President::presidentLoggedIn()){
+      $presidentName = $this->president->getPresidentName();
+      $adviserName = $this->president->getAdviserName();
+      return view('president.presidentSetUp')
+              ->with('presidentTitle', $presidentName[0])
+              ->with('presidentFname', $presidentName[1])
+              ->with('presidentLname', $presidentName[2])
+              ->with('adviserTitle', $adviserName[0])
+              ->with('adviserFname', $adviserName[1])
+              ->with('adviserLname', $adviserName[2]);
+    }else{
+      return Redirect::to('/president/login');
+    }
+  }
+
+  public function doSetUp(){
+    if(President::presidentLoggedIn()){
+      $president_title = trim(Input::get('presidentTitle'));
+      $president_fname = trim(Input::get('presidentFirstName'));
+      $president_lname = trim(Input::get('presidentLastName'));
+      $adviser_title = trim(Input::get('adviserTitle'));
+      $adviser_fname = trim(Input::get('adviserFirstName'));
+      $adviser_lname = trim(Input::get('adviserLastName'));
+
+      $validator = Validator::make(array(
+        'president_title' => $president_title,
+        'president_fname' => $president_fname,
+        'president_lname' => $president_lname,
+        'adviser_title' => $adviser_title,
+        'adviser_fname' => $adviser_fname,
+        'adviser_lname' => $adviser_lname
+      ),array(
+        'president_title' => 'required',
+        'president_fname' => 'required',
+        'president_lname' => 'required',
+        'adviser_title' => 'required',
+        'adviser_fname' => 'required',
+        'adviser_lname' => 'required'
+      ));
+
+      if($validator->fails()){
+        return Redirect::to('/president/setup')->with('error','รูปแบบข้อมูลไม่ถูกต้องหรือมีข้อมูลเป็นค่าว่าง');
+      }
+
+      if($this->president->nameSetUp($president_title, $president_fname, $president_lname, $adviser_title, $adviser_fname, $adviser_lname)){
+        return Redirect::to('/president/setup')->with('success', 'แก้ไขข้อมูลเรียบร้อยแล้ว');
+      }else{
+        return Redirect::to('/president/setup')->with('error', 'มีข้อผิดพลาดเกิดขึ้น กรุณาลองใหม่ในภายหลัง');
+      }
+    }else{
+      return Redirect::to('/president/login');
+    }
+  }
+
   public function fillFM3301(){
     if(President::presidentLoggedIn()){
       return view('president.presidentFill3301');
@@ -237,9 +294,7 @@ class PresidentController extends Controller{
 
   public function showFM3301(){
     if(President::presidentLoggedIn()){
-      $presidentName  = Input::get('presidentTitle').' '.trim(Input::get('presidentFirstName')).' '.trim(Input::get('presidentLastName'));
-      $adviserName    = Input::get('adviserTitle').' '.trim(Input::get('adviserFirstName')).' '.trim(Input::get('adviserLastName'));
-      $path = $this->president->createFM3301($presidentName, $adviserName);
+      $path = $this->president->createFM3301();
       return response()->download($path)->deleteFileAfterSend(true);
     }else{
       return Redirect::to('/president/login');
@@ -256,23 +311,43 @@ class PresidentController extends Controller{
 
   public function showFM3304(){
     if(President::presidentLoggedIn()){
-      $adviserName  = Input::get('adviserTitle').' '.trim(Input::get('adviserFirstName')).' '.trim(Input::get('adviserLastName'));
       $semester     = Input::get('semester');
       if($semester != 1 && $semester != 2){
         return Redirect::to('/president/fm3304')->with('error', 'ภาคเรียนต้องมีค่าเป็น 1 หรือ 2 เท่านั้น');
       }
-      $path = $this->president->createFM3304($adviserName, $semester);
+      $path = $this->president->createFM3304($semester);
       return response()->download($path)->deleteFileAfterSend(true);
     }else{
       return Redirect::to('/president/login');
     }
   }
 
-  public function fillFM3305(){
+  public function selectYearToFillFM3305(){
     if(President::presidentLoggedIn()){
-      $pass = $this->president->getMemberPass(true);
-      $notPass = $this->president->getMemberNotPass(true);
-      return view('president.presidentFill3305')->with('pass', $pass)->with('notPass', $notPass);
+      return view('president.presidentSelectYearToFillFM3305');
+    }else{
+      return Redirect::to('/president/login');
+    }
+  }
+
+  public function selectYear(){
+    $year = Config::get('applicationConfig.operation_year');
+    $semester = Input::get('semester');
+    return Redirect::to('/president/fm3305/'.$year.'/'.$semester);
+  }
+
+  public function fillFM3305(Request $request, $year, $semester){
+    if(President::presidentLoggedIn()){
+      if(($semester == 1 || $semester == 2) && $year == Config::get('applicationConfig.operation_year')){
+        $pass = $this->president->getMemberPass(true, $semester);
+        $notPass = $this->president->getMemberNotPass(true, $semester);
+        return view('president.presidentFill3305')
+          ->with('pass', $pass)
+          ->with('notPass', $notPass)
+          ->with('semester', $semester);
+      }else{
+        abort(400);
+      }
     }else{
       return Redirect::to('/president/login');
     }
@@ -281,11 +356,13 @@ class PresidentController extends Controller{
   public function addUserToNotPass(){
     if(President::presidentLoggedIn()){
       $national_id_encrypted = Input::get('national_id');
-      $add = $this->president->addUserToNotPass($national_id_encrypted);
+      $semester = Input::get('semester');
+      $year = Config::get('applicationConfig.operation_year');
+      $add = $this->president->addUserToNotPass($national_id_encrypted, $semester);
       if($add === true){
-        return Redirect::to('/president/fm3305')->with('success', 'ให้มผ.นักเรียนเรียบร้อย');
+        return Redirect::to('/president/fm3305/'.$year.'/'.$semester)->with('success', 'ให้มผ.นักเรียนเรียบร้อย');
       }else{
-        return Redirect::to('/president/fm3305')->with('error', $add);
+        return Redirect::to('/president/fm3305/'.$year.'/'.$semester)->with('error', $add);
       }
     }else{
       return Redirect::to('/president/login');
@@ -295,11 +372,13 @@ class PresidentController extends Controller{
   public function removeUserFromNotPass(){
     if(President::presidentLoggedIn()){
       $national_id_encrypted = Input::get('national_id');
-      $remove = $this->president->removeUserFromNotPass($national_id_encrypted);
+      $semester = Input::get('semester');
+      $year = Config::get('applicationConfig.operation_year');
+      $remove = $this->president->removeUserFromNotPass($national_id_encrypted, $semester);
       if($remove === true){
-        return Redirect::to('/president/fm3305')->with('success', 'ให้ผ.นักเรียนเรียบร้อย');
+        return Redirect::to('/president/fm3305/'.$year.'/'.$semester)->with('success', 'ให้ผ.นักเรียนเรียบร้อย');
       }else{
-        return Redirect::to('/president/fm3305')->with('error', $add);
+        return Redirect::to('/president/fm3305/'.$year.'/'.$semester)->with('error', $add);
       }
     }else{
       return Redirect::to('/president/login');
