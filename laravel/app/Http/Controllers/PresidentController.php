@@ -267,4 +267,56 @@ class PresidentController extends Controller{
       return Redirect::to('/president/login');
     }
   }
+
+  public function fillFM3305(){
+    if(President::presidentLoggedIn()){
+      $pass = $this->president->getMemberPass(true);
+      $notPass = $this->president->getMemberNotPass(true);
+      return view('president.presidentFill3305')->with('pass', $pass)->with('notPass', $notPass);
+    }else{
+      return Redirect::to('/president/login');
+    }
+  }
+
+  public function addUserToNotPass(){
+    if(President::presidentLoggedIn()){
+      $national_id_encrypted = Input::get('national_id');
+      $add = $this->president->addUserToNotPass($national_id_encrypted);
+      if($add === true){
+        return Redirect::to('/president/fm3305')->with('success', 'ให้มผ.นักเรียนเรียบร้อย');
+      }else{
+        return Redirect::to('/president/fm3305')->with('error', $add);
+      }
+    }else{
+      return Redirect::to('/president/login');
+    }
+  }
+
+  public function removeUserFromNotPass(){
+    if(President::presidentLoggedIn()){
+      $national_id_encrypted = Input::get('national_id');
+      $remove = $this->president->removeUserFromNotPass($national_id_encrypted);
+      if($remove === true){
+        return Redirect::to('/president/fm3305')->with('success', 'ให้ผ.นักเรียนเรียบร้อย');
+      }else{
+        return Redirect::to('/president/fm3305')->with('error', $add);
+      }
+    }else{
+      return Redirect::to('/president/login');
+    }
+  }
+
+  public function showFM3305(){
+    if(President::presidentLoggedIn()){
+      $adviserName  = Input::get('adviserTitle').' '.trim(Input::get('adviserFirstName')).' '.trim(Input::get('adviserLastName'));
+      $semester     = Input::get('semester');
+      if($semester != 1 && $semester != 2){
+        return Redirect::to('/president/fm3304')->with('error', 'ภาคเรียนต้องมีค่าเป็น 1 หรือ 2 เท่านั้น');
+      }
+      $path = $this->president->createFM3305($adviserName, $semester);
+      return response()->download($path)->deleteFileAfterSend(true);
+    }else{
+      return Redirect::to('/president/login');
+    }
+  }
 }
