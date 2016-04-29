@@ -3,7 +3,12 @@
 @section('content')
 @include('layout.component.errorwbg')
 @include('layout.component.successwbg')
-<legend>รายชื่อนักเรียนที่ผ่าน{{ Session::get('fullname') }}</legend>
+<legend>รายชื่อนักเรียนที่ผ่าน{{ Session::get('fullname') }}</legend
+<form class="form-horizontal" action="" method="POST">
+    <select class="form-control" name="term" id="termSelect">
+        <!-- TODO: Generate Term & TermID Here -->
+    </select>
+</form>
 <table class="table table-striped table-hover ">
   <thead>
     <tr>
