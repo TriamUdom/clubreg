@@ -633,7 +633,65 @@ class President{
     }
   }
 
-  public function createFM3305(){
+  public function createFM3305($semester){
+    $studentData = $this->getAllStudentList();
+    $studentNotPass = $this->getMemberNotPass();
+    $clubData = DB::table('club')->where('club_code', Session::get('club_code'))->first();
 
+    $fileName = '[FM 33-05] '.substr(Session::get('club_code'), -2).'_'.Session::get('fullname');
+    $rootPath = dirname(__DIR__, 2);
+    if(file_exists($rootPath.'\resources\FMOutput\\'.$fileName.'.docx')){
+      unlink($rootPath.'\resources\FMOutput\\'.$fileName.'.docx');
+    }
+
+    $templateProcessor = new TemplateProcessor($rootPath.'\resources\FMtemplate\FM3305.docx');
+
+    $templateProcessor->setValue('clubName',             htmlspecialchars($clubData->club_name));
+    $templateProcessor->setValue('clubCode',             htmlspecialchars($clubData->club_code));
+    $templateProcessor->setValue('semester',             htmlspecialchars($semester));
+    $templateProcessor->setValue('operation_year',       htmlspecialchars(Config::get('applicationConfig.operation_year')));
+
+    $studentCount = count($studentData);
+    $studentNotPassCount = count($studentNotPass);
+
+    $templateProcessor->setValue('total',                htmlspecialchars($studentCount));
+    $templateProcessor->setValue('pass',                 htmlspecialchars($studentCount-count($studentNotPass)));
+    $templateProcessor->setValue('fail',                 htmlspecialchars($studentNotPassCount));
+
+    $templateProcessor->cloneRow('count', $studentNotPassCount);
+
+    for($j=0;$j<$studentNotPassCount;$j++){
+      $k = $j+1;
+      $templateProcessor->setValue('count#'.$k, $k);
+
+      $templateProcessor->setValue('tfname#'.$k,         htmlspecialchars($studentNotPass[$j]->title.' '.$studentNotPass[$j]->fname));
+      $templateProcessor->setValue('lname#'.$k,          htmlspecialchars($studentNotPass[$j]->lname));
+
+      $templateProcessor->setValue('class#'.$k,          htmlspecialchars($studentNotPass[$j]->class));
+      $templateProcessor->setValue('room#'.$k,           htmlspecialchars($studentNotPass[$j]->room));
+    }
+
+    $adviserName = $this->getAdviserName('string');
+    $templateProcessor->setValue('adviserName',          htmlspecialchars($adviserName));
+    $templateProcessor->setValue('day',                  htmlspecialchars(date('j')));
+    $month = array(
+      1 => 'มกราคม',
+      2 => 'กุมภาพันธ์',
+      3 => 'มีนาคม',
+      4 => 'เมษายน',
+      5 => 'พฤษภาคม',
+      6 => 'มิถุนายน',
+      7 => 'กรกฎาคม',
+      8 => 'สิงหาคม',
+      9 => 'กันยายน',
+      10 => 'ตุลาคม',
+      11 => 'พฤศจิกายน',
+      12 => 'ธันวาคม'
+    );
+    $templateProcessor->setValue('month',                htmlspecialchars($month[date('n')]));
+    $templateProcessor->setValue('year',                 htmlspecialchars(date('Y')+543));
+
+    $templateProcessor->saveAs($rootPath.'\resources\FMOutput\\'.$fileName.'.docx');
+    return $rootPath.'\resources\FMOutput\\'.$fileName.'.docx';
   }
 }

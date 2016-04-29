@@ -387,12 +387,11 @@ class PresidentController extends Controller{
 
   public function showFM3305(){
     if(President::presidentLoggedIn()){
-      $adviserName  = Input::get('adviserTitle').' '.trim(Input::get('adviserFirstName')).' '.trim(Input::get('adviserLastName'));
-      $semester     = Input::get('semester');
+      $semester = Input::get('semester');
       if($semester != 1 && $semester != 2){
         return Redirect::to('/president/fm3304')->with('error', 'ภาคเรียนต้องมีค่าเป็น 1 หรือ 2 เท่านั้น');
       }
-      $path = $this->president->createFM3305($adviserName, $semester);
+      $path = $this->president->createFM3305($semester);
       return response()->download($path)->deleteFileAfterSend(true);
     }else{
       return Redirect::to('/president/login');
