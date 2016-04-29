@@ -3,12 +3,7 @@
 @section('content')
 @include('layout.component.errorwbg')
 @include('layout.component.successwbg')
-<legend>รายชื่อนักเรียนที่ผ่าน{{ Session::get('fullname') }}</legend
-<form class="form-horizontal" action="" method="POST">
-    <select class="form-control" name="term" id="termSelect">
-        <!-- TODO: Generate Term & TermID Here -->
-    </select>
-</form>
+<legend>รายชื่อนักเรียนที่ผ่าน{{ Session::get('fullname') }}</legend>
 <table class="table table-striped table-hover ">
   <thead>
     <tr>
@@ -36,7 +31,7 @@
           <form class="form-horizontal" method="POST" action="/president/fm3305/student.do">
             <fieldset>
               <input type="hidden" name="national_id" value="{{ $pass[$i]->national_id }}">
-              <input type="hidden" name="action" value="dismiss">
+              <input type="hidden" name="semester" value="{{ $semester }}">
               <button type="submit" class="btn btn-danger btn-block">ให้ไม่ผ่าน</button>
               {{ csrf_field() }}
             </fieldset>
@@ -74,7 +69,7 @@
           <form class="form-horizontal" method="POST" action="/president/fm3305/student.delete">
             <fieldset>
               <input type="hidden" name="national_id" value="{{ $notPass[$i]->national_id }}">
-              <input type="hidden" name="action" value="cancel">
+              <input type="hidden" name="semester" value="{{ $semester }}">
               <button type="submit" class="btn btn-warning btn-block">ให้ผ่าน</button>
               {{ csrf_field() }}
             </fieldset>
