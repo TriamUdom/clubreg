@@ -4,7 +4,7 @@
 <form class="form-horizontal" method="POST" action="/president/fm3301.do">
   <fieldset>
    <legend>Download FM33-01 สำหรับชมรม {{ Session::get('fullname') }}</legend>
-   @include('layout.component.errornobg')
+   @include('layout.component.errorwbg')
    <div class="form-group">
      <label class="col-lg-2 control-label">ชื่อประธานชมรม</label>
      <div class="col-lg-2">
