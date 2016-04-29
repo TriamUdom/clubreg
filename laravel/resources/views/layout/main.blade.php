@@ -8,11 +8,11 @@
     <meta property="og:title" content="ระบบลงทะเบียนชมรม โรงเรียนเตรียมอุดมศึกษา" />
     <meta property="og:description" content="ระบบลงทะเบียนชมรม โรงเรียนเตรียมอุดมศึกษา ประจำปีการศึกษา ๒๕๕๙" />
     <meta property="og:image" content="http://i.imgur.com/retNp1v.jpg" />)
-    <link rel="stylesheet" href="/css/thaisarabunnew.css" type="text/css">
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="/css/tpl.css">
-    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/assets/fonts/thsarabunnew.css" type="text/css">
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/assets/css/tpl.css">
+    <link rel="stylesheet" href="/assets/css/main.css">
     @yield('css')
   </head>
   <body>
@@ -35,8 +35,8 @@
       @endif
     </div>
 
-    <script src="/js/jquery.min.js"></script>
-    <script src="/js/bootstrap.min.js"></script>
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
     @yield('script')
     @if(Config::get('applicationConfig.release') == 'release' && Config::get('applicationConfig.mode') != 'close' && Config::get('applicationConfig.mode') != 'technical_difficulties')
       <script>
