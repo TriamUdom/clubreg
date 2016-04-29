@@ -464,7 +464,43 @@ class President{
 
     $templateProcessor->setValue('operation_year',        htmlspecialchars(Config::get('applicationConfig.operation_year')));
     $templateProcessor->setValue('presidentName',         htmlspecialchars($presidentName));
-    $templateProcessor->setValue('presidentAdviserName',  htmlspecialchars($adviserName));
+    $templateProcessor->setValue('adviserName',           htmlspecialchars($adviserName));
+
+    $templateProcessor->saveAs($rootPath.'\resources\FMOutput\\'.$fileName.'.docx');
+    return $rootPath.'\resources\FMOutput\\'.$fileName.'.docx';
+  }
+
+  public function createFM3304($adviserName, $semester){
+    $studentData = $this->getAllStudentList();
+    $clubData = DB::table('club')->where('club_code', Session::get('club_code'))->first();
+
+    $fileName = '[FM 33-04] '.substr(Session::get('club_code'), -2).'_'.Session::get('fullname');
+    $rootPath = dirname(__DIR__, 2);
+    if(file_exists($rootPath.'\resources\FMOutput\\'.$fileName.'.docx')){
+      unlink($rootPath.'\resources\FMOutput\\'.$fileName.'.docx');
+    }
+
+    $templateProcessor = new TemplateProcessor($rootPath.'\resources\FMtemplate\FM3304.docx');
+
+    $templateProcessor->setValue('clubName',             htmlspecialchars($clubData->club_name));
+    $templateProcessor->setValue('clubCode',             htmlspecialchars($clubData->club_code));
+    $templateProcessor->setValue('semester',             htmlspecialchars($semester));
+    $templateProcessor->setValue('operation_year',       htmlspecialchars(Config::get('applicationConfig.operation_year')));
+
+    $studentCount = count($studentData);
+    $templateProcessor->cloneRow('count', $studentCount);
+
+    for($j=0;$j<$studentCount;$j++){
+      $k = $j+1;
+      $templateProcessor->setValue('count#'.$k, $k);
+
+      $templateProcessor->setValue('tfname#'.$k,          htmlspecialchars($studentData[$j]->title.' '.$studentData[$j]->fname));
+      $templateProcessor->setValue('lname#'.$k,           htmlspecialchars($studentData[$j]->lname));
+
+      $templateProcessor->setValue('class-room#'.$k,      htmlspecialchars($studentData[$j]->class.'/'.$studentData[$j]->room));
+    }
+
+    $templateProcessor->setValue('adviserName',           htmlspecialchars($adviserName));
 
     $templateProcessor->saveAs($rootPath.'\resources\FMOutput\\'.$fileName.'.docx');
     return $rootPath.'\resources\FMOutput\\'.$fileName.'.docx';
