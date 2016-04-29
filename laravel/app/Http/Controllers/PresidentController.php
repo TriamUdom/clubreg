@@ -237,9 +237,31 @@ class PresidentController extends Controller{
 
   public function showFM3301(){
     if(President::presidentLoggedIn()){
-      $presidentName        = Input::get('presidentTitle').' '.trim(Input::get('presidentFirstName')).' '.trim(Input::get('presidentLastName'));
-      $adviserName          = Input::get('adviserTitle').' '.trim(Input::get('adviserFirstName')).' '.trim(Input::get('adviserLastName'));
+      $presidentName  = Input::get('presidentTitle').' '.trim(Input::get('presidentFirstName')).' '.trim(Input::get('presidentLastName'));
+      $adviserName    = Input::get('adviserTitle').' '.trim(Input::get('adviserFirstName')).' '.trim(Input::get('adviserLastName'));
       $path = $this->president->createFM3301($presidentName, $adviserName);
+      return response()->download($path)->deleteFileAfterSend(true);
+    }else{
+      return Redirect::to('/president/login');
+    }
+  }
+
+  public function fillFM3304(){
+    if(President::presidentLoggedIn()){
+      return view('president.presidentFill3304');
+    }else{
+      return Redirect::to('/president/login');
+    }
+  }
+
+  public function showFM3304(){
+    if(President::presidentLoggedIn()){
+      $adviserName  = Input::get('adviserTitle').' '.trim(Input::get('adviserFirstName')).' '.trim(Input::get('adviserLastName'));
+      $semester     = Input::get('semester');
+      if($semester != 1 && $semester != 2){
+        return Redirect::to('/president/fm3304')->with('error', 'ภาคเรียนต้องมีค่าเป็น 1 หรือ 2 เท่านั้น');
+      }
+      $path = $this->president->createFM3304($adviserName, $semester);
       return response()->download($path)->deleteFileAfterSend(true);
     }else{
       return Redirect::to('/president/login');
