@@ -76,6 +76,7 @@ if(isset($_SERVER['HTTP_USER_AGENT']) && (preg_match('~MSIE|Internet Explorer~i'
     Route::post('/president/fm3305.do', 'PresidentController@showFM3305');
     Route::post('/president/fm3305/student.do', 'PresidentController@addUserToNotPass');
     Route::post('/president/fm3305/student.delete', 'PresidentController@removeUserFromNotPass');
+    Route::get('/president/rollcall', 'PresidentController@showRowCallPage');
   }
 
   if(Config::get('applicationConfig.administration')){

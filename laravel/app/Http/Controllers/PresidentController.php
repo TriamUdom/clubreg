@@ -406,4 +406,13 @@ class PresidentController extends Controller{
       return Redirect::to('/president/login');
     }
   }
+
+  public function showRowCallPage(){
+    if(President::presidentLoggedIn()){
+      $data = $this->president->getAllStudentList();
+      return view('president.presidentRollCall')->with('data', $data);
+    }else{
+      return Redirect::to('/president/login');
+    }
+  }
 }
