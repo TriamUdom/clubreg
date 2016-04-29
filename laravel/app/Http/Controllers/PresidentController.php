@@ -226,4 +226,23 @@ class PresidentController extends Controller{
       return Redirect::to('/president/login');
     }
   }
+
+  public function fillFM3301(){
+    if(President::presidentLoggedIn()){
+      return view('president.presidentFill3301');
+    }else{
+      return Redirect::to('/president/login');
+    }
+  }
+
+  public function showFM3301(){
+    if(President::presidentLoggedIn()){
+      $presidentName        = Input::get('presidentTitle').' '.trim(Input::get('presidentFirstName')).' '.trim(Input::get('presidentLastName'));
+      $adviserName          = Input::get('adviserTitle').' '.trim(Input::get('adviserFirstName')).' '.trim(Input::get('adviserLastName'));
+      $path = $this->president->createFM3301($presidentName, $adviserName);
+      return response()->download($path)->deleteFileAfterSend(true);
+    }else{
+      return Redirect::to('/president/login');
+    }
+  }
 }

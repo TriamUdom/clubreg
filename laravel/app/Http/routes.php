@@ -64,11 +64,11 @@ if(isset($_SERVER['HTTP_USER_AGENT']) && (preg_match('~MSIE|Internet Explorer~i'
     Route::post('/president/audition.cancel','PresidentController@auditionCancel');
     Route::get('/president/registration', 'PresidentController@showRegisteredPage');
     Route::get('/president/all', 'PresidentController@showAllPage');
+    Route::get('/president/fm3301', 'PresidentController@fillFM3301');
+    Route::post('/president/fm3301.do', 'PresidentController@showFM3301');
   }
 
   if(Config::get('applicationConfig.administration')){
-    Route::get('/debug/movedata','DebugOperation@moveData');
-    Route::get('/debug/moveuserdata','DebugOperation@moveuserdata');
     Route::get('/admin','AdminController@showAdminPage');
     Route::get('/admin/login','AdminController@showLoginPage');
     Route::post('/admin/login.do','AdminController@adminLogin');

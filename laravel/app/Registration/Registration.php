@@ -4,6 +4,7 @@ use DB;
 use Config;
 use Session;
 use Operation;
+use App\Exceptions\DataException;
 
 class Registration{
 
@@ -71,13 +72,33 @@ class Registration{
         if($totalInClub < (($teacherUsage*30)+5)){
           //Still room for more student
           if(DB::table('audition')->where('club_code', $club_code)->where('national_id', Session::get('national_id'))->where('year', Config::get('applicationConfig.operation_year'))->count() == 0){
-            DB::table('registration')->insert(array(
-              'national_id' => Session::get('national_id'),
-              'club_code'   => $club_code,
-              'timestamp'   => time(),
-              'year'        => Config::get('applicationConfig.operation_year')
-            ));
+            DB::beginTransaction();
+              try{
+                DB::table('registration')->insert(array(
+                  'national_id' => Session::get('national_id'),
+                  'club_code'   => $club_code,
+                  'timestamp'   => time(),
+                  'year'        => Config::get('applicationConfig.operation_year')
+                ));
 
+                if(!is_null(DB::table('user_year')->where('national_id', Session::get('national_id'))->where('year', Config::get('applicationConfig.operation_year'))->pluck('club_code'))){
+                  throw new DataException('club_code is not empty cannot proceed');
+                }else{
+                  DB::table('user_year')
+                    ->where('national_id', Session::get('national_id'))
+                    ->where('year', Config::get('applicationConfig.operation_year'))
+                    ->update(array(
+                      'club_code' => $club_code
+                    ));
+                }
+              }catch(DataException $e){
+                DB::rollBack();
+                abort(500);
+              }catch(Exception $e){
+                DB::rollBack();
+                abort(500);
+              }
+            DB::commit();
             return true;
           }else{
             return 'นักเรียนมีประวัติการลงทะเบียนชมรมนี้แล้ว';
