@@ -6,6 +6,7 @@ use Config;
 use Session;
 use Redirect;
 use President;
+use Operation;
 use Validator;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -55,8 +56,16 @@ class PresidentController extends Controller{
    */
   public function showPresidentPage(){
     if(President::presidentLoggedIn()){
-      $data = DB::table('club')->where('club_code', Session::get('club_code'))->first();
-      return view('president.president')->with('data', $data);
+      $presidentName = $this->president->getPresidentName();
+      $adviserName = $this->president->getAdviserName();
+      if(isset($presidentName[0]) && isset($presidentName[1]) && isset($presidentName[2]) && isset($adviserName[0]) && isset($adviserName[1]) && isset($adviserName[2])){
+        $canEdit = true;
+      }else{
+        $canEdit = false;
+      }
+      return view('president.president')
+              ->with('audition', Operation::isClubAudition(Session::get('club_code')))
+              ->with('canEdit', $canEdit);
     }else{
       return Redirect::to('/president/login');
     }
