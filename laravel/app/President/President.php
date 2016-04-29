@@ -442,8 +442,6 @@ class President{
       $lessThanCriterion = $adviserCount*30 - $studentCount;
     }
 
-    //$presidentName = 'นายทดสอบ สอบทด';
-
     $templateProcessor->setValue('totalStudentCount',     htmlspecialchars($studentCount));
     $templateProcessor->setValue('class4StudentCount',    htmlspecialchars($class4StudentCount));
     $templateProcessor->setValue('class5StudentCount',    htmlspecialchars($class5StudentCount));
@@ -470,6 +468,5 @@ class President{
 
     $templateProcessor->saveAs($rootPath.'\resources\FMOutput\\'.$fileName.'.docx');
     return $rootPath.'\resources\FMOutput\\'.$fileName.'.docx';
-
   }
 }
