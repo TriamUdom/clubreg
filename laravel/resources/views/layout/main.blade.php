@@ -10,7 +10,6 @@
     <meta property="og:image" content="http://i.imgur.com/retNp1v.jpg" />)
     <link rel="stylesheet" href="/assets/fonts/thsarabunnew.css" type="text/css">
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/assets/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="/assets/css/tpl.css">
     <link rel="stylesheet" href="/assets/css/main.css">
     @yield('css')
