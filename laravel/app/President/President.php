@@ -484,8 +484,8 @@ class President{
 
     $fileName = '[FM 33-01] '.substr(Session::get('club_code'), -2).'_'.Session::get('fullname');
     $rootPath = dirname(__DIR__, 2);
-    if(file_exists($rootPath.'\resources\FMOutput\\'.$fileName.'.docx')){
-      unlink($rootPath.'\resources\FMOutput\\'.$fileName.'.docx');
+    if(file_exists($rootPath.'\public\FMOutput\\'.$fileName.'.docx')){
+      unlink($rootPath.'\public\FMOutput\\'.$fileName.'.docx');
     }
 
     $templateProcessor = new TemplateProcessor($rootPath.'\resources\FMtemplate\FM3301.docx');
@@ -553,8 +553,8 @@ class President{
     $templateProcessor->setValue('presidentName',         htmlspecialchars($presidentName));
     $templateProcessor->setValue('adviserName',           htmlspecialchars($adviserName));
 
-    $templateProcessor->saveAs($rootPath.'\resources\FMOutput\\'.$fileName.'.docx');
-    return $rootPath.'\resources\FMOutput\\'.$fileName.'.docx';
+    $templateProcessor->saveAs($rootPath.'\public\FMOutput\\'.$fileName.'.docx');
+    return $rootPath.'\public\FMOutput\\'.$fileName.'.docx';
   }
 
   public function createFM3304($semester){
@@ -563,8 +563,8 @@ class President{
 
     $fileName = '[FM 33-04] '.substr(Session::get('club_code'), -2).'_'.Session::get('fullname');
     $rootPath = dirname(__DIR__, 2);
-    if(file_exists($rootPath.'\resources\FMOutput\\'.$fileName.'.docx')){
-      unlink($rootPath.'\resources\FMOutput\\'.$fileName.'.docx');
+    if(file_exists($rootPath.'\public\FMOutput\\'.$fileName.'.docx')){
+      unlink($rootPath.'\public\FMOutput\\'.$fileName.'.docx');
     }
 
     $templateProcessor = new TemplateProcessor($rootPath.'\resources\FMtemplate\FM3304.docx');
@@ -590,8 +590,8 @@ class President{
     $adviserName = $this->getAdviserName('string');
     $templateProcessor->setValue('adviserName',           htmlspecialchars($adviserName));
 
-    $templateProcessor->saveAs($rootPath.'\resources\FMOutput\\'.$fileName.'.docx');
-    return $rootPath.'\resources\FMOutput\\'.$fileName.'.docx';
+    $templateProcessor->saveAs($rootPath.'\public\FMOutput\\'.$fileName.'.docx');
+    return $rootPath.'\public\FMOutput\\'.$fileName.'.docx';
   }
 
   public function addUserToNotPass($national_id_encrypted, $semester){
@@ -640,8 +640,8 @@ class President{
 
     $fileName = '[FM 33-05] '.substr(Session::get('club_code'), -2).'_'.Session::get('fullname');
     $rootPath = dirname(__DIR__, 2);
-    if(file_exists($rootPath.'\resources\FMOutput\\'.$fileName.'.docx')){
-      unlink($rootPath.'\resources\FMOutput\\'.$fileName.'.docx');
+    if(file_exists($rootPath.'\public\FMOutput\\'.$fileName.'.docx')){
+      unlink($rootPath.'\public\FMOutput\\'.$fileName.'.docx');
     }
 
     $templateProcessor = new TemplateProcessor($rootPath.'\resources\FMtemplate\FM3305.docx');
@@ -691,7 +691,7 @@ class President{
     $templateProcessor->setValue('month',                htmlspecialchars($month[date('n')]));
     $templateProcessor->setValue('year',                 htmlspecialchars(date('Y')+543));
 
-    $templateProcessor->saveAs($rootPath.'\resources\FMOutput\\'.$fileName.'.docx');
-    return $rootPath.'\resources\FMOutput\\'.$fileName.'.docx';
+    $templateProcessor->saveAs($rootPath.'\public\FMOutput\\'.$fileName.'.docx');
+    return $rootPath.'\public\FMOutput\\'.$fileName.'.docx';
   }
 }
