@@ -18,8 +18,38 @@ class Registration{
     for($i=0;$i<count($selected);$i++){
       $selected_code[] = $selected[$i]->club_code;
     }
+
+    $club = DB::table('club')
+              ->where('audition', 0)
+              ->where('active', 1)
+              ->get();
+    $totalInClub = 0;
+    $totalInClub += DB::table('confirmation')
+                      ->where('club_code', $club_code)
+                      ->where('year', Config::get('applicationConfig.operation_year'))
+                      ->count();
+    $totalInClub += DB::table('registration')
+                      ->where('club_code', $club_code)
+                      ->where('year', Config::get('applicationConfig.operation_year'))
+                      ->count();
+    $teacherUsage = DB::table('teacher_year')
+                      ->where('club_code', $club_code)
+                      ->where('year', Config::get('applicationConfig.operation_year'))
+                      ->count();
+
+    for($i=0;$i<count($club);$i++){
+      if($totalInClub < (($teacherUsage*1)+0)){
+        $clubFull[] .= $club[$i]->club_code;
+      }
+    }
+
     if(isset($selected_code)){
-      $data = DB::table('club')->where('audition',0)->where('active',1)->whereNotIn('club_code', $selected_code)->get();
+      $data = DB::table('club')
+                ->where('audition',0)
+                ->where('active',1)
+                ->whereNotIn('club_code', $selected_code)
+                ->whereNotIn('club_code', $clubFull)
+                ->get();
     }else{
       $data = DB::table('club')->where('audition',0)->where('active',1)->get();
     }
