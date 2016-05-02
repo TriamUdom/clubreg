@@ -239,6 +239,7 @@ class PresidentController extends Controller{
   }
 
   public function presidentSetUp(){
+  public function showSetUpPage(){
     if(President::presidentLoggedIn()){
       $presidentName = $this->president->getPresidentName();
       $adviserName = $this->president->getAdviserName();
