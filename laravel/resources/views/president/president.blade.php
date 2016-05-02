@@ -14,12 +14,16 @@
 @if($canEdit)
   <a class="btn btn-primary btn-lg btn-block" href="/president/fm3301" target="_self">Download FM33-01</a>
   <a class="btn btn-primary btn-lg btn-block" href="/president/fm3304" target="_self">Download FM33-04</a>
-  <a class="btn btn-primary btn-lg btn-block" href="/president/rollcall" target="_self">ระบบเช็คชื่อ</a>
+  <?php
+  //<a class="btn btn-primary btn-lg btn-block" href="/president/rollcall" target="_self">ระบบเช็คชื่อ</a>
+  ?>
   <a class="btn btn-primary btn-lg btn-block" href="/president/fm3305" target="_self">แจ้งรายชื่อนักเรียนที่ไม่ผ่านชมรม และ Download FM33-05</a>
 @else
   <a class="btn btn-primary btn-lg btn-block" href="/president/fm3301" target="_self" disabled>Download FM33-01</a>
   <a class="btn btn-primary btn-lg btn-block" href="/president/fm3304" target="_self" disabled>Download FM33-04</a>
-  <a class="btn btn-primary btn-lg btn-block" href="/president/rollcall" target="_self" disabled>ระบบเช็คชื่อ</a>
+  <?php
+  //<a class="btn btn-primary btn-lg btn-block" href="/president/rollcall" target="_self" disabled>ระบบเช็คชื่อ</a>
+  ?>
   <a class="btn btn-primary btn-lg btn-block" href="/president/fm3305" target="_self" disabled>แจ้งรายชื่อนักเรียนที่ไม่ผ่านชมรม และ Download FM33-05</a>
 @endif
 @stop
