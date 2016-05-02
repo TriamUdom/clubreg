@@ -138,7 +138,6 @@ class Registration{
               abort(500);
             }
             DB::commit();
-            DB::commit();
             return true;
           }else{
             return 'นักเรียนมีประวัติการลงทะเบียนชมรมนี้แล้ว';
