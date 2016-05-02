@@ -23,23 +23,24 @@ class Registration{
               ->where('audition', 0)
               ->where('active', 1)
               ->get();
-    $totalInClub = 0;
-    $totalInClub += DB::table('confirmation')
-                      ->where('club_code', $club_code)
-                      ->where('year', Config::get('applicationConfig.operation_year'))
-                      ->count();
-    $totalInClub += DB::table('registration')
-                      ->where('club_code', $club_code)
-                      ->where('year', Config::get('applicationConfig.operation_year'))
-                      ->count();
-    $teacherUsage = DB::table('teacher_year')
-                      ->where('club_code', $club_code)
-                      ->where('year', Config::get('applicationConfig.operation_year'))
-                      ->count();
 
     for($i=0;$i<count($club);$i++){
+      $totalInClub = 0;
+      $totalInClub += DB::table('confirmation')
+                        ->where('club_code', $club[$i]->club_code)
+                        ->where('year', Config::get('applicationConfig.operation_year'))
+                        ->count();
+      $totalInClub += DB::table('registration')
+                        ->where('club_code', $club[$i]->club_code)
+                        ->where('year', Config::get('applicationConfig.operation_year'))
+                        ->count();
+      $teacherUsage = DB::table('teacher_year')
+                        ->where('club_code', $club[$i]->club_code)
+                        ->where('year', Config::get('applicationConfig.operation_year'))
+                        ->count();
+
       if($totalInClub < (($teacherUsage*1)+0)){
-        $clubFull[] .= $club[$i]->club_code;
+        $clubNotFull[] = $club[$i]->club_code;
       }
     }
 
@@ -48,10 +49,16 @@ class Registration{
                 ->where('audition',0)
                 ->where('active',1)
                 ->whereNotIn('club_code', $selected_code)
-                ->whereNotIn('club_code', $clubFull)
+                ->whereIn('club_code', $clubNotFull)
+                ->orderBy('club_code', 'asc')
                 ->get();
     }else{
-      $data = DB::table('club')->where('audition',0)->where('active',1)->get();
+      $data = DB::table('club')
+                ->where('audition',0)
+                ->where('active',1)
+                ->whereIn('club_code', $clubNotFull)
+                ->orderBy('club_code', 'asc')
+                ->get();
     }
     return $data;
   }
