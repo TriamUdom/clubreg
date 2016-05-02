@@ -238,7 +238,11 @@ class PresidentController extends Controller{
     }
   }
 
-  public function presidentSetUp(){
+  /**
+   * Render club setup page
+   *
+   * @return view
+   */
   public function showSetUpPage(){
     if(President::presidentLoggedIn()){
       $presidentName = $this->president->getPresidentName();
@@ -255,6 +259,11 @@ class PresidentController extends Controller{
     }
   }
 
+  /**
+   * Prepare and send data to nameSetUp method in model
+   *
+   * @return Redirection
+   */
   public function doSetUp(){
     if(President::presidentLoggedIn()){
       $president_title = trim(Input::get('presidentTitle'));
@@ -294,6 +303,11 @@ class PresidentController extends Controller{
     }
   }
 
+  /**
+   * Render fillFM3301 page
+   *
+   * @return view
+   */
   public function fillFM3301(){
     if(President::presidentLoggedIn()){
       return view('president.presidentFill3301');
@@ -302,6 +316,11 @@ class PresidentController extends Controller{
     }
   }
 
+  /**
+   * Give order to create FM3301 and send it to user
+   *
+   * @return response
+   */
   public function showFM3301(){
     if(President::presidentLoggedIn()){
       $path = $this->president->createFM3301();
@@ -311,6 +330,11 @@ class PresidentController extends Controller{
     }
   }
 
+  /**
+   * Render fillFM3304 page
+   *
+   * @return view
+   */
   public function fillFM3304(){
     if(President::presidentLoggedIn()){
       return view('president.presidentFill3304');
@@ -319,6 +343,11 @@ class PresidentController extends Controller{
     }
   }
 
+  /**
+   * Give order to create FM3304 and send it to user
+   *
+   * @return response
+   */
   public function showFM3304(){
     if(President::presidentLoggedIn()){
       $semester     = Input::get('semester');
@@ -332,6 +361,11 @@ class PresidentController extends Controller{
     }
   }
 
+  /**
+   * Render page to select year to fill FM3305
+   *
+   * @return view
+   */
   public function selectYearToFillFM3305(){
     if(President::presidentLoggedIn()){
       return view('president.presidentSelectYearToFillFM3305');
@@ -340,12 +374,22 @@ class PresidentController extends Controller{
     }
   }
 
+  /**
+   * Redirect user to appropriate url to continue the filling of FM3305
+   *
+   * @return Redirection
+   */
   public function selectYear(){
     $year = Config::get('applicationConfig.operation_year');
     $semester = Input::get('semester');
     return Redirect::to('/president/fm3305/'.$year.'/'.$semester);
   }
 
+  /**
+   * Render fillFM3305 view
+   *
+   * @return view
+   */
   public function fillFM3305(Request $request, $year, $semester){
     if(President::presidentLoggedIn()){
       if(($semester == 1 || $semester == 2) && $year == Config::get('applicationConfig.operation_year')){
@@ -363,6 +407,11 @@ class PresidentController extends Controller{
     }
   }
 
+  /**
+   * Give order to addUserToNotPass in president model
+   *
+   * @return Redirection
+   */
   public function addUserToNotPass(){
     if(President::presidentLoggedIn()){
       $national_id_encrypted = Input::get('national_id');
@@ -379,6 +428,11 @@ class PresidentController extends Controller{
     }
   }
 
+  /**
+   * Give order to removeUserFromNotPass in president model
+   *
+   * @return Redirection
+   */
   public function removeUserFromNotPass(){
     if(President::presidentLoggedIn()){
       $national_id_encrypted = Input::get('national_id');
@@ -395,6 +449,11 @@ class PresidentController extends Controller{
     }
   }
 
+  /**
+   * Give order to create FM3305 and send it to user
+   *
+   * @return response
+   */
   public function showFM3305(){
     if(President::presidentLoggedIn()){
       $semester = Input::get('semester');
@@ -408,6 +467,11 @@ class PresidentController extends Controller{
     }
   }
 
+  /**
+   * Render rollcall page
+   *
+   * @return view
+   */
   public function showRowCallPage(){
     if(President::presidentLoggedIn()){
       $data = $this->president->getAllStudentList();

@@ -114,6 +114,12 @@ class President{
     }
   }
 
+  /**
+   * Encrypt nationalid from array of standard object that we get from DB->get()
+   *
+   * @param   array   plain text array
+   * @return  array   encrypted array
+   */
   private static function encryptNationalID(array $data){
     for($i=0;$i<count($data);$i++){
       $data[$i]->national_id = Crypt::encrypt($data[$i]->national_id);
@@ -197,6 +203,11 @@ class President{
     return $data;
   }
 
+  /**
+   * Get data of confirmed auditioner
+   *
+   * @return object data
+   */
   public function getAuditionConfirmed(){
     $data = DB::table('audition')
               ->join('user_year', function($join){
@@ -294,9 +305,14 @@ class President{
         return false;
       break;
     }
-
   }
 
+  /**
+   * Get all data of all student in club
+   *
+   * @param bool whether or not you want national_id in return array to be encrypt
+   * @return array array of standard object
+   */
   public function getAllStudentList($encryptNationalID = false){
     $data1 = DB::table('confirmation')
               ->join('user_year', function($join){
@@ -393,6 +409,12 @@ class President{
     return $return;
   }
 
+  /**
+   * Get club's president fullname
+   *
+   * @param   string specify what data type to return value: array (default), string
+   * @return  string, array
+   */
   public function getPresidentName($type = 'array'){
     $data = DB::table('club')->where('club_code', Session::get('club_code'))->first();
     if($type == 'array'){
@@ -402,6 +424,12 @@ class President{
     }
   }
 
+  /**
+   * Get club's adviser fullname
+   *
+   * @param   string specify what data type to return value: array (default), string
+   * @return  string, array
+   */
   public function getAdviserName($type = 'array'){
     $data = DB::table('club')->where('club_code', Session::get('club_code'))->first();
     if($type == 'array'){
@@ -411,6 +439,12 @@ class President{
     }
   }
 
+  /**
+   * Update president and adviser fullname in table club
+   *
+   * @param string
+   * @return true
+   */
   public function nameSetUp($president_title, $president_fname, $president_lname, $adviser_title, $adviser_fname, $adviser_lname){
     DB::table('club')
       ->where('club_code', Session::get('club_code'))
@@ -425,6 +459,12 @@ class President{
     return true;
   }
 
+  /**
+   * Get member that pass
+   *
+   * @param bool whether or not you want the output national_id to be encrypt
+   * @return array
+   */
   public function getMemberPass($encryptNationalID = false){
     $memberNotPass = $this->getMemberNotPass();
 
@@ -454,6 +494,12 @@ class President{
     return $data;
   }
 
+  /**
+   * Get member that does not pass
+   *
+   * @param bool whether or not you want the output national_id to be encrypt
+   * @return array
+   */
   public function getMemberNotPass($encryptNationalID = false){
     $data = DB::table('not_pass_user')
               ->join('user', 'not_pass_user.national_id', '=', 'user.national_id')
@@ -473,6 +519,11 @@ class President{
     return $data;
   }
 
+  /**
+   * Create FM3301
+   *
+   * @return  string path to generated FM3301 file
+   */
   public function createFM3301(){
     $studentData = $this->getAllStudentList();
     $clubData = DB::table('club')->where('club_code', Session::get('club_code'))->first();
@@ -557,6 +608,12 @@ class President{
     return $rootPath.'\public\FMOutput\\'.$fileName.'.docx';
   }
 
+  /**
+   * Create FM3304
+   *
+   * @param   int     semester that this FM3304 assigned to
+   * @return  string  path to generated FM3304 file
+   */
   public function createFM3304($semester){
     $studentData = $this->getAllStudentList();
     $clubData = DB::table('club')->where('club_code', Session::get('club_code'))->first();
@@ -594,6 +651,14 @@ class President{
     return $rootPath.'\public\FMOutput\\'.$fileName.'.docx';
   }
 
+  /**
+   * Add user to not_pass_user
+   *
+   * @param string encrypted national_id
+   * @param int    semester
+   * @return true on success
+   * @return string error message upon failure
+   */
   public function addUserToNotPass($national_id_encrypted, $semester){
     $national_id = Crypt::decrypt($national_id_encrypted);
     if(Operation::isUserInClub($national_id, Session::get('club_code'))){
@@ -614,6 +679,14 @@ class President{
     }
   }
 
+  /**
+   * Remove user from not_pass_user
+   *
+   * @param string encrypted national_id
+   * @param int    semester
+   * @return true on success
+   * @return string error message upon failure
+   */
   public function removeUserFromNotPass($national_id_encrypted, $semester){
     $national_id = Crypt::decrypt($national_id_encrypted);
     if(Operation::isUserInClub($national_id, Session::get('club_code'))){
@@ -633,6 +706,12 @@ class President{
     }
   }
 
+  /**
+   * Create FM3305
+   *
+   * @param   int     semester that this FM3305 assigned to
+   * @return  string  path to generated FM3305 file
+   */
   public function createFM3305($semester){
     $studentData = $this->getAllStudentList();
     $studentNotPass = $this->getMemberNotPass();

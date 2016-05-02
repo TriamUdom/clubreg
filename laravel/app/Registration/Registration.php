@@ -199,6 +199,13 @@ class Registration{
     }
   }
 
+  /**
+   * Determine if there's still room for more student to apply to club
+   *
+   * @param   int total member in club
+   * @param   int total teacher assigned to club
+   * @return  bool
+   */
   private function stillRoomLeft($totalInClub, $teacherUsage){
     if($totalInClub < (($teacherUsage*1)+0)){
       return true;
