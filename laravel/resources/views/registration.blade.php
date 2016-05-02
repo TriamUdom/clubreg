@@ -9,6 +9,7 @@
   <thead>
     <tr>
       <th>#</th>
+      <th>รหัสชมรม</th>
       <th>ชมรม</th>
       <th></th>
     </tr>
@@ -19,6 +20,7 @@
         <fieldset>
           <tr>
             <td>{{ $i+1 }}</td>
+            <td>{{ $data['available'][$i]->club_code }}</td>
             <td>{{ $data['available'][$i]->club_name }}</td>
             <td><a href=""><button type="submit" class="btn btn-primary btn-block" name="{{ $data['available'][$i]->club_code }}">เลือก</button></a></td>
           </tr>
