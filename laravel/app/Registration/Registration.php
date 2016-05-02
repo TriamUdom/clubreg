@@ -39,7 +39,7 @@ class Registration{
                         ->where('year', Config::get('applicationConfig.operation_year'))
                         ->count();
 
-      if($totalInClub < (($teacherUsage*1)+0)){
+      if($this->stillRoomLeft($totalInClub, $teacherUsage)){
         $clubNotFull[] = $club[$i]->club_code;
       }
     }
@@ -60,6 +60,7 @@ class Registration{
                 ->orderBy('club_code', 'asc')
                 ->get();
     }
+
     return $data;
   }
 
@@ -77,6 +78,7 @@ class Registration{
         $club_name = DB::table('club')->where('club_code', $club_code)->pluck('club_name');
         $data[] = array('club_name' => $club_name, 'club_code' => $club_code);
       }
+
       return $data;
     }else{
       return false;
@@ -107,7 +109,7 @@ class Registration{
                           ->where('club_code', $club_code)
                           ->where('year', Config::get('applicationConfig.operation_year'))
                           ->count();
-        if($totalInClub < (($teacherUsage*1)+0)){
+        if($this->stillRoomLeft($totalInClub, $teacherUsage)){
           //Still room for more student
           if(DB::table('audition')->where('club_code', $club_code)->where('national_id', Session::get('national_id'))->where('year', Config::get('applicationConfig.operation_year'))->count() == 0){
             try{
@@ -195,6 +197,14 @@ class Registration{
       }
 
       return true;
+    }
+  }
+
+  private function stillRoomLeft($totalInClub, $teacherUsage){
+    if($totalInClub < (($teacherUsage*1)+0)){
+      return true;
+    }else{
+      return false;
     }
   }
 }
