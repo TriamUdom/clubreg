@@ -6685,10 +6685,10 @@ button.close {
   -webkit-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
   box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
 }
-.btn-info { /* Info; grey 6B6969, lighter grey 858383*/
-  background-image: -webkit-radial-gradient(circle, #6B6969 80%, #858383 81%);
-  background-image: -o-radial-gradient(circle, #6B6969 80%, #858383 81%);
-  background-image: radial-gradient(circle, #6B6969 80%, #858383 81%);
+.btn-info { /* Info; sky-blue 5ed3ff, lighter sky-blue 2abaf0*/
+  background-image: -webkit-radial-gradient(circle, #5ed3ff 80%, #2abaf0 81%);
+  background-image: -o-radial-gradient(circle, #5ed3ff 80%, #2abaf0 81%);
+  background-image: radial-gradient(circle, #5ed3ff 80%, #2abaf0 81%);
   background-repeat: no-repeat;
   -webkit-background-size: 200% 200%;
           background-size: 200%;
@@ -6700,13 +6700,13 @@ button.close {
 .btn-info:hover {
   -webkit-background-size: 100% 100%;
           background-size: 100%;
-  border-color: #6B6969;
+  border-color: #5ed3ff;
 }
 .btn-info:active {
-  background-color: #6B6969;
-  background-image: -webkit-radial-gradient(circle, #6B6969 10%, #858383 11%);
-  background-image: -o-radial-gradient(circle, #6B6969 10%, #858383 11%);
-  background-image: radial-gradient(circle, #6B6969 10%, #858383 11%);
+  background-color: #5ed3ff;
+  background-image: -webkit-radial-gradient(circle, #5ed3ff 10%, #2abaf0 11%);
+  background-image: -o-radial-gradient(circle, #5ed3ff 10%, #2abaf0 11%);
+  background-image: radial-gradient(circle, #5ed3ff 10%, #2abaf0 11%);
   background-repeat: no-repeat;
   -webkit-background-size: 1000% 1000%;
           background-size: 1000%;
