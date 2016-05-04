@@ -7,7 +7,8 @@
     <meta property="og:url" content="https://reg.clubs.triamudom.ac.th/" />
     <meta property="og:title" content="ระบบลงทะเบียนชมรม โรงเรียนเตรียมอุดมศึกษา" />
     <meta property="og:description" content="ระบบลงทะเบียนชมรม โรงเรียนเตรียมอุดมศึกษา ประจำปีการศึกษา ๒๕๕๙" />
-    <meta property="og:image" content="http://i.imgur.com/retNp1v.jpg" />)
+    <meta property="og:image" content="http://i.imgur.com/retNp1v.jpg" />
+    <link rel="icon" sizes="200x200" href="/assets/images/clubsicon2.png">
     <link rel="stylesheet" href="/assets/fonts/thsarabunnew.css" type="text/css">
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="/assets/css/tpl.css">
