@@ -14,9 +14,15 @@ class Registration{
    * @return array club that don't have audition which the user haven't selected
    */
   public function getRegistrationClub(){
-    $selected = DB::table('registration')->where('national_id', Session::get('national_id'))->get();
-    for($i=0;$i<count($selected);$i++){
-      $selected_code[] = $selected[$i]->club_code;
+    if (Operation::userLoggedIn()) {
+      $selected = DB::table('registration')
+                    ->where('national_id', Session::get('national_id'))
+                    ->where('year', Config::get('applicationConfig.operation_year'))
+                    ->get();
+
+      for($i=0;$i<count($selected);$i++){
+        $selected_code[] = $selected[$i]->club_code;
+      }
     }
 
     $club = DB::table('club')
