@@ -11,8 +11,10 @@
 @elseif(Config::get('applicationConfig.mode') == 'close')
   @include('layout.indexComponent.close')
 @endif
-<br><br>
+<div style="margin-bottom: 10px;"></div>
 @if(Session::get('logged_in') == 1)
+  @include('layout.indexComponent.viewOnlyButton')
+  <br>
   @if(Config::get('applicationConfig.mode') == 'confirmation')
   <a href="/confirmation">
     <button class="btn btn-success btn-block">ดำเนินการต่อ</button>
@@ -29,10 +31,16 @@
 
   @endif
 @else
+  @include('layout.indexComponent.viewOnlyButton')
+  <br>
   @if(Config::get('applicationConfig.mode') != 'close' && Config::get('applicationConfig.mode') != 'technical_difficulties')
-    <a href="/login">
-      <button class="btn btn-success btn-block">ดำเนินการต่อ</button>
-    </a>
+    <div class="row">
+      <div class="col-lg-12">
+        <a href="/login">
+          <button class="btn btn-success btn-block">ดำเนินการต่อ</button>
+        </a>
+      </div>
+    </div>
   @endif
 @endif
 @stop
