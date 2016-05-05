@@ -8,17 +8,19 @@
 <table class="table table-striped table-hover">
   <thead>
     <tr>
-      <th>#</th>
-      <th>ชมรม</th>
-      <th></th>
+      <th class="col-sm-1">#</th>
+      <th class="col-sm-2">รหัสชมรม</th>
+      <th class="col-sm-6">ชมรม</th>
+      <th class="col-sm-3"></th>
     </tr>
   </thead>
   <tbody>
     @for ($i = 0; $i < count($data['available']); $i++)
-      <form class="form-horizontal" onsubmit="return confirm('เมื่อยืนยันการลงทะเบียนชมรม{{ $data['pass'][$i]['club_name'] }}แล้ว \n นักเรียนจะไม่สามารถเปลี่ยนแปลงชมรมได้อีก');" method="POST" action="/registration.do">
+      <form class="form-horizontal" onsubmit="return confirm('เมื่อลงทะเบียน{{ $data['available'][$i]->club_name }}แล้ว \n นักเรียนจะไม่สามารถเปลี่ยนแปลงชมรมได้อีก');" method="POST" action="/registration.do">
         <fieldset>
           <tr>
             <td>{{ $i+1 }}</td>
+            <td>{{ $data['available'][$i]->club_code }}</td>
             <td>{{ $data['available'][$i]->club_name }}</td>
             <td><a href=""><button type="submit" class="btn btn-primary btn-block" name="{{ $data['available'][$i]->club_code }}">เลือก</button></a></td>
           </tr>

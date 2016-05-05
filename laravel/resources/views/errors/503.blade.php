@@ -40,7 +40,8 @@
     <body>
         <div class="container">
             <div class="content">
-                <div class="title">Be right back.</div>
+                <div class="title">503 Service Unavailable</div>
+                <span>กรุณาลองใหม่ในภายหลัง</span>
             </div>
         </div>
     </body>

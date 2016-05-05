@@ -6,7 +6,10 @@ use Config;
 use Session;
 use Redirect;
 use President;
+use Operation;
 use Validator;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,8 +56,16 @@ class PresidentController extends Controller{
    */
   public function showPresidentPage(){
     if(President::presidentLoggedIn()){
-      $data = DB::table('club')->where('club_code', Session::get('club_code'))->first();
-      return view('president.president')->with('data', $data);
+      $presidentName = $this->president->getPresidentName();
+      $adviserName = $this->president->getAdviserName();
+      if(isset($presidentName[0]) && isset($presidentName[1]) && isset($presidentName[2]) && isset($adviserName[0]) && isset($adviserName[1]) && isset($adviserName[2])){
+        $canEdit = true;
+      }else{
+        $canEdit = false;
+      }
+      return view('president.president')
+              ->with('audition', Operation::isClubAudition(Session::get('club_code')))
+              ->with('canEdit', $canEdit);
     }else{
       return Redirect::to('/president/login');
     }
@@ -227,6 +238,76 @@ class PresidentController extends Controller{
     }
   }
 
+  /**
+   * Render club setup page
+   *
+   * @return view
+   */
+  public function showSetUpPage(){
+    if(President::presidentLoggedIn()){
+      $presidentName = $this->president->getPresidentName();
+      $adviserName = $this->president->getAdviserName();
+      return view('president.presidentSetUp')
+              ->with('presidentTitle', $presidentName[0])
+              ->with('presidentFname', $presidentName[1])
+              ->with('presidentLname', $presidentName[2])
+              ->with('adviserTitle', $adviserName[0])
+              ->with('adviserFname', $adviserName[1])
+              ->with('adviserLname', $adviserName[2]);
+    }else{
+      return Redirect::to('/president/login');
+    }
+  }
+
+  /**
+   * Prepare and send data to nameSetUp method in model
+   *
+   * @return Redirection
+   */
+  public function doSetUp(){
+    if(President::presidentLoggedIn()){
+      $president_title = trim(Input::get('presidentTitle'));
+      $president_fname = trim(Input::get('presidentFirstName'));
+      $president_lname = trim(Input::get('presidentLastName'));
+      $adviser_title = trim(Input::get('adviserTitle'));
+      $adviser_fname = trim(Input::get('adviserFirstName'));
+      $adviser_lname = trim(Input::get('adviserLastName'));
+
+      $validator = Validator::make(array(
+        'president_title' => $president_title,
+        'president_fname' => $president_fname,
+        'president_lname' => $president_lname,
+        'adviser_title' => $adviser_title,
+        'adviser_fname' => $adviser_fname,
+        'adviser_lname' => $adviser_lname
+      ),array(
+        'president_title' => 'required',
+        'president_fname' => 'required',
+        'president_lname' => 'required',
+        'adviser_title' => 'required',
+        'adviser_fname' => 'required',
+        'adviser_lname' => 'required'
+      ));
+
+      if($validator->fails()){
+        return Redirect::to('/president/setup')->with('error','รูปแบบข้อมูลไม่ถูกต้องหรือมีข้อมูลเป็นค่าว่าง');
+      }
+
+      if($this->president->nameSetUp($president_title, $president_fname, $president_lname, $adviser_title, $adviser_fname, $adviser_lname)){
+        return Redirect::to('/president/setup')->with('success', 'แก้ไขข้อมูลเรียบร้อยแล้ว');
+      }else{
+        return Redirect::to('/president/setup')->with('error', 'มีข้อผิดพลาดเกิดขึ้น กรุณาลองใหม่ในภายหลัง');
+      }
+    }else{
+      return Redirect::to('/president/login');
+    }
+  }
+
+  /**
+   * Render fillFM3301 page
+   *
+   * @return view
+   */
   public function fillFM3301(){
     if(President::presidentLoggedIn()){
       return view('president.presidentFill3301');
@@ -235,12 +316,166 @@ class PresidentController extends Controller{
     }
   }
 
+  /**
+   * Give order to create FM3301 and send it to user
+   *
+   * @return response
+   */
   public function showFM3301(){
     if(President::presidentLoggedIn()){
-      $presidentName        = Input::get('presidentTitle').' '.trim(Input::get('presidentFirstName')).' '.trim(Input::get('presidentLastName'));
-      $adviserName          = Input::get('adviserTitle').' '.trim(Input::get('adviserFirstName')).' '.trim(Input::get('adviserLastName'));
-      $path = $this->president->createFM3301($presidentName, $adviserName);
+      $path = $this->president->createFM3301();
       return response()->download($path)->deleteFileAfterSend(true);
+    }else{
+      return Redirect::to('/president/login');
+    }
+  }
+
+  /**
+   * Render fillFM3304 page
+   *
+   * @return view
+   */
+  public function fillFM3304(){
+    if(President::presidentLoggedIn()){
+      return view('president.presidentFill3304');
+    }else{
+      return Redirect::to('/president/login');
+    }
+  }
+
+  /**
+   * Give order to create FM3304 and send it to user
+   *
+   * @return response
+   */
+  public function showFM3304(){
+    if(President::presidentLoggedIn()){
+      $semester     = Input::get('semester');
+      if($semester != 1 && $semester != 2){
+        return Redirect::to('/president/fm3304')->with('error', 'ภาคเรียนต้องมีค่าเป็น 1 หรือ 2 เท่านั้น');
+      }
+      $path = $this->president->createFM3304($semester);
+      return response()->download($path)->deleteFileAfterSend(true);
+    }else{
+      return Redirect::to('/president/login');
+    }
+  }
+
+  /**
+   * Render page to select year to fill FM3305
+   *
+   * @return view
+   */
+  public function selectYearToFillFM3305(){
+    if(President::presidentLoggedIn()){
+      return view('president.presidentSelectYearToFillFM3305');
+    }else{
+      return Redirect::to('/president/login');
+    }
+  }
+
+  /**
+   * Redirect user to appropriate url to continue the filling of FM3305
+   *
+   * @return Redirection
+   */
+  public function selectYear(){
+    $year = Config::get('applicationConfig.operation_year');
+    $semester = Input::get('semester');
+    return Redirect::to('/president/fm3305/'.$year.'/'.$semester);
+  }
+
+  /**
+   * Render fillFM3305 view
+   *
+   * @return view
+   */
+  public function fillFM3305(Request $request, $year, $semester){
+    if(President::presidentLoggedIn()){
+      if(($semester == 1 || $semester == 2) && $year == Config::get('applicationConfig.operation_year')){
+        $pass = $this->president->getMemberPass(true, $semester);
+        $notPass = $this->president->getMemberNotPass(true, $semester);
+        return view('president.presidentFill3305')
+          ->with('pass', $pass)
+          ->with('notPass', $notPass)
+          ->with('semester', $semester);
+      }else{
+        abort(400, "Invalid semester or year");
+      }
+    }else{
+      return Redirect::to('/president/login');
+    }
+  }
+
+  /**
+   * Give order to addUserToNotPass in president model
+   *
+   * @return Redirection
+   */
+  public function addUserToNotPass(){
+    if(President::presidentLoggedIn()){
+      $national_id_encrypted = Input::get('national_id');
+      $semester = Input::get('semester');
+      $year = Config::get('applicationConfig.operation_year');
+      $add = $this->president->addUserToNotPass($national_id_encrypted, $semester);
+      if($add === true){
+        return Redirect::to('/president/fm3305/'.$year.'/'.$semester)->with('success', 'ให้มผ.นักเรียนเรียบร้อย');
+      }else{
+        return Redirect::to('/president/fm3305/'.$year.'/'.$semester)->with('error', $add);
+      }
+    }else{
+      return Redirect::to('/president/login');
+    }
+  }
+
+  /**
+   * Give order to removeUserFromNotPass in president model
+   *
+   * @return Redirection
+   */
+  public function removeUserFromNotPass(){
+    if(President::presidentLoggedIn()){
+      $national_id_encrypted = Input::get('national_id');
+      $semester = Input::get('semester');
+      $year = Config::get('applicationConfig.operation_year');
+      $remove = $this->president->removeUserFromNotPass($national_id_encrypted, $semester);
+      if($remove === true){
+        return Redirect::to('/president/fm3305/'.$year.'/'.$semester)->with('success', 'ให้ผ.นักเรียนเรียบร้อย');
+      }else{
+        return Redirect::to('/president/fm3305/'.$year.'/'.$semester)->with('error', $add);
+      }
+    }else{
+      return Redirect::to('/president/login');
+    }
+  }
+
+  /**
+   * Give order to create FM3305 and send it to user
+   *
+   * @return response
+   */
+  public function showFM3305(){
+    if(President::presidentLoggedIn()){
+      $semester = Input::get('semester');
+      if($semester != 1 && $semester != 2){
+        return Redirect::to('/president/fm3304')->with('error', 'ภาคเรียนต้องมีค่าเป็น 1 หรือ 2 เท่านั้น');
+      }
+      $path = $this->president->createFM3305($semester);
+      return response()->download($path)->deleteFileAfterSend(true);
+    }else{
+      return Redirect::to('/president/login');
+    }
+  }
+
+  /**
+   * Render rollcall page
+   *
+   * @return view
+   */
+  public function showRowCallPage(){
+    if(President::presidentLoggedIn()){
+      $data = $this->president->getAllStudentList();
+      return view('president.presidentRollCall')->with('data', $data);
     }else{
       return Redirect::to('/president/login');
     }

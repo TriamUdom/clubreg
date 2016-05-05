@@ -14,15 +14,18 @@ class Audition{
    * @return array club that have audition which the user haven't selected
    */
   public function getAuditionClub(){
-    $selected = DB::table('audition')
-                  ->where('national_id', Session::get('national_id'))
-                  ->where('year', Config::get('applicationConfig.operation_year'))
-                  ->whereIn('status', [-1, 0, 1])
-                  ->get();
+    if(Operation::userLoggedIn()){
+      $selected = DB::table('audition')
+                    ->where('national_id', Session::get('national_id'))
+                    ->where('year', Config::get('applicationConfig.operation_year'))
+                    ->whereIn('status', [-1, 0, 1])
+                    ->get();
 
-    for($i=0;$i<count($selected);$i++){
-      $selected_code[] = $selected[$i]->club_code;
+      for($i=0;$i<count($selected);$i++){
+        $selected_code[] = $selected[$i]->club_code;
+      }
     }
+
     if(isset($selected_code)){
       $data = DB::table('club')
                 ->where('audition',1)
@@ -185,7 +188,7 @@ class Audition{
               ));
 
             if(!is_null(DB::table('user_year')->where('national_id', Session::get('national_id'))->where('year', Config::get('applicationConfig.operation_year'))->pluck('club_code'))){
-              throw new DataException('club_code is not empty cannot proceed');
+              throw new DataException("club_code is not empty cannot proceed");
             }else{
               DB::table('user_year')
                 ->where('national_id', Session::get('national_id'))
@@ -196,10 +199,10 @@ class Audition{
             }
           }catch(DataException $e){
             DB::rollBack();
-            abort(500);
+            abort(500, $e->getMessage());
           }catch(Exception $e){
             DB::rollBack();
-            abort(500);
+            abort(500, $e->getMessage());
           }
         DB::commit();
         return true;

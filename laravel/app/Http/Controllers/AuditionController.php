@@ -130,7 +130,7 @@ class AuditionController extends Controller{
           return Redirect::to('/audition')->with('error', $confirm);
         }
       }else{
-        abort(400);
+        abort(400, "Illegel Audition confirm");
       }
     }else{
       return Redirect::to('/login');

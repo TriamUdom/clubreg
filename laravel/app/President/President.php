@@ -115,6 +115,20 @@ class President{
   }
 
   /**
+   * Encrypt nationalid from array of standard object that we get from DB->get()
+   *
+   * @param   array   plain text array
+   * @return  array   encrypted array
+   */
+  private static function encryptNationalID(array $data){
+    for($i=0;$i<count($data);$i++){
+      $data[$i]->national_id = Crypt::encrypt($data[$i]->national_id);
+    }
+
+    return $data;
+  }
+
+  /**
    * Get data of pending auditioner
    *
    * @return object data
@@ -134,9 +148,7 @@ class President{
               ->orderBy('user_year.number', 'asc')
               ->get();
 
-    for($i=0;$i<count($data);$i++){
-      $data[$i]->national_id = Crypt::encrypt($data[$i]->national_id);
-    }
+    $data = self::encryptNationalID($data);
 
     return $data;
   }
@@ -161,9 +173,7 @@ class President{
               ->orderBy('user_year.number', 'asc')
               ->get();
 
-    for($i=0;$i<count($data);$i++){
-      $data[$i]->national_id = Crypt::encrypt($data[$i]->national_id);
-    }
+    $data = self::encryptNationalID($data);
 
     return $data;
   }
@@ -188,13 +198,16 @@ class President{
               ->orderBy('user_year.number', 'asc')
               ->get();
 
-    for($i=0;$i<count($data);$i++){
-      $data[$i]->national_id = Crypt::encrypt($data[$i]->national_id);
-    }
+    $data = self::encryptNationalID($data);
 
     return $data;
   }
 
+  /**
+   * Get data of confirmed auditioner
+   *
+   * @return object data
+   */
   public function getAuditionConfirmed(){
     $data = DB::table('audition')
               ->join('user_year', function($join){
@@ -210,9 +223,7 @@ class President{
               ->orderBy('user_year.number', 'asc')
               ->get();
 
-    for($i=0;$i<count($data);$i++){
-      $data[$i]->national_id = Crypt::encrypt($data[$i]->national_id);
-    }
+    $data = self::encryptNationalID($data);
 
     return $data;
   }
@@ -294,10 +305,15 @@ class President{
         return false;
       break;
     }
-
   }
 
-  public function getAllStudentList(){
+  /**
+   * Get all data of all student in club
+   *
+   * @param bool whether or not you want national_id in return array to be encrypt
+   * @return array array of standard object
+   */
+  public function getAllStudentList($encryptNationalID = false){
     $data1 = DB::table('confirmation')
               ->join('user_year', function($join){
                 $join->on('confirmation.national_id', '=', 'user_year.national_id')
@@ -384,12 +400,131 @@ class President{
                 ->orderBy('number', 'asc')
                 ->get();
 
-    DB::statement('DROP TEMPORARY TABLE IF EXISTS '. $table_name); //Drop the temporary table
+    DB::statement('DROP TEMPORARY TABLE IF EXISTS '. $table_name);
+
+    if($encryptNationalID){
+      $data = self::encryptNationalID($data);
+    }
 
     return $return;
   }
 
-  public function createFM3301($presidentName, $adviserName){
+  /**
+   * Get club's president fullname
+   *
+   * @param   string specify what data type to return value: array (default), string
+   * @return  string, array
+   */
+  public function getPresidentName($type = 'array'){
+    $data = DB::table('club')->where('club_code', Session::get('club_code'))->first();
+    if($type == 'array'){
+      return array($data->president_title, $data->president_fname, $data->president_lname);
+    }else if($type == 'string'){
+      return $data->president_title.' '.$data->president_fname.' '.$data->president_lname;
+    }
+  }
+
+  /**
+   * Get club's adviser fullname
+   *
+   * @param   string specify what data type to return value: array (default), string
+   * @return  string, array
+   */
+  public function getAdviserName($type = 'array'){
+    $data = DB::table('club')->where('club_code', Session::get('club_code'))->first();
+    if($type == 'array'){
+      return array($data->adviser_title, $data->adviser_fname, $data->adviser_lname);
+    }else if($type == 'string'){
+      return $data->adviser_title.' '.$data->adviser_fname.' '.$data->adviser_lname;
+    }
+  }
+
+  /**
+   * Update president and adviser fullname in table club
+   *
+   * @param string
+   * @return true
+   */
+  public function nameSetUp($president_title, $president_fname, $president_lname, $adviser_title, $adviser_fname, $adviser_lname){
+    DB::table('club')
+      ->where('club_code', Session::get('club_code'))
+      ->update(array(
+        'president_title' => $president_title,
+        'president_fname' => $president_fname,
+        'president_lname' => $president_lname,
+        'adviser_title' => $adviser_title,
+        'adviser_fname' => $adviser_fname,
+        'adviser_lname' => $adviser_lname
+      ));
+    return true;
+  }
+
+  /**
+   * Get member that pass
+   *
+   * @param bool whether or not you want the output national_id to be encrypt
+   * @return array
+   */
+  public function getMemberPass($encryptNationalID = false){
+    $memberNotPass = $this->getMemberNotPass();
+
+    for($i=0;$i<count($memberNotPass);$i++){
+      $notPassNationalID[] = $memberNotPass[$i]->national_id;
+    }
+
+    if(isset($notPassNationalID)){
+      $memberPass = DB::table('user_year')
+                      ->join('user', 'user_year.national_id', '=', 'user.national_id')
+                      ->where('user_year.year', Config::get('applicationConfig.operation_year'))
+                      ->where('user_year.club_code', Session::get('club_code'))
+                      ->whereNotIn('user_year.national_id', $notPassNationalID)
+                      ->get();
+    }else{
+      $memberPass = DB::table('user_year')
+                      ->join('user', 'user_year.national_id', '=', 'user.national_id')
+                      ->where('user_year.year', Config::get('applicationConfig.operation_year'))
+                      ->where('user_year.club_code', Session::get('club_code'))
+                      ->get();
+    }
+
+    if($encryptNationalID){
+      $data = self::encryptNationalID($memberPass);
+    }
+
+    return $data;
+  }
+
+  /**
+   * Get member that does not pass
+   *
+   * @param bool whether or not you want the output national_id to be encrypt
+   * @return array
+   */
+  public function getMemberNotPass($encryptNationalID = false){
+    $data = DB::table('not_pass_user')
+              ->join('user', 'not_pass_user.national_id', '=', 'user.national_id')
+              ->join('user_year', function($join){
+                $join->on('not_pass_user.national_id', '=', 'user_year.national_id')
+                     ->on('not_pass_user.year', '=', 'user_year.year')
+                     ->on('not_pass_user.club_code', '=', 'user_year.club_code');
+              })
+              ->where('not_pass_user.year', Config::get('applicationConfig.operation_year'))
+              ->where('not_pass_user.club_code', Session::get('club_code'))
+              ->get();
+
+    if($encryptNationalID){
+      $data = self::encryptNationalID($data);
+    }
+
+    return $data;
+  }
+
+  /**
+   * Create FM3301
+   *
+   * @return  string path to generated FM3301 file
+   */
+  public function createFM3301(){
     $studentData = $this->getAllStudentList();
     $clubData = DB::table('club')->where('club_code', Session::get('club_code'))->first();
     $adviserCount = DB::table('teacher_year')
@@ -400,8 +535,8 @@ class President{
 
     $fileName = '[FM 33-01] '.substr(Session::get('club_code'), -2).'_'.Session::get('fullname');
     $rootPath = dirname(__DIR__, 2);
-    if(file_exists($rootPath.'\resources\FMOutput\\'.$fileName.'.docx')){
-      unlink($rootPath.'\resources\FMOutput\\'.$fileName.'.docx');
+    if(file_exists($rootPath.'\public\FMOutput\\'.$fileName.'.docx')){
+      unlink($rootPath.'\public\FMOutput\\'.$fileName.'.docx');
     }
 
     $templateProcessor = new TemplateProcessor($rootPath.'\resources\FMtemplate\FM3301.docx');
@@ -442,8 +577,6 @@ class President{
       $lessThanCriterion = $adviserCount*30 - $studentCount;
     }
 
-    //$presidentName = 'นายทดสอบ สอบทด';
-
     $templateProcessor->setValue('totalStudentCount',     htmlspecialchars($studentCount));
     $templateProcessor->setValue('class4StudentCount',    htmlspecialchars($class4StudentCount));
     $templateProcessor->setValue('class5StudentCount',    htmlspecialchars($class5StudentCount));
@@ -465,11 +598,179 @@ class President{
     }
 
     $templateProcessor->setValue('operation_year',        htmlspecialchars(Config::get('applicationConfig.operation_year')));
+
+    $presidentName = $this->getPresidentName('string');
+    $adviserName = $this->getAdviserName('string');
     $templateProcessor->setValue('presidentName',         htmlspecialchars($presidentName));
-    $templateProcessor->setValue('presidentAdviserName',  htmlspecialchars($adviserName));
+    $templateProcessor->setValue('adviserName',           htmlspecialchars($adviserName));
 
-    $templateProcessor->saveAs($rootPath.'\resources\FMOutput\\'.$fileName.'.docx');
-    return $rootPath.'\resources\FMOutput\\'.$fileName.'.docx';
+    $templateProcessor->saveAs($rootPath.'\public\FMOutput\\'.$fileName.'.docx');
+    return $rootPath.'\public\FMOutput\\'.$fileName.'.docx';
+  }
 
+  /**
+   * Create FM3304
+   *
+   * @param   int     semester that this FM3304 assigned to
+   * @return  string  path to generated FM3304 file
+   */
+  public function createFM3304($semester){
+    $studentData = $this->getAllStudentList();
+    $clubData = DB::table('club')->where('club_code', Session::get('club_code'))->first();
+
+    $fileName = '[FM 33-04] '.substr(Session::get('club_code'), -2).'_'.Session::get('fullname');
+    $rootPath = dirname(__DIR__, 2);
+    if(file_exists($rootPath.'\public\FMOutput\\'.$fileName.'.docx')){
+      unlink($rootPath.'\public\FMOutput\\'.$fileName.'.docx');
+    }
+
+    $templateProcessor = new TemplateProcessor($rootPath.'\resources\FMtemplate\FM3304.docx');
+
+    $templateProcessor->setValue('clubName',             htmlspecialchars($clubData->club_name));
+    $templateProcessor->setValue('clubCode',             htmlspecialchars($clubData->club_code));
+    $templateProcessor->setValue('semester',             htmlspecialchars($semester));
+    $templateProcessor->setValue('operation_year',       htmlspecialchars(Config::get('applicationConfig.operation_year')));
+
+    $studentCount = count($studentData);
+    $templateProcessor->cloneRow('count', $studentCount);
+
+    for($j=0;$j<$studentCount;$j++){
+      $k = $j+1;
+      $templateProcessor->setValue('count#'.$k, $k);
+
+      $templateProcessor->setValue('tfname#'.$k,          htmlspecialchars($studentData[$j]->title.' '.$studentData[$j]->fname));
+      $templateProcessor->setValue('lname#'.$k,           htmlspecialchars($studentData[$j]->lname));
+
+      $templateProcessor->setValue('class-room#'.$k,      htmlspecialchars($studentData[$j]->class.'/'.$studentData[$j]->room));
+    }
+
+    $adviserName = $this->getAdviserName('string');
+    $templateProcessor->setValue('adviserName',           htmlspecialchars($adviserName));
+
+    $templateProcessor->saveAs($rootPath.'\public\FMOutput\\'.$fileName.'.docx');
+    return $rootPath.'\public\FMOutput\\'.$fileName.'.docx';
+  }
+
+  /**
+   * Add user to not_pass_user
+   *
+   * @param string encrypted national_id
+   * @param int    semester
+   * @return true on success
+   * @return string error message upon failure
+   */
+  public function addUserToNotPass($national_id_encrypted, $semester){
+    $national_id = Crypt::decrypt($national_id_encrypted);
+    if(Operation::isUserInClub($national_id, Session::get('club_code'))){
+      if(DB::table('not_pass_user')->where('national_id', $national_id)->where('year', Config::get('applicationConfig.operation_year'))->exists()){
+        return "มีข้อมูลนักเรียนคนนี้ในรายชื่อไม่ผ่านชมรมแล้ว ไม่สามารถเพิ่มข้อมูลซ้ำได้";
+      }else{
+        DB::table('not_pass_user')->insert(array(
+          'national_id' => $national_id,
+          'semester' => $semester,
+          'year' => Config::get('applicationConfig.operation_year'),
+          'club_code' => Session::get('club_code')
+        ));
+
+        return true;
+      }
+    }else{
+      return "นักเรียนคนนี้ไม่มีในรายชื่อสมาชิกชมรม";
+    }
+  }
+
+  /**
+   * Remove user from not_pass_user
+   *
+   * @param string encrypted national_id
+   * @param int    semester
+   * @return true on success
+   * @return string error message upon failure
+   */
+  public function removeUserFromNotPass($national_id_encrypted, $semester){
+    $national_id = Crypt::decrypt($national_id_encrypted);
+    if(Operation::isUserInClub($national_id, Session::get('club_code'))){
+      if(!DB::table('not_pass_user')->where('national_id', $national_id)->where('year', Config::get('applicationConfig.operation_year'))->exists()){
+        return "ไม่มีข้อมูลนักเรียนคนนี้ในรายชื่อไม่ผ่านชมรม ไม่สามารถลบได้";
+      }else{
+        DB::table('not_pass_user')
+          ->where('national_id', $national_id)
+          ->where('semester', $semester)
+          ->where('year', Config::get('applicationConfig.operation_year'))
+          ->delete();
+
+        return true;
+      }
+    }else{
+      return "นักเรียนคนนี้ไม่มีในรายชื่อสมาชิกชมรม";
+    }
+  }
+
+  /**
+   * Create FM3305
+   *
+   * @param   int     semester that this FM3305 assigned to
+   * @return  string  path to generated FM3305 file
+   */
+  public function createFM3305($semester){
+    $studentData = $this->getAllStudentList();
+    $studentNotPass = $this->getMemberNotPass();
+    $clubData = DB::table('club')->where('club_code', Session::get('club_code'))->first();
+
+    $fileName = '[FM 33-05] '.substr(Session::get('club_code'), -2).'_'.Session::get('fullname');
+    $rootPath = dirname(__DIR__, 2);
+    if(file_exists($rootPath.'\public\FMOutput\\'.$fileName.'.docx')){
+      unlink($rootPath.'\public\FMOutput\\'.$fileName.'.docx');
+    }
+
+    $templateProcessor = new TemplateProcessor($rootPath.'\resources\FMtemplate\FM3305.docx');
+
+    $templateProcessor->setValue('clubName',             htmlspecialchars($clubData->club_name));
+    $templateProcessor->setValue('clubCode',             htmlspecialchars($clubData->club_code));
+    $templateProcessor->setValue('semester',             htmlspecialchars($semester));
+    $templateProcessor->setValue('operation_year',       htmlspecialchars(Config::get('applicationConfig.operation_year')));
+
+    $studentCount = count($studentData);
+    $studentNotPassCount = count($studentNotPass);
+
+    $templateProcessor->setValue('total',                htmlspecialchars($studentCount));
+    $templateProcessor->setValue('pass',                 htmlspecialchars($studentCount-count($studentNotPass)));
+    $templateProcessor->setValue('fail',                 htmlspecialchars($studentNotPassCount));
+
+    $templateProcessor->cloneRow('count', $studentNotPassCount);
+
+    for($j=0;$j<$studentNotPassCount;$j++){
+      $k = $j+1;
+      $templateProcessor->setValue('count#'.$k, $k);
+
+      $templateProcessor->setValue('tfname#'.$k,         htmlspecialchars($studentNotPass[$j]->title.' '.$studentNotPass[$j]->fname));
+      $templateProcessor->setValue('lname#'.$k,          htmlspecialchars($studentNotPass[$j]->lname));
+
+      $templateProcessor->setValue('class#'.$k,          htmlspecialchars($studentNotPass[$j]->class));
+      $templateProcessor->setValue('room#'.$k,           htmlspecialchars($studentNotPass[$j]->room));
+    }
+
+    $adviserName = $this->getAdviserName('string');
+    $templateProcessor->setValue('adviserName',          htmlspecialchars($adviserName));
+    $templateProcessor->setValue('day',                  htmlspecialchars(date('j')));
+    $month = array(
+      1 => 'มกราคม',
+      2 => 'กุมภาพันธ์',
+      3 => 'มีนาคม',
+      4 => 'เมษายน',
+      5 => 'พฤษภาคม',
+      6 => 'มิถุนายน',
+      7 => 'กรกฎาคม',
+      8 => 'สิงหาคม',
+      9 => 'กันยายน',
+      10 => 'ตุลาคม',
+      11 => 'พฤศจิกายน',
+      12 => 'ธันวาคม'
+    );
+    $templateProcessor->setValue('month',                htmlspecialchars($month[date('n')]));
+    $templateProcessor->setValue('year',                 htmlspecialchars(date('Y')+543));
+
+    $templateProcessor->saveAs($rootPath.'\public\FMOutput\\'.$fileName.'.docx');
+    return $rootPath.'\public\FMOutput\\'.$fileName.'.docx';
   }
 }
