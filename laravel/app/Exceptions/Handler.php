@@ -18,7 +18,7 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $dontReport = [
-        //HttpException::class,
+        HttpException::class,
         //ModelNotFoundException::class,
     ];
 
@@ -32,6 +32,10 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $e)
     {
+      if($e instanceof NotFoundHttpException) {
+        return;
+      }
+
       if(Config::get('applicationConfig.release') == 'release'){
         \Log::warning($e, array(
           'session' => Session::all(),
