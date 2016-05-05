@@ -54,7 +54,7 @@ class UIController extends Controller{
       $this->audition = new Audition;
     }
     $data = $this->audition->getAuditionClub(true);
-    return view('viewOnly')->with('data', $data);
+    return view('viewOnly')->with('data', $data)->with('mode', 'มีการคัดเลือก (ออดิชัน)');
   }
 
   public function showVORegistration(){
@@ -62,6 +62,6 @@ class UIController extends Controller{
       $this->registration = new Registration;
     }
     $data = $this->registration->getRegistrationClub(true);
-    return view('viewOnly')->with('data', $data);
+    return view('viewOnly')->with('data', $data)->with('mode', 'ไม่มีการคัดเลือก (ออดิชัน)');
   }
 }
