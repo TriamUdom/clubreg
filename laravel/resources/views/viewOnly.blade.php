@@ -1,7 +1,7 @@
 @extends('layout.main')
 
 @section('content')
-<legend>ชมรมที่เปิดรับ</legend>
+<legend>รายชื่อชมรมที่{{ $mode }}</legend>
 <table class="table table-striped table-hover">
   <thead>
     <tr>
