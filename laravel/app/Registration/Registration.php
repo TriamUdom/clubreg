@@ -13,8 +13,8 @@ class Registration{
    *
    * @return array club that don't have audition which the user haven't selected
    */
-  public function getRegistrationClub(){
-    if (Operation::userLoggedIn()) {
+  public function getRegistrationClub($viewOnly = false){
+    if(Operation::userLoggedIn()){
       $selected = DB::table('registration')
                     ->where('national_id', Session::get('national_id'))
                     ->where('year', Config::get('applicationConfig.operation_year'))
@@ -50,21 +50,29 @@ class Registration{
       }
     }
 
-    if(isset($selected_code)){
+    if($viewOnly){
       $data = DB::table('club')
                 ->where('audition',0)
                 ->where('active',1)
-                ->whereNotIn('club_code', $selected_code)
-                ->whereIn('club_code', $clubNotFull)
                 ->orderBy('club_code', 'asc')
                 ->get();
     }else{
-      $data = DB::table('club')
-                ->where('audition',0)
-                ->where('active',1)
-                ->whereIn('club_code', $clubNotFull)
-                ->orderBy('club_code', 'asc')
-                ->get();
+      if(isset($selected_code)){
+        $data = DB::table('club')
+                  ->where('audition',0)
+                  ->where('active',1)
+                  ->whereNotIn('club_code', $selected_code)
+                  ->whereIn('club_code', $clubNotFull)
+                  ->orderBy('club_code', 'asc')
+                  ->get();
+      }else{
+        $data = DB::table('club')
+                  ->where('audition',0)
+                  ->where('active',1)
+                  ->whereIn('club_code', $clubNotFull)
+                  ->orderBy('club_code', 'asc')
+                  ->get();
+      }
     }
 
     return $data;
