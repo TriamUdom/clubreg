@@ -4,7 +4,7 @@
 <div class="jumbotron">
   <div class="row">
     <div class="col-sm-4">
-      <img src="/img/error/c4.png" class="pull-right" alt="Avatar" width="200px">
+      <img src="/assets/img/error/c4.png" class="pull-right" alt="Avatar" width="200px">
     </div>
     <div class="col-sm-7">
       <br /><br /><br />

@@ -1,0 +1,11 @@
+@media (max-width:395px){
+  #main_container{
+    margin-top:170px;
+  }
+}
+
+@media (min-width:396px){
+  #main_container{
+    margin-top:100px;
+  }
+}

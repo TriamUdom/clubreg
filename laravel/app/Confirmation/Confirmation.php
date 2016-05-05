@@ -49,13 +49,13 @@ class Confirmation{
 
           return true;
         }else{
-          abort(400);
+          abort(400, "Illegal club_code detected");
         }
       }else{
         return 'ชมรมที่เลือกไม่ได้เปิดรับสมัครนักเรียนในปีการศึกษานี้';
       }
     }else{
-      abort(400);
+      abort(400, "Illegal status code detected");
     }
   }
 
@@ -74,10 +74,10 @@ class Confirmation{
 
         return true;
       }else{
-        abort(400);
+        abort(400, "Illegal club_code detected");
       }
     }else{
-      abort(400);
+      abort(400, "Illegal status code detected");
     }
   }
 }

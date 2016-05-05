@@ -14,15 +14,59 @@ class Registration{
    * @return array club that don't have audition which the user haven't selected
    */
   public function getRegistrationClub(){
-    $selected = DB::table('registration')->where('national_id', Session::get('national_id'))->get();
-    for($i=0;$i<count($selected);$i++){
-      $selected_code[] = $selected[$i]->club_code;
+    if (Operation::userLoggedIn()) {
+      $selected = DB::table('registration')
+                    ->where('national_id', Session::get('national_id'))
+                    ->where('year', Config::get('applicationConfig.operation_year'))
+                    ->get();
+
+      for($i=0;$i<count($selected);$i++){
+        $selected_code[] = $selected[$i]->club_code;
+      }
     }
+
+    $club = DB::table('club')
+              ->where('audition', 0)
+              ->where('active', 1)
+              ->get();
+
+    for($i=0;$i<count($club);$i++){
+      $totalInClub = 0;
+      $totalInClub += DB::table('confirmation')
+                        ->where('club_code', $club[$i]->club_code)
+                        ->where('year', Config::get('applicationConfig.operation_year'))
+                        ->count();
+      $totalInClub += DB::table('registration')
+                        ->where('club_code', $club[$i]->club_code)
+                        ->where('year', Config::get('applicationConfig.operation_year'))
+                        ->count();
+      $teacherUsage = DB::table('teacher_year')
+                        ->where('club_code', $club[$i]->club_code)
+                        ->where('year', Config::get('applicationConfig.operation_year'))
+                        ->count();
+
+      if($this->stillRoomLeft($totalInClub, $teacherUsage)){
+        $clubNotFull[] = $club[$i]->club_code;
+      }
+    }
+
     if(isset($selected_code)){
-      $data = DB::table('club')->where('audition',0)->where('active',1)->whereNotIn('club_code', $selected_code)->get();
+      $data = DB::table('club')
+                ->where('audition',0)
+                ->where('active',1)
+                ->whereNotIn('club_code', $selected_code)
+                ->whereIn('club_code', $clubNotFull)
+                ->orderBy('club_code', 'asc')
+                ->get();
     }else{
-      $data = DB::table('club')->where('audition',0)->where('active',1)->get();
+      $data = DB::table('club')
+                ->where('audition',0)
+                ->where('active',1)
+                ->whereIn('club_code', $clubNotFull)
+                ->orderBy('club_code', 'asc')
+                ->get();
     }
+
     return $data;
   }
 
@@ -40,6 +84,7 @@ class Registration{
         $club_name = DB::table('club')->where('club_code', $club_code)->pluck('club_name');
         $data[] = array('club_name' => $club_name, 'club_code' => $club_code);
       }
+
       return $data;
     }else{
       return false;
@@ -56,6 +101,7 @@ class Registration{
   public function addUserToList($club_code){
     if(Operation::isClubActive($club_code)){
       if(!Operation::isClubAudition($club_code)){
+        DB::beginTransaction();
         $totalInClub = 0;
         $totalInClub += DB::table('confirmation')
                           ->where('club_code', $club_code)
@@ -69,35 +115,34 @@ class Registration{
                           ->where('club_code', $club_code)
                           ->where('year', Config::get('applicationConfig.operation_year'))
                           ->count();
-        if($totalInClub < (($teacherUsage*30)+5)){
+        if($this->stillRoomLeft($totalInClub, $teacherUsage)){
           //Still room for more student
           if(DB::table('audition')->where('club_code', $club_code)->where('national_id', Session::get('national_id'))->where('year', Config::get('applicationConfig.operation_year'))->count() == 0){
-            DB::beginTransaction();
-              try{
-                DB::table('registration')->insert(array(
-                  'national_id' => Session::get('national_id'),
-                  'club_code'   => $club_code,
-                  'timestamp'   => time(),
-                  'year'        => Config::get('applicationConfig.operation_year')
-                ));
+            try{
+              DB::table('registration')->insert(array(
+                'national_id' => Session::get('national_id'),
+                'club_code'   => $club_code,
+                'timestamp'   => time(),
+                'year'        => Config::get('applicationConfig.operation_year')
+              ));
 
-                if(!is_null(DB::table('user_year')->where('national_id', Session::get('national_id'))->where('year', Config::get('applicationConfig.operation_year'))->pluck('club_code'))){
-                  throw new DataException('club_code is not empty cannot proceed');
-                }else{
-                  DB::table('user_year')
-                    ->where('national_id', Session::get('national_id'))
-                    ->where('year', Config::get('applicationConfig.operation_year'))
-                    ->update(array(
-                      'club_code' => $club_code
-                    ));
-                }
-              }catch(DataException $e){
-                DB::rollBack();
-                abort(500);
-              }catch(Exception $e){
-                DB::rollBack();
-                abort(500);
+              if(!empty(DB::table('user_year')->where('national_id', Session::get('national_id'))->where('year', Config::get('applicationConfig.operation_year'))->pluck('club_code'))){
+                throw new DataException("club_code is not empty cannot proceed");
+              }else{
+                DB::table('user_year')
+                  ->where('national_id', Session::get('national_id'))
+                  ->where('year', Config::get('applicationConfig.operation_year'))
+                  ->update(array(
+                    'club_code' => $club_code
+                  ));
               }
+            }catch(DataException $e){
+              DB::rollBack();
+              abort(500, $e->getMessage());
+            }catch(Exception $e){
+              DB::rollBack();
+              abort(500, $e->getMessage());
+            }
             DB::commit();
             return true;
           }else{
@@ -106,8 +151,13 @@ class Registration{
         }else{
           //All teacher had been used up
           //Let's see if we can get some more
-          if($this->assignTeacherToClub($club_code)){
-            $this->addUserToList($club_code);
+          if($this->assignTeacherToClub($club_code, true)){
+            DB::rollBack();
+            if($this->assignTeacherToClub($club_code)){
+              $this->addUserToList($club_code);
+            }else{
+              return 'ชมรมนี้มีนักเรียนเต็มแล้ว';
+            }
           }else{
             return 'ชมรมนี้มีนักเรียนเต็มแล้ว';
           }
@@ -126,7 +176,7 @@ class Registration{
    * @param string $club_code
    * @return bool
    */
-  private function assignTeacherToClub($club_code){
+  private function assignTeacherToClub($club_code, $fake = false){
     $subject_code = DB::table('club')
                       ->where('club_code', $club_code)
                       ->pluck('subject_code');
@@ -140,16 +190,33 @@ class Registration{
       //All teacher had been assigned
       return false;
     }else{
-      //There's still some teacher(s) available
-      DB::table('teacher_year')
-        ->where('number', $min_number)
-        ->where('subject_code', $subject_code)
-        ->where('year', Config::get('applicationConfig.operation_year'))
-        ->update(array(
-          'club_code' => $club_code
-        ));
+      if(!$fake){
+        //There's still some teacher(s) available
+        DB::table('teacher_year')
+          ->where('number', $min_number)
+          ->where('subject_code', $subject_code)
+          ->where('year', Config::get('applicationConfig.operation_year'))
+          ->update(array(
+            'club_code' => $club_code
+          ));
+      }
 
       return true;
+    }
+  }
+
+  /**
+   * Determine if there's still room for more student to apply to club
+   *
+   * @param   int total member in club
+   * @param   int total teacher assigned to club
+   * @return  bool
+   */
+  private function stillRoomLeft($totalInClub, $teacherUsage){
+    if($totalInClub < (($teacherUsage*1)+0)){
+      return true;
+    }else{
+      return false;
     }
   }
 }
