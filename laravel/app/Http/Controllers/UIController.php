@@ -53,7 +53,7 @@ class UIController extends Controller{
     if(!isset($this->audition)){
       $this->audition = new Audition;
     }
-    $data = $this->audition->getAuditionClub();
+    $data = $this->audition->getAuditionClub(true);
     return view('viewOnly')->with('data', $data);
   }
 
@@ -61,7 +61,7 @@ class UIController extends Controller{
     if(!isset($this->registration)){
       $this->registration = new Registration;
     }
-    $data = $this->registration->getRegistrationClub();
+    $data = $this->registration->getRegistrationClub(true);
     return view('viewOnly')->with('data', $data);
   }
 }
