@@ -2,8 +2,10 @@
 
 use DB;
 use Session;
+use Audition;
 use Redirect;
 use Operation;
+use Registration;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,6 +18,9 @@ use Operation;
 */
 
 class UIController extends Controller{
+
+  private $audition;
+  private $registration;
 
   /**
    * Show index page
@@ -42,5 +47,21 @@ class UIController extends Controller{
     }else{
       return view('login');
     }
+  }
+
+  public function showVOAudition(){
+    if(!isset($this->audition)){
+      $this->audition = new Audition;
+    }
+    $data = $this->audition->getAuditionClub();
+    return view('viewOnly')->with('data', $data);
+  }
+
+  public function showVORegistration(){
+    if(!isset($this->registration)){
+      $this->registration = new Registration;
+    }
+    $data = $this->registration->getRegistrationClub();
+    return view('viewOnly')->with('data', $data);
   }
 }
