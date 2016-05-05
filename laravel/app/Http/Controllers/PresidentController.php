@@ -400,7 +400,7 @@ class PresidentController extends Controller{
           ->with('notPass', $notPass)
           ->with('semester', $semester);
       }else{
-        abort(400);
+        abort(400, "Invalid semester or year");
       }
     }else{
       return Redirect::to('/president/login');

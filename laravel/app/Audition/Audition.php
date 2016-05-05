@@ -196,10 +196,10 @@ class Audition{
             }
           }catch(DataException $e){
             DB::rollBack();
-            abort(500);
+            abort(500, $e->getMessage());
           }catch(Exception $e){
             DB::rollBack();
-            abort(500);
+            abort(500, $e->getMessage());
           }
         DB::commit();
         return true;
