@@ -13,7 +13,7 @@ class Audition{
    *
    * @return array club that have audition which the user haven't selected
    */
-  public function getAuditionClub(){
+  public function getAuditionClub($viewOnly = false){
     if(Operation::userLoggedIn()){
       $selected = DB::table('audition')
                     ->where('national_id', Session::get('national_id'))
@@ -26,18 +26,27 @@ class Audition{
       }
     }
 
-    if(isset($selected_code)){
+    if($viewOnly){
       $data = DB::table('club')
                 ->where('audition',1)
                 ->where('active',1)
-                ->whereNotIn('club_code', $selected_code)
+                ->orderBy('club_code', 'asc')
                 ->get();
     }else{
-      $data = DB::table('club')
-                ->where('audition',1)
-                ->where('active',1)
-                ->get();
+      if(isset($selected_code)){
+        $data = DB::table('club')
+                  ->where('audition',1)
+                  ->where('active',1)
+                  ->whereNotIn('club_code', $selected_code)
+                  ->get();
+      }else{
+        $data = DB::table('club')
+                  ->where('audition',1)
+                  ->where('active',1)
+                  ->get();
+      }
     }
+
     return $data;
   }
 
