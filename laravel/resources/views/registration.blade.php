@@ -8,10 +8,10 @@
 <table class="table table-striped table-hover">
   <thead>
     <tr>
-      <th>#</th>
-      <th>รหัสชมรม</th>
-      <th>ชมรม</th>
-      <th></th>
+      <th class="col-sm-1">#</th>
+      <th class="col-sm-2">รหัสชมรม</th>
+      <th class="col-sm-6">ชมรม</th>
+      <th class="col-sm-3"></th>
     </tr>
   </thead>
   <tbody>
