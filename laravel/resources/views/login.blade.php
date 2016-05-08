@@ -5,6 +5,7 @@
   <fieldset>
     <legend>เข้าสู่ระบบ</legend>
     @include('layout.component.errorList')
+    @include('layout.component.errornobg')
     <div class="form-group">
       <label for="sid" class="col-lg-2 control-label">หมายเลขประจำตัวนักเรียน</label>
       <div class="col-lg-10">

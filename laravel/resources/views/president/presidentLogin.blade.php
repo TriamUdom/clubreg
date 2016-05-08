@@ -5,6 +5,7 @@
   <fieldset>
    <legend>เข้าสู่ระบบสำหรับประธานชมรม</legend>
    @include('layout.component.errorList')
+   @include('layout.component.errornobg')
    <div class="form-group">
      <label for="username" class="col-lg-2 control-label">ชื่อผู้ใช้</label>
      <div class="col-lg-10">
