@@ -9,7 +9,8 @@
         "laravel/framework": "5.1.*",
         "phpoffice/phpword": "dev-develop",
         "dompdf/dompdf": "0.7.x@beta",
-        "jenssegers/rollbar": "^1.5"
+        "jenssegers/rollbar": "^1.5",
+        "greggilbert/recaptcha": "dev-master"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

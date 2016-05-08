@@ -56,15 +56,4 @@ return [
   'tusd_api_key' => '',
   'tusd_api_secret' => '',
 
-  /*
-  reCAPTCHA Verification URL : URL for the Google reCAPTCHA API service
-  */
-  'recaptcha_verification_url' => 'https://www.google.com/recaptcha/api/siteverify',
-
-  /*
-  reCAPTCHA Secret : Secret (API Key) for the reCAPTCHA service
-  */
-  'recaptcha_secret' => '6LdeihYTAAAAAHic28L24vHAgEaJM8EH_WwdifUd',
-
-
 ];
