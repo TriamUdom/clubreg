@@ -1,9 +1,5 @@
 @extends('layout.main')
 
-@section('head')
-<script src='https://www.google.com/recaptcha/api.js?hl=th'></script>
-@stop
-
 @section('content')
 <form class="form-horizontal" method="POST" action="/login.do">
   <fieldset>
@@ -27,7 +23,7 @@
     <div class="form-group">
       <label class="col-lg-2 control-label"></label>
       <div class="col-lg-10">
-        <div class="g-recaptcha" data-sitekey="6LcDUh8TAAAAAG88ppIpYarb8JulybDCALM8VAeC"></div>
+        {!! Recaptcha::render() !!}
         <span class="help-block">กดช่องสี่เหลี่ยมให้มีเครื่องหมายถูก</span>
       </div>
     </div>
