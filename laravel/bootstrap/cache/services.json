@@ -28,6 +28,7 @@
         "App\\Providers\\EventServiceProvider",
         "App\\Providers\\RouteServiceProvider",
         "Jenssegers\\Rollbar\\RollbarServiceProvider",
+        "Jenssegers\\Agent\\AgentServiceProvider",
         "Greggilbert\\Recaptcha\\RecaptchaServiceProvider"
     ],
     "eager": [
@@ -47,6 +48,7 @@
         "App\\Providers\\EventServiceProvider",
         "App\\Providers\\RouteServiceProvider",
         "Jenssegers\\Rollbar\\RollbarServiceProvider",
+        "Jenssegers\\Agent\\AgentServiceProvider",
         "Greggilbert\\Recaptcha\\RecaptchaServiceProvider"
     ],
     "deferred": {

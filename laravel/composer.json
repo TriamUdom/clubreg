@@ -10,7 +10,8 @@
         "phpoffice/phpword": "dev-develop",
         "dompdf/dompdf": "0.7.x@beta",
         "jenssegers/rollbar": "^1.5",
-        "greggilbert/recaptcha": "dev-master"
+        "greggilbert/recaptcha": "dev-master",
+        "jenssegers/agent": "^2.3"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
