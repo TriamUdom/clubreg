@@ -221,7 +221,7 @@ class Registration{
    * @return  bool
    */
   private function stillRoomLeft($totalInClub, $teacherUsage){
-    if($totalInClub < (($teacherUsage*1)+0)){
+    if($totalInClub < (($teacherUsage*30)+5)){
       return true;
     }else{
       return false;
