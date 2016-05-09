@@ -125,7 +125,7 @@ class Registration{
                           ->count();
         if($this->stillRoomLeft($totalInClub, $teacherUsage)){
           //Still room for more student
-          if(DB::table('audition')->where('club_code', $club_code)->where('national_id', Session::get('national_id'))->where('year', Config::get('applicationConfig.operation_year'))->count() == 0){
+          if(DB::table('audition')->where('club_code', $club_code)->where('national_id', Session::get('national_id'))->where('year', Config::get('applicationConfig.operation_year'))->where('status', 2)->count() == 0){
             try{
               DB::table('registration')->insert(array(
                 'national_id' => Session::get('national_id'),
