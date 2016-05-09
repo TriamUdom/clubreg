@@ -162,7 +162,7 @@ class Registration{
           if($this->assignTeacherToClub($club_code, true)){
             DB::rollBack();
             if($this->assignTeacherToClub($club_code)){
-              $this->addUserToList($club_code);
+              return $this->addUserToList($club_code);
             }else{
               return 'ชมรมนี้มีนักเรียนเต็มแล้ว';
             }
