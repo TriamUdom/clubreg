@@ -17,7 +17,10 @@
   </head>
   <body>
 
-    @include('layout/component.menu')
+    @include('layout.component.menu')
+    @if(Session::get('logged_in') == 1)
+        @include('layout.component.tucchiring')
+    @endif
 
     <div class="container" id="main_container">
       <div class="well">

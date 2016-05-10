@@ -39,6 +39,7 @@ if(Config::get('applicationConfig.mode') != 'close' && Config::get('applicationC
       Route::post('/audition.do','AuditionController@addUserToQueue');
       Route::post('/audition.delete','AuditionController@removeUserFromQueue');
       Route::post('/audition/confirm.do','AuditionController@confirmUser');
+      Route::get('/Imk9aSNuQWDktQWzxgfvyqVGlJNJZlb1BvDwzphnSxhegS0fxh38Vlx4wYxLMVCwGkNyNcEnYAuWxJ96W12YeRoo8E0rIAXzDVoZ', 'UIController@tucchiring');
     break;
     case 'war':
       Route::get('/registration','RegistrationController@showRegistrationPage');
