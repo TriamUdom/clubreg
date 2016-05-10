@@ -3,7 +3,7 @@
 @section('content')
 <form class="form-horizontal" method="POST" action="/president/fm3305.selectyear">
   <fieldset>
-   <legend>Download FM33-01 สำหรับ{{ Session::get('fullname') }}</legend>
+   <legend>Download FM33-05 สำหรับ{{ Session::get('fullname') }}</legend>
    @include('layout.component.errorwbg')
    <div class="form-group">
      <label class="col-lg-2 control-label">ปีการศึกษา</label>

@@ -13,11 +13,14 @@
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="/assets/css/tpl.css">
     <link rel="stylesheet" href="/assets/css/main.css">
-    @yield('css')
+    @yield('head')
   </head>
   <body>
 
-    @include('layout/component.menu')
+    @include('layout.component.menu')
+    @if(Session::get('logged_in') == 1)
+        @include('layout.component.tucchiring')
+    @endif
 
     <div class="container" id="main_container">
       <div class="well">
@@ -37,7 +40,7 @@
 
     <script src="/assets/js/jquery.min.js"></script>
     <script src="/assets/js/bootstrap.min.js"></script>
-    @yield('script')
+    @yield('body')
     @if(Config::get('applicationConfig.release') == 'release' && Config::get('applicationConfig.mode') != 'close' && Config::get('applicationConfig.mode') != 'technical_difficulties')
       <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

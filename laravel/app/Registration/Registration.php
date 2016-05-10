@@ -47,6 +47,14 @@ class Registration{
 
       if($this->stillRoomLeft($totalInClub, $teacherUsage)){
         $clubNotFull[] = $club[$i]->club_code;
+      }else{
+        if($this->assignTeacherToClub($club[$i]->club_code, true)){
+          $clubNotFull[] = $club[$i]->club_code;
+      }else{
+        if($this->assignTeacherToClub($club[$i]->club_code, true)){
+          $clubNotFull[] = $club[$i]->club_code;
+        }
+        }
       }
     }
 
@@ -125,7 +133,7 @@ class Registration{
                           ->count();
         if($this->stillRoomLeft($totalInClub, $teacherUsage)){
           //Still room for more student
-          if(DB::table('audition')->where('club_code', $club_code)->where('national_id', Session::get('national_id'))->where('year', Config::get('applicationConfig.operation_year'))->count() == 0){
+          if(DB::table('audition')->where('club_code', $club_code)->where('national_id', Session::get('national_id'))->where('year', Config::get('applicationConfig.operation_year'))->where('status', 2)->count() == 0){
             try{
               DB::table('registration')->insert(array(
                 'national_id' => Session::get('national_id'),
@@ -162,7 +170,7 @@ class Registration{
           if($this->assignTeacherToClub($club_code, true)){
             DB::rollBack();
             if($this->assignTeacherToClub($club_code)){
-              $this->addUserToList($club_code);
+              return $this->addUserToList($club_code);
             }else{
               return 'ชมรมนี้มีนักเรียนเต็มแล้ว';
             }
@@ -221,7 +229,7 @@ class Registration{
    * @return  bool
    */
   private function stillRoomLeft($totalInClub, $teacherUsage){
-    if($totalInClub < (($teacherUsage*1)+0)){
+    if($totalInClub < (($teacherUsage*30)+5)){
       return true;
     }else{
       return false;

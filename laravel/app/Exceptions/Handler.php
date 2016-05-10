@@ -64,7 +64,23 @@ class Handler extends ExceptionHandler
         }
 
         if($e instanceof \Illuminate\Session\TokenMismatchException){
-          return redirect()->back();
+            if($request->session()->get('logged_in') == 1){
+                $request->session()->flush();
+                $request->session()->regenerate();
+                return redirect('/login')->with('error', 'การเชื่อมต่อหมดอายุ กรุณาเข้าสู่ระบบอีกครั้ง');
+            }else if($request->session()->get('president_logged_in') == 1){
+                $request->session()->flush();
+                $request->session()->regenerate();
+                return redirect('/president/login')->with('error', 'การเชื่อมต่อหมดอายุ กรุณาเข้าสู่ระบบอีกครั้ง');
+            }else if($request->session()->get('admin_logged_in') == 1){
+                $request->session()->flush();
+                $request->session()->regenerate();
+                return redirect('/admin/login')->with('error', 'การเชื่อมต่อหมดอายุ กรุณาเข้าสู่ระบบอีกครั้ง');
+            }else{
+                $request->session()->flush();
+                $request->session()->regenerate();
+                return redirect()->back();
+            }
         }
 
         if($e instanceof \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException){
