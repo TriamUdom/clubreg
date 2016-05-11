@@ -9,6 +9,7 @@
      <label for="sid" class="col-lg-2 control-label">หมายเลขประจำตัวนักเรียน</label>
      <div class="col-lg-10">
        <input type="text" class="form-control" id="sid" name="sid">
+       <span class="help-block">นักเรียนชั้นมัธยมศึกษาปีที่ 4 ที่ยังไม่มีเลขประจำตัวนักเรียนให้ใส่เป็น 00000</span>
      </div>
    </div>
 

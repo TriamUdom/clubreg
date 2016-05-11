@@ -53,8 +53,8 @@ class OperationController extends Controller{
       'sid' => $sid,
       'nid' => $nid
     ),array(
-      'sid' => 'required|numeric',
-      'nid' => 'required|numeric'
+      'sid' => 'required|numeric|digits:5',
+      'nid' => 'required|numeric|digits:13'
     ));
 
     if($validator->fails()){
@@ -73,7 +73,7 @@ class OperationController extends Controller{
           return Redirect::to('/registration');
         break;
         default:
-          abort(500);
+          abort(500, "Invalid operation mode");
         break;
       }
 

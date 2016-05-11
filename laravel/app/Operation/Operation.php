@@ -17,7 +17,8 @@ class Operation{
   public function authenticateUser($sid, $nid){
     if($this->userExist($nid)){
       $user = DB::table('user')->where('national_id',$nid)->first();
-      if($user->student_id == $sid){
+      $user_year = DB::table('user_year')->where('national_id', $nid)->where('year', Config::get('applicationConfig.operation_year'))->first();
+      if($user->student_id == $sid || (is_null($user->student_id) && $user_year->class == 4)){
         // Auth Successful
         // Laravel's Session Magic. Do Not Touch.
         Session::put('logged_in', '1');
@@ -182,6 +183,21 @@ class Operation{
    */
   public static function isClubAudition($club_code){
     if(DB::table('club')->where('club_code', $club_code)->pluck('audition') == 1){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
+  /**
+   * Determine if a given national id is a member of suspectedClub
+   *
+   * @param int $national_id
+   * @param string $suspectedClubCode
+   * @return bool
+   */
+  public static function isUserInClub($national_id, $suspectedClubCode){
+    if(DB::table('user_year')->where('national_id', $national_id)->where('club_code', $suspectedClubCode)->where('year', Config::get('applicationConfig.operation_year'))->exists()){
       return true;
     }else{
       return false;
