@@ -1,21 +1,3 @@
-# Before Script
-before_script:
-  - composer self-update
-  - composer install --prefer-dist > /dev/null
-
-# Services
-services:
-  - mysql:latest
-
-# Variables
-variables:
-  MYSQL_USER: clubreg
-  MYSQL_PASSWORD: xbjosmyp
-  MYSQL_DATABASE: club_confirm
-
-# PHP 5.5
-php:5.5:
-  image: bobey/docker-gitlab-ci-runner-php5.5
+test:app:
   script:
-    - echo "Running PHPUnit Tests"
-    - php vendor/bin/phpunit --colors --debug  --coverage-text
+  - phpunit --configuration laravel/phpunit.xml
