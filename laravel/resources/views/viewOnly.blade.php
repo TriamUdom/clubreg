@@ -5,9 +5,9 @@
 <table class="table table-striped table-hover">
   <thead>
     <tr>
-      <th>#</th>
-      <th>รหัสชมรม</th>
-      <th>ชมรม</th>
+      <th class="col-sm-1">#</th>
+      <th class="col-sm-2">รหัสชมรม</th>
+      <th class="col-sm-9">ชมรม</th>
     </tr>
   </thead>
   <tbody>

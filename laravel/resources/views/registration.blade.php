@@ -16,7 +16,7 @@
   </thead>
   <tbody>
     @for ($i = 0; $i < count($data['available']); $i++)
-      <form class="form-horizontal" onsubmit="return confirm('เมื่อลงทะเบียน{{ $data['available'][$i]->club_name }}แล้ว \n นักเรียนจะไม่สามารถเปลี่ยนแปลงชมรมได้อีก');" method="POST" action="/registration.do">
+      <form class="form-horizontal" onsubmit="return confirm('เมื่อยืนยันการลงทะเบียน{{ $data['available'][$i]->club_name }}แล้ว \n นักเรียนจะไม่สามารถเปลี่ยนแปลงชมรมได้อีก');" method="POST" action="/registration.do">
         <fieldset>
           <tr>
             <td>{{ $i+1 }}</td>
@@ -31,4 +31,16 @@
     @endfor
   </tbody>
 </table>
+@stop
+
+@section('body')
+<script src="/assets/js/bootbox.min.js"></script>
+<script type="text/javascript">
+  function confirmSubmission(clubName){
+    console.log('TEST');
+    return 0;
+    bootbox.confirm("เมื่อลงทะเบียน"+clubName+"แล้ว \n นักเรียนจะไม่สามารถเปลี่ยนแปลงชมรมได้อีก",function(result){
+    })
+  }
+</script>
 @stop

@@ -82,17 +82,25 @@ class PresidentController extends Controller{
 
     $username = Input::get('username');
     $password = Input::get('password');
+    $recaptcha = Input::get('g-recaptcha-response');
 
     $validator = Validator::make(array(
       'username' => $username,
-      'password' => $password
+      'password' => $password,
+      'g-recaptcha-response' => $recaptcha
     ),array(
       'username' => 'required',
-      'password' => 'required'
+      'password' => 'required',
+      'g-recaptcha-response' => 'required|recaptcha'
+    ),array(
+      'username.required' => 'ต้องกรอกชื่อผู้ใช้',
+      'password.required' => 'ต้องกรอกรหัสผ่าน',
+      'g-recaptcha-response.recaptcha' => 'ต้องทำเครื่องหมายถูกในช่อง "ฉันไม่ใช่โปรแกรมอัตโนมัติ"',
+      'g-recaptcha-response.required' => 'ต้องทำเครื่องหมายถูกในช่อง "ฉันไม่ใช่โปรแกรมอัตโนมัติ"'
     ));
 
     if($validator->fails()){
-      return Redirect::back()->with('error','รูปแบบข้อมูลไม่ถูกต้องหรือมีข้อมูลเป็นค่าว่าง');
+      return Redirect::back()->with('errorList', $validator->errors()->all());
     }
 
     if($this->president->authenticatePresident($username, $password)){

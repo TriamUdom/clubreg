@@ -48,17 +48,27 @@ class OperationController extends Controller{
 
     $sid = Input::get('sid');
     $nid = Input::get('nid');
+    $recaptcha = Input::get('g-recaptcha-response');
 
     $validator = Validator::make(array(
       'sid' => $sid,
-      'nid' => $nid
+      'nid' => $nid,
+      'g-recaptcha-response' => $recaptcha
     ),array(
-      'sid' => 'required|numeric|digits:5',
-      'nid' => 'required|numeric|digits:13'
+      'sid' => 'required|digits:5',
+      'nid' => 'required|digits:13',
+      'g-recaptcha-response' => 'required|recaptcha'
+    ),array(
+      'sid.required' => 'ต้องกรอกเลขประจำตัวนักเรียน',
+      'sid.digits' => 'เลขประจำตัวนักเรียนต้องเป็นตัวเลข 5 หลัก',
+      'nid.required' => 'ต้องกรอกเลขประชาชน',
+      'nid.digits' => 'เลขประชาชนต้องเป็นตัวเลข 13 หลัก',
+      'g-recaptcha-response.recaptcha' => 'ต้องทำเครื่องหมายถูกในช่อง "ฉันไม่ใช่โปรแกรมอัตโนมัติ"',
+      'g-recaptcha-response.required' => 'ต้องทำเครื่องหมายถูกในช่อง "ฉันไม่ใช่โปรแกรมอัตโนมัติ"'
     ));
 
     if($validator->fails()){
-      return Redirect::back()->with('error','รูปแบบข้อมูลไม่ถูกต้องหรือมีข้อมูลเป็นค่าว่าง');
+      return Redirect::back()->with('errorList', $validator->errors()->all());
     }
 
     if ($this->operation->authenticateUser($sid, $nid)) {

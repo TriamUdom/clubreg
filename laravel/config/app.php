@@ -149,6 +149,9 @@ return [
          * Rollbar Service Providers...
          */
         Jenssegers\Rollbar\RollbarServiceProvider::class,
+        'Jenssegers\Agent\AgentServiceProvider',
+
+        Greggilbert\Recaptcha\RecaptchaServiceProvider::class,
     ],
 
     /*
@@ -164,6 +167,7 @@ return [
 
     'aliases' => [
 
+        'Agent'     => 'Jenssegers\Agent\Facades\Agent',
         'App'       => Illuminate\Support\Facades\App::class,
         'Artisan'   => Illuminate\Support\Facades\Artisan::class,
         'Auth'      => Illuminate\Support\Facades\Auth::class,
@@ -186,6 +190,7 @@ return [
         'Mail'      => Illuminate\Support\Facades\Mail::class,
         'Password'  => Illuminate\Support\Facades\Password::class,
         'Queue'     => Illuminate\Support\Facades\Queue::class,
+        'Recaptcha' => Greggilbert\Recaptcha\Facades\Recaptcha::class,
         'Redirect'  => Illuminate\Support\Facades\Redirect::class,
         'Redis'     => Illuminate\Support\Facades\Redis::class,
         'Request'   => Illuminate\Support\Facades\Request::class,

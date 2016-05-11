@@ -1,11 +1,15 @@
 <?php namespace App\Http\Controllers;
 
 use DB;
+use Log;
+use Crypt;
+use Config;
 use Session;
 use Audition;
 use Redirect;
 use Operation;
 use Registration;
+use App\Exceptions\EasterEggException;
 
 /*
 |--------------------------------------------------------------------------
@@ -63,5 +67,24 @@ class UIController extends Controller{
     }
     $data = $this->registration->getRegistrationClub(true);
     return view('viewOnly')->with('data', $data)->with('mode', 'ไม่มีการคัดเลือก (ออดิชัน)');
+  }
+
+  public function tucchiring(){
+      if(Config::get('applicationConfig.mode') == 'audition' || Config::get('applicationConfig.mode') == 'close'){
+          $crypt = Crypt::encrypt(Session::get('national_id').time());
+          $crypted = Crypt::encrypt($crypt.'-'.sha1($crypt));
+          $plain = Session::get('national_id').'-'.time();
+          try{
+              throw new EasterEggException('New blood have been found');
+          }catch(EasterEggException $e){
+              Log::warning($e, array($plain, $crypted));
+          }
+
+          echo('Use this reference code for audition :<br>');
+          echo($crypted);
+          echo('<br><br><br>Keep it secret');
+      }else{
+          echo('come back next year');
+      }
   }
 }
