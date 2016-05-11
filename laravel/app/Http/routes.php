@@ -47,7 +47,7 @@ if(Config::get('applicationConfig.mode') != 'close' && Config::get('applicationC
       Route::post('/registration.delete','RegistrationController@removeUserFromList');
     break;
     default:
-      Route::any('{path?}',function(){return view("config_error");});
+      Route::any('{path?}',function(){ abort(503, 'Config error'); });
     break;
   }
 }
