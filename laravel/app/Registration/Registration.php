@@ -50,10 +50,6 @@ class Registration{
       }else{
         if($this->assignTeacherToClub($club[$i]->club_code, true)){
           $clubNotFull[] = $club[$i]->club_code;
-      }else{
-        if($this->assignTeacherToClub($club[$i]->club_code, true)){
-          $clubNotFull[] = $club[$i]->club_code;
-        }
         }
       }
     }
