@@ -45,10 +45,17 @@ class RegistrationController extends Controller{
         //Already confirm club
         return Redirect::to('/confirmed');
       }else{
-        $available = $this->registration->getRegistrationClub();
-        return view('registration')->with('data', array(
-          'available' => $available
-        ));
+        $data = $this->registration->getRegistrationClub();
+        if(isset($data['full'])){
+          return view('registration')->with('data', array(
+            'available' => $data['notFull'],
+            'full' => $data['full'],
+          ));
+        }else{
+          return view('registration')->with('data', array(
+            'available' => $data['notFull']
+          ));
+        }
       }
     }else{
       Redirect::to('/login');
