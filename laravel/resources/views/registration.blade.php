@@ -29,6 +29,16 @@
         </fieldset>
       </form>
     @endfor
+    @if(isset($data['full']))
+      @for ($i = 0; $i < count($data['full']); $i++)
+        <tr>
+          <td>{{ $i+1 }}</td>
+          <td>{{ $data['full'][$i]->club_code }}</td>
+          <td>{{ $data['full'][$i]->club_name }}</td>
+          <td><button class="btn btn-danger btn-block disabled">เต็ม</button></td>
+        </tr>
+      @endfor
+    @endif
   </tbody>
 </table>
 @stop

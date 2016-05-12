@@ -50,6 +50,8 @@ class Registration{
       }else{
         if($this->assignTeacherToClub($club[$i]->club_code, true)){
           $clubNotFull[] = $club[$i]->club_code;
+        }else{
+          $clubFull[] = $club[$i]->club_code;
         }
       }
     }
@@ -69,6 +71,15 @@ class Registration{
                   ->whereIn('club_code', $clubNotFull)
                   ->orderBy('club_code', 'asc')
                   ->get();
+        if(isset($clubFull)){
+          $full = DB::table('club')
+                    ->where('audition',0)
+                    ->where('active',1)
+                    ->whereNotIn('club_code', $selected_code)
+                    ->whereIn('club_code', $clubFull)
+                    ->orderBy('club_code', 'asc')
+                    ->get();
+        }
       }else{
         $data = DB::table('club')
                   ->where('audition',0)
@@ -76,10 +87,22 @@ class Registration{
                   ->whereIn('club_code', $clubNotFull)
                   ->orderBy('club_code', 'asc')
                   ->get();
+        if(isset($clubFull)){
+          $full = DB::table('club')
+                    ->where('audition',0)
+                    ->where('active',1)
+                    ->whereIn('club_code', $clubFull)
+                    ->orderBy('club_code', 'asc')
+                    ->get();
+        }
       }
     }
 
-    return $data;
+    if(isset($clubFull)){
+      return array('notFull' => $data, 'full' => $full);
+    }else{
+      return array('notFull' => $data);
+    }
   }
 
   /**
