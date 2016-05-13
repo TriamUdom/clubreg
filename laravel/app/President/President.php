@@ -534,12 +534,11 @@ class President{
     $criterionCount = $adviserCount*30;
 
     $fileName = '[FM 33-01] '.substr(Session::get('club_code'), -2).'_'.Session::get('fullname');
-    $rootPath = dirname(__DIR__, 2);
-    if(file_exists($rootPath.'\public\FMOutput\\'.$fileName.'.docx')){
-      unlink($rootPath.'\public\FMOutput\\'.$fileName.'.docx');
+    if(file_exists(public_path('FMOutput/'.$fileName.'.docx'))){
+      unlink(public_path('FMOutput/'.$fileName.'.docx'));
     }
 
-    $templateProcessor = new TemplateProcessor($rootPath.'\resources\FMtemplate\FM3301.docx');
+    $templateProcessor = new TemplateProcessor(base_path('resources/FMtemplate/FM3301.docx'));
 
     $templateProcessor->setValue('clubName',            htmlspecialchars($clubData->club_name));
     $templateProcessor->setValue('clubCode',            htmlspecialchars($clubData->club_code));
@@ -604,8 +603,8 @@ class President{
     $templateProcessor->setValue('presidentName',         htmlspecialchars($presidentName));
     $templateProcessor->setValue('adviserName',           htmlspecialchars($adviserName));
 
-    $templateProcessor->saveAs($rootPath.'\public\FMOutput\\'.$fileName.'.docx');
-    return $rootPath.'\public\FMOutput\\'.$fileName.'.docx';
+    $templateProcessor->saveAs(public_path('FMOutput/'.$fileName.'.docx'));
+    return public_path('FMOutput/'.$fileName.'.docx');
   }
 
   /**
@@ -619,12 +618,11 @@ class President{
     $clubData = DB::table('club')->where('club_code', Session::get('club_code'))->first();
 
     $fileName = '[FM 33-04] '.substr(Session::get('club_code'), -2).'_'.Session::get('fullname');
-    $rootPath = dirname(__DIR__, 2);
-    if(file_exists($rootPath.'\public\FMOutput\\'.$fileName.'.docx')){
-      unlink($rootPath.'\public\FMOutput\\'.$fileName.'.docx');
+    if(file_exists(public_path('FMOutput/'.$fileName.'.docx'))){
+      unlink(public_path('FMOutput/'.$fileName.'.docx'));
     }
 
-    $templateProcessor = new TemplateProcessor($rootPath.'\resources\FMtemplate\FM3304.docx');
+    $templateProcessor = new TemplateProcessor(base_path('resources/FMtemplate/FM3304.docx'));
 
     $templateProcessor->setValue('clubName',             htmlspecialchars($clubData->club_name));
     $templateProcessor->setValue('clubCode',             htmlspecialchars($clubData->club_code));
@@ -647,8 +645,8 @@ class President{
     $adviserName = $this->getAdviserName('string');
     $templateProcessor->setValue('adviserName',           htmlspecialchars($adviserName));
 
-    $templateProcessor->saveAs($rootPath.'\public\FMOutput\\'.$fileName.'.docx');
-    return $rootPath.'\public\FMOutput\\'.$fileName.'.docx';
+    $templateProcessor->saveAs(public_path('FMOutput/'.$fileName.'.docx'));
+    return public_path('FMOutput/'.$fileName.'.docx');
   }
 
   /**
@@ -718,12 +716,11 @@ class President{
     $clubData = DB::table('club')->where('club_code', Session::get('club_code'))->first();
 
     $fileName = '[FM 33-05] '.substr(Session::get('club_code'), -2).'_'.Session::get('fullname');
-    $rootPath = dirname(__DIR__, 2);
-    if(file_exists($rootPath.'\public\FMOutput\\'.$fileName.'.docx')){
-      unlink($rootPath.'\public\FMOutput\\'.$fileName.'.docx');
+    if(file_exists(public_path('FMOutput/'.$fileName.'.docx'))){
+      unlink(public_path('FMOutput/'.$fileName.'.docx'));
     }
 
-    $templateProcessor = new TemplateProcessor($rootPath.'\resources\FMtemplate\FM3305.docx');
+    $templateProcessor = new TemplateProcessor(base_path('resources/FMtemplate/FM3305.docx'));
 
     $templateProcessor->setValue('clubName',             htmlspecialchars($clubData->club_name));
     $templateProcessor->setValue('clubCode',             htmlspecialchars($clubData->club_code));
@@ -770,7 +767,7 @@ class President{
     $templateProcessor->setValue('month',                htmlspecialchars($month[date('n')]));
     $templateProcessor->setValue('year',                 htmlspecialchars(date('Y')+543));
 
-    $templateProcessor->saveAs($rootPath.'\public\FMOutput\\'.$fileName.'.docx');
-    return $rootPath.'\public\FMOutput\\'.$fileName.'.docx';
+    $templateProcessor->saveAs(public_path('FMOutput/'.$fileName.'.docx'));
+    return public_path('FMOutput/'.$fileName.'.docx');
   }
 }
