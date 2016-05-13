@@ -32,6 +32,7 @@ class Audition{
                 ->where('active',1)
                 ->orderBy('club_code', 'asc')
                 ->get();
+      return $data;
     }else{
       if(isset($selected_code)){
         $data = DB::table('club')
