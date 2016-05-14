@@ -363,7 +363,7 @@ class President{
         $data = array_merge($data1, $data2); //Merge the two array
         $table_name = 'a'.mb_substr(Session::get('club_code'), 1); // Remove ก from club code to prevent problem
         DB::statement('
-          CREATE TEMPORARY TABLE IF NOT EXISTS '. $table_name .' LIKE `club_name_list_template`
+          CREATE TEMPORARY TABLE IF NOT EXISTS `'. $table_name .'` LIKE `club_name_list_template`
         '); //Create the table for sorting
         if(DB::table($table_name)->count() == 0){
           for($i=0; $i<count($data); $i++){
@@ -400,7 +400,7 @@ class President{
                 ->orderBy('number', 'asc')
                 ->get();
 
-    DB::statement('DROP TEMPORARY TABLE IF EXISTS '. $table_name);
+    DB::statement('DROP TEMPORARY TABLE IF EXISTS `'. $table_name.'`');
 
     if($encryptNationalID){
       $data = self::encryptNationalID($data);
