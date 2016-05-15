@@ -20,7 +20,24 @@ return [
     // I'm not really know exactly how this will work
     // But I'm hoping that we'll never have to use it
   */
-  'mode' => 'audition',
+  'mode' => call_user_func(function(){
+        $auto = true;
+        if($auto){
+            //automatic mode selection
+            if(in_array(range(1463317200, 1463504399), time())){
+                return 'audition';
+            }elseif(in_array(range(1463504400, 1463633999), time())){
+                return 'close';
+            }elseif(in_array(range(1463634000, 1463763599), time())){
+                return 'war';
+            }else{
+                return 'close';
+            }
+        }else{
+            //manual mode selection
+            return 'audition';
+        }
+  }),
 
   /*
   year: application operation year
