@@ -43,9 +43,11 @@
               @if(Session::get('president_logged_in') == 1)
 
               @else
-              <li><a href="/contact" target="_self">ติดต่อเจ้าหน้าที่</a></li>
+                <li><a href="/contact" target="_self">ติดต่อเจ้าหน้าที่</a></li>
               @endif
-              <li><a href="/login" target="_self">เข้าสู่ระบบ</a></li>
+              @if(Config::get('applicationConfig.mode') != 'close' && Config::get('applicationConfig.mode') != 'technical_difficulties')
+                <li><a href="/login" target="_self">เข้าสู่ระบบ</a></li>
+              @endif
               <?php /*
               <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" id="helpcenter">ศูนย์ช่วยเหลือ <span class="caret"></span></a>

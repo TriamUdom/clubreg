@@ -19,14 +19,14 @@ Route::get('/error/notloggedin',function(){
 Route::get('/contact',function(){
   return view('contact');
 });
+Route::get('/vaudition','UIController@showVOAudition');
+Route::get('/vregistration','UIController@showVORegistration');
 
 if(Config::get('applicationConfig.mode') != 'close' && Config::get('applicationConfig.mode') != 'technical_difficulties'){
   Route::get('/login','UIController@login');
   Route::post('/login.do','OperationController@login');
   Route::get('/logout','OperationController@logout');
   Route::get('/confirmed','OperationController@confirmedClub');
-  Route::get('/vaudition','UIController@showVOAudition');
-  Route::get('/vregistration','UIController@showVORegistration');
 
   switch(Config::get('applicationConfig.mode')){
     case 'confirmation':
