@@ -15,6 +15,10 @@
 @if(Session::get('logged_in') == 1)
   @include('layout.indexComponent.viewOnlyButton')
   <br>
+  <a href="/assets/pdfFile/ขั้นตอนการใช้งานระบบลงทะเบียนชมรม.pdf">
+      <button class="btn btn-info btn-block">ประกาศงานกิจกรรมพัฒนาผู้เรียน เรื่องระบบลงทะเบียนชมรม</button>
+  </a>
+  <br>
   @if(Config::get('applicationConfig.mode') == 'confirmation')
   <a href="/confirmation">
     <button class="btn btn-success btn-block">ดำเนินการต่อ</button>
@@ -32,6 +36,10 @@
   @endif
 @else
   @include('layout.indexComponent.viewOnlyButton')
+  <br>
+  <a href="/assets/pdfFile/ขั้นตอนการใช้งานระบบลงทะเบียนชมรม.pdf">
+      <button class="btn btn-info btn-block">ประกาศงานกิจกรรมพัฒนาผู้เรียน เรื่องระบบลงทะเบียนชมรม</button>
+  </a>
   <br>
   @if(Config::get('applicationConfig.mode') != 'close' && Config::get('applicationConfig.mode') != 'technical_difficulties')
     <div class="row">
