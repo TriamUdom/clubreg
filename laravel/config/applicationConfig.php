@@ -6,7 +6,7 @@ return [
   release: release notation & software state
   values: alpha, beta, release
   */
-  'release' => 'beta',
+  'release' => 'release',
 
   /*
   mode: application operating mode
@@ -21,14 +21,14 @@ return [
     // But I'm hoping that we'll never have to use it
   */
   'mode' => call_user_func(function(){
-        $auto = false;
+        $auto = true;
         if($auto){
             //automatic mode selection
-            if(in_array(range(1463317200, 1463504399), time())){
+            if(in_array(range(1463317200, 1463633999), time())){
                 return 'audition';
-            }elseif(in_array(range(1463504400, 1463633999), time())){
+            }elseif(in_array(range(1463634000, 1463709599), time())){
                 return 'close';
-            }elseif(in_array(range(1463634000, 1463763599), time())){
+            }elseif(in_array(range(1463709600, 1463806800), time())){
                 return 'war';
             }else{
                 return 'close';
@@ -49,7 +49,7 @@ return [
   administration: enable admin operation
   value: true, false
   */
-  'administration' => true,
+  'administration' => false,
 
   /*
   environment: determain what mode the application is on
