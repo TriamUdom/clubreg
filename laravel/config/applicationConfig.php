@@ -21,7 +21,7 @@ return [
     // But I'm hoping that we'll never have to use it
   */
   'mode' => call_user_func(function(){
-        $auto = true;
+        $auto = false;
         if($auto){
             //automatic mode selection
             if(in_array(range(1463317200, 1463633999), time())){
