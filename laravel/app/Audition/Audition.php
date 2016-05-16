@@ -197,7 +197,7 @@ class Audition{
                 'status' => 2
               ));
 
-            if(!is_null(DB::table('user_year')->where('national_id', Session::get('national_id'))->where('year', Config::get('applicationConfig.operation_year'))->pluck('club_code'))){
+            if(!empty(DB::table('user_year')->where('national_id', Session::get('national_id'))->where('year', Config::get('applicationConfig.operation_year'))->pluck('club_code'))){
               throw new DataException("club_code is not empty cannot proceed");
             }else{
               DB::table('user_year')
