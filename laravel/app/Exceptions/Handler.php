@@ -60,7 +60,7 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $e)
     {
         if($e instanceof ModelNotFoundException) {
-          abort(404);
+          abort(404, "ModelNotFound");
         }
 
         if($e instanceof \Illuminate\Session\TokenMismatchException){
@@ -84,7 +84,7 @@ class Handler extends ExceptionHandler
         }
 
         if($e instanceof \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException){
-          abort(405);
+          abort(405, "MethodNotAllowed");
         }
 
         return parent::render($request, $e);
