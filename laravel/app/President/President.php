@@ -134,6 +134,10 @@ class President{
    * @return object data
    */
   public function getAuditionData(){
+    $haveClub = DB::table('audition')
+                    ->where('status', 2)
+                    ->where('year', Config::get('applicationConfig.operation_year'))
+                    ->lists('national_id');
     $data = DB::table('audition')
               ->join('user_year', function($join){
                 $join->on('audition.national_id', '=', 'user_year.national_id')
@@ -143,6 +147,7 @@ class President{
               ->where('audition.year', Config::get('applicationConfig.operation_year'))
               ->where('audition.club_code', Session::get('club_code'))
               ->where('audition.status', 0)
+              ->whereNotIn('audition.national_id', $haveClub)
               ->orderBy('user_year.class', 'asc')
               ->orderBy('user_year.room', 'asc')
               ->orderBy('user_year.number', 'asc')
