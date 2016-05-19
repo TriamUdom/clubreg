@@ -24,11 +24,11 @@ return [
         $auto = false;
         if($auto){
             //automatic mode selection
-            if(in_array(range(1463317200, 1463504399), time())){
+            if(in_array(time(), range(1463317200, 1463504399))){
                 return 'audition';
-            }elseif(in_array(range(1463504400, 1463633999), time())){
+            }elseif(in_array(time(), range(1463504400, 1463633999))){
                 return 'close';
-            }elseif(in_array(range(1463634000, 1463763599), time())){
+            }elseif(in_array(time(), range(1463634000, 1463763599))){
                 return 'war';
             }else{
                 return 'close';
