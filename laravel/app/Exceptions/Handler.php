@@ -19,6 +19,7 @@ class Handler extends ExceptionHandler
      */
     protected $dontReport = [
         HttpException::class,
+        //Illuminate\Session\TokenMismatchException::class,
         //ModelNotFoundException::class,
     ];
 
@@ -34,6 +35,10 @@ class Handler extends ExceptionHandler
     {
       if($e instanceof NotFoundHttpException) {
         return;
+      }
+
+      if($e instanceof TokenMismatchException){
+          return;
       }
 
       if(Config::get('applicationConfig.release') == 'release'){
