@@ -35,7 +35,7 @@ return [
             }
         }else{
             //manual mode selection
-            return 'audition';
+            return 'close';
         }
   }),
 
