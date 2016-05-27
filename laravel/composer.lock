@@ -1283,12 +1283,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPOffice/PHPWord.git",
-                "reference": "d57973693d67a4a576b29bb0ac8532428620e9b9"
+                "reference": "023977a8852f7a52403b6974d5a557ac8848fded"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPOffice/PHPWord/zipball/d57973693d67a4a576b29bb0ac8532428620e9b9",
-                "reference": "d57973693d67a4a576b29bb0ac8532428620e9b9",
+                "url": "https://api.github.com/repos/PHPOffice/PHPWord/zipball/023977a8852f7a52403b6974d5a557ac8848fded",
+                "reference": "023977a8852f7a52403b6974d5a557ac8848fded",
                 "shasum": ""
             },
             "require": {
@@ -1376,7 +1376,7 @@
                 "word",
                 "writer"
             ],
-            "time": "2016-04-23 15:49:10"
+            "time": "2016-05-24 08:05:55"
         },
         {
             "name": "psr/log",
@@ -2854,16 +2854,16 @@
         },
         {
             "name": "mockery/mockery",
-            "version": "0.9.4",
+            "version": "0.9.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/padraic/mockery.git",
-                "reference": "70bba85e4aabc9449626651f48b9018ede04f86b"
+                "reference": "4db079511a283e5aba1b3c2fb19037c645e70fc2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/padraic/mockery/zipball/70bba85e4aabc9449626651f48b9018ede04f86b",
-                "reference": "70bba85e4aabc9449626651f48b9018ede04f86b",
+                "url": "https://api.github.com/repos/padraic/mockery/zipball/4db079511a283e5aba1b3c2fb19037c645e70fc2",
+                "reference": "4db079511a283e5aba1b3c2fb19037c645e70fc2",
                 "shasum": ""
             },
             "require": {
@@ -2891,7 +2891,7 @@
             ],
             "authors": [
                 {
-                    "name": "Padraic Brady",
+                    "name": "Pádraic Brady",
                     "email": "padraic.brady@gmail.com",
                     "homepage": "http://blog.astrumfutura.com"
                 },
@@ -2915,7 +2915,7 @@
                 "test double",
                 "testing"
             ],
-            "time": "2015-04-02 19:54:00"
+            "time": "2016-05-22 21:52:33"
         },
         {
             "name": "phpdocumentor/reflection-docblock",
