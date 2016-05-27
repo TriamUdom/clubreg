@@ -1,12 +1,13 @@
 <?php namespace App\Http\Controllers;
 
 use DB;
+use Crypt;
 use Input;
 use Admin;
 use Config;
 use Session;
-use Validator;
 use Redirect;
+use Validator;
 
 /*
 |--------------------------------------------------------------------------
@@ -251,5 +252,98 @@ class AdminController extends Controller{
     }else{
       return Redirect::to('/admin/login');
     }
+  }
+
+  public function showManualSearch(){
+      return view('admin.adminManualSearch');
+  }
+
+  public function showManualAdd(){
+      $input = array();
+      $input['nid'] = 0;
+      $input['sid'] = 0;
+      if(Input::all()){
+          $input = Input::all();
+      }
+      $club_code = DB::table('user_year')
+                      ->join('user', 'user_year.national_id', '=', 'user.national_id')
+                      ->join('club', 'user_year.club_code', '=', 'club.club_code')
+                      ->where('user_year.year', 2559)
+                      ->where(
+                      function($query) use ($input){
+                          $query->where('user.national_id', $input['nid'])
+                                ->orWhere('user.student_id', $input['sid']);
+                      })
+                      ->pluck('club.club_code');
+      if($club_code){
+          $data = DB::table('user_year')
+                    ->join('user', 'user_year.national_id', '=', 'user.national_id')
+                    ->join('club', 'user_year.club_code', '=', 'club.club_code')
+                    ->where('user_year.year', 2559)
+                    ->where(
+                    function($query) use ($input){
+                        $query->where('user.national_id', $input['nid'])
+                              ->orWhere('user.student_id', $input['sid']);
+                    })
+                    ->first();
+      }else{
+          $data = DB::table('user_year')
+                    ->join('user', 'user_year.national_id', '=', 'user.national_id')
+                    ->where('user_year.year', 2559)
+                    ->where(
+                    function($query) use ($input){
+                        $query->where('user.national_id', $input['nid'])
+                              ->orWhere('user.student_id', $input['sid']);
+                    })
+                    ->first();
+      }
+      $clubs = DB::table('club')
+                 ->where('active', 1)
+                 ->orderBy('club_code', 'asc')
+                 ->get();
+      if(isset($data->national_id)){
+          $manual = DB::table('manualadd')
+                      ->where('national_id', $data->national_id)
+                      ->where('year', Config::get('applicationConfig.operation_year'))
+                      ->first();
+          return view('admin.adminManualAdd')
+                    ->with('data', $data)
+                    ->with('encrypted', array(
+                            'national_id' => Crypt::encrypt($data->national_id)
+                        ))
+                    ->with('manual', $manual)
+                    ->with('clubs', $clubs);
+      }else{
+          return view('admin.adminManualAdd')
+                    ->with('data', $data)
+                    ->with('clubs', $clubs);
+      }
+  }
+
+  public function manualAdd(){
+      $input = Input::all();
+      $current_club = DB::table('user_year')
+                          ->where('national_id', Crypt::decrypt($input['nid']))
+                          ->where('year', Config::get('applicationConfig.operation_year'))
+                          ->pluck('club_code');
+      if($input['wanted_club'] == $current_club){
+          return Redirect::to('/admin/manualadd?sid=&nid='.Crypt::decrypt($input['nid']))
+                          ->with('error', 'ไม่มีการเปลี่ยนแปลงชมรม ไม่สามารถบันทึกข้อมูลได้');
+      }
+      DB::table('manualadd')
+          ->where('national_id', Crypt::decrypt($input['nid']))
+          ->where('year', Config::get('applicationConfig.operation_year'))
+          ->delete();
+      DB::table('manualadd')
+          ->insert(array(
+              'national_id' => Crypt::decrypt($input['nid']),
+              'current_club' => $current_club,
+              'wanted_club' => $input['wanted_club'],
+              'description' => $input['description'],
+              'timestamp' => time(),
+              'year' => Config::get('applicationConfig.operation_year')
+          ));
+      return Redirect::to('/admin/manualadd?sid=&nid='.Crypt::decrypt($input['nid']))
+                     ->with('success','บันทึกข้อมูลเรียบร้อยแล้ว');
   }
 }

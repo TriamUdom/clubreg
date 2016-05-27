@@ -9,7 +9,7 @@
 @elseif(Config::get('applicationConfig.mode') == 'war')
   @include('layout.indexComponent.registration')
 @elseif(Config::get('applicationConfig.mode') == 'close')
-  @include('layout.indexComponent.close')
+  @include('layout.indexComponent.audition')
 @endif
 <div style="margin-bottom: 10px;"></div>
 @if(Session::get('logged_in') == 1)

@@ -92,4 +92,7 @@ if(Config::get('applicationConfig.administration')){
   Route::get('/admin/checklist/afteraudition','AdminController@showAfterAuditionPage');
   Route::get('/admin/checklist/beforeregistration','AdminController@showBefoReregistrationPage');
   Route::get('/admin/checklist/afterregistration','AdminController@showAfterRegistrationPage');
+  Route::get('/admin/manual','AdminController@showManualSearch');
+  Route::get('/admin/manualadd','AdminController@showManualAdd');
+  Route::post('/admin/manualadd','AdminController@manualAdd');
 }
