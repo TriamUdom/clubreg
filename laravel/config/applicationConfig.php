@@ -24,26 +24,18 @@ return [
         $auto = false;
         if($auto){
             //automatic mode selection
-<<<<<<< HEAD
-            if(in_array(range(1463317200, 1463633999), time())){
-                return 'audition';
-            }elseif(in_array(range(1463634000, 1463709599), time())){
-                return 'close';
-            }elseif(in_array(range(1463709600, 1463806800), time())){
-=======
             if(in_array(time(), range(1463317200, 1463504399))){
                 return 'audition';
             }elseif(in_array(time(), range(1463504400, 1463633999))){
                 return 'close';
             }elseif(in_array(time(), range(1463634000, 1463763599))){
->>>>>>> master
                 return 'war';
             }else{
                 return 'close';
             }
         }else{
             //manual mode selection
-            return 'audition';
+            return 'close';
         }
   }),
 
