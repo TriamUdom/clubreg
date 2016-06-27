@@ -95,4 +95,5 @@ if(Config::get('applicationConfig.administration')){
   Route::get('/admin/manual','AdminController@showManualSearch');
   Route::get('/admin/manualadd','AdminController@showManualAdd');
   Route::post('/admin/manualadd','AdminController@manualAdd');
+  Route::get('/admin/excmanualregistration','AdminController@manualReg');
 }
