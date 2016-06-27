@@ -341,9 +341,153 @@ class AdminController extends Controller{
               'wanted_club' => $input['wanted_club'],
               'description' => $input['description'],
               'timestamp' => time(),
-              'year' => Config::get('applicationConfig.operation_year')
+              'year' => Config::get('applicationConfig.operation_year'),
+              'done' => 0
           ));
       return Redirect::to('/admin/manualadd?sid=&nid='.Crypt::decrypt($input['nid']))
                      ->with('success','บันทึกข้อมูลเรียบร้อยแล้ว');
+  }
+
+  public function manualReg(){
+      $datas = DB::table('manualadd')->where('year', 2559)->where('done', 0)->get();
+      $audition_club = DB::table('club')->where('audition', 1)->lists('club_code');
+      $messages = array();
+      $required_audition = array();
+      foreach($datas as $data){
+          $user_year = DB::table('user_year')
+                         ->where('national_id', $data->national_id)
+                         ->where('year', Config::get('applicationConfig.operation_year'))
+                         ->first();
+          if($data->wanted_club == $user_year->club_code){
+              $messages[] = "<h4 color=\"green\">No action need to be done for $data->national_id<h4>";
+          }else{
+              if(in_array($data->wanted_club, $audition_club)){
+                  $club = DB::table('audition')
+                            ->where('national_id', $data->national_id)
+                            ->where('year', Config::get('applicationConfig.operation_year'))
+                            ->where('club_code', $data->wanted_club)
+                            ->first();
+                  if(!empty($club) && $club->status == 1){
+                      if(!empty($user_year->club_code)){
+                          $this->userYearDataReset($data->national_id);
+                      }
+                      DB::beginTransaction();
+                          try{
+                              DB::table('audition')
+                                ->where('national_id', $data->national_id)
+                                ->where('year', Config::get('applicationConfig.operation_year'))
+                                ->where('club_code', $data->wanted_club)
+                                ->update(array(
+                                    'status' => 2
+                                ));
+
+                              DB::table('user_year')
+                                ->where('national_id', $data->national_id)
+                                ->where('year', Config::get('applicationConfig.operation_year'))
+                                ->update(array(
+                                    'club_code' => $data->wanted_club
+                                ));
+
+                              DB::table('manualadd')
+                                ->where('national_id', $data->national_id)
+                                ->where('year', Config::get('applicationConfig.operation_year'))
+                                ->update(array(
+                                    'done' => 1
+                                ));
+                          }catch(Exception $e){
+                              DB::rollback();
+                              echo($e->getMessage());
+                          }
+                      DB::commit();
+                      $messages[] = "<h3 color=\"green\">Register $data->national_id by audition finished</h3>";
+                  }else{
+                      $messages[] = "<h3 color=\"red\">Cannot proceed for national_id : $data->national_id</h3><br><h4>Club required audition</h4>";
+                      $required_audition[] = $data->national_id;
+                  }
+              }else{
+                  if(!empty($user_year->club_code)){
+                      $this->userYearDataReset($data->national_id);
+                  }
+                  DB::beginTransaction();
+                      try{
+                          DB::table('registration')
+                            ->insert(array(
+                                'national_id' => $data->national_id,
+                                'club_code' => $data->wanted_club,
+                                'timestamp' => time(),
+                                'year' => Config::get('applicationConfig.operation_year')
+                            ));
+
+                          DB::table('user_year')
+                            ->where('national_id', $data->national_id)
+                            ->where('year', Config::get('applicationConfig.operation_year'))
+                            ->update(array(
+                                'club_code' => $data->wanted_club
+                            ));
+
+                          DB::table('manualadd')
+                            ->where('national_id', $data->national_id)
+                            ->where('year', Config::get('applicationConfig.operation_year'))
+                            ->update(array(
+                                'done' => 1
+                            ));
+                      }catch(Exception $e){
+                          DB::rollback();
+                          echo($e->getMessage());
+                      }
+                  DB::commit();
+                  $messages[] = "<h3 color=\"green\">Register $data->national_id by registration finished</h3>";
+              }
+          }
+      }
+      return view('admin.adminManualRegistration')->with('messages', $messages)->with('required_audition', $required_audition);
+  }
+
+  private function userYearDataReset($national_id){
+      $audition_club = DB::table('club')->where('audition', 1)->lists('club_code');
+      $current_club = DB::table('user_year')
+                        ->where('national_id', $national_id)
+                        ->where('year', Config::get('applicationConfig.operation_year'))
+                        ->pluck('club_code');
+
+      DB::beginTransaction();
+          try{
+              DB::table('user_year')
+                ->where('national_id', $national_id)
+                ->where('year', Config::get('applicationConfig.operation_year'))
+                ->update(array(
+                    'club_code' => ''
+                ));
+
+              if(in_array($current_club, $audition_club)){
+                  DB::table('audition')
+                    ->where('national_id', $national_id)
+                    ->where('year', Config::get('applicationConfig.operation_year'))
+                    ->where('status', 2)
+                    ->update(array(
+                        'status' => 1
+                    ));
+              }else{
+                  DB::table('registration')
+                    ->where('national_id', $national_id)
+                    ->where('year', Config::get('applicationConfig.operation_year'))
+                    ->delete();
+              }
+          }catch(Exception $e){
+              DB::rollback();
+              echo($e->getMessage());
+          }
+      DB::commit();
+      return true;
+  }
+
+  public function fixExcelEncodingError(){
+      $datas = DB::table('manualadd')->where('wanted_club', 'LIKE', '?%')->get();
+      foreach($datas as $data){
+          $new = 'ก'.substr($data->wanted_club, 1);
+          DB::table('manualadd')->where('national_id', $data->national_id)->update(array(
+              'wanted_club' => $new
+          ));
+      }
   }
 }
