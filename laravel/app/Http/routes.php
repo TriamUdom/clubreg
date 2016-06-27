@@ -21,11 +21,11 @@ Route::get('/contact',function(){
 });
 Route::get('/vaudition','UIController@showVOAudition');
 Route::get('/vregistration','UIController@showVORegistration');
+Route::get('/logout','OperationController@logout');
 
 if(Config::get('applicationConfig.mode') != 'close' && Config::get('applicationConfig.mode') != 'technical_difficulties'){
   Route::get('/login','UIController@login');
   Route::post('/login.do','OperationController@login');
-  Route::get('/logout','OperationController@logout');
   Route::get('/confirmed','OperationController@confirmedClub');
 
   switch(Config::get('applicationConfig.mode')){
